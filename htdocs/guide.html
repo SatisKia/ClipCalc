@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
+<title>ClipCalc説明書</title>
+<style type="text/css">
+html, body {
+	margin:0;
+	padding:0;
+	line-height:18px;
+}
+* {
+	font-family:"Helvetica";
+	font-size:16px;
+	color:#000000;
+}
+.div_body {
+	background-color:#FFFFFF;
+}
+button {
+	-webkit-appearance:button;
+	margin:2px;
+	padding:2px;
+	width:45px;
+	height:30px;
+	vertical-align:middle;
+	border-left:1px solid #E0E0E0;
+	border-top:1px solid #E0E0E0;
+	border-right:1px solid #808080;
+	border-bottom:1px solid #808080;
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_optional {
+	opacity:0.5;
+}
+.button_func {
+	width:65px;
+}
+.button_extfunc {
+	width:95px;
+}
+.button_loadextfunc {
+	width:160px;
+}
+.button_savefunc {
+	width:85px;
+}
+.button_import {
+	width:110px;
+}
+.hr {
+	border:0;
+	margin:0;
+	height:4px;
+}
+.hr_border {
+	border-top:1px solid #808080;
+	margin-top:4px;
+	margin-bottom:3px;
+}
+.hr_fract {
+	border-top:1px solid #000000;
+	margin-top:0;
+	margin-bottom:1px;
+}
+.span_expr {
+	font-family:"Courier New";
+	font-size:20px;
+}
+.span_opt {
+	font-family:"Helvetica";
+	font-size:12px;
+	vertical-align:-2pt;
+}
+.span_inv {
+	font-family:"Helvetica";
+	font-size:12px;
+	vertical-align:4pt;
+}
+.span_pow {
+	font-family:"Helvetica";
+	font-size:12px;
+	vertical-align:4pt;
+}
+.div_ex {
+	width:100%;
+	text-align:right;
+	background-color:#F8F8F8;
+}
+.div_ans {
+	padding-right:2px;
+	text-align:right;
+	font-family:"Courier New";
+	font-size:20px;
+	font-style:italic;
+	font-weight:bold;
+	color:#000000;
+	background-color:#C0F080;
+	border:1px solid #808080;
+}
+.span_example {
+	border:1px solid #000000;
+	border-radius:10px;
+}
+</style>
+</head>
+<body>
+<div class="div_body">
+
+<hr class="hr">
+<b><i><span style="font-size:22px">ClipCalc</span></i><br>
+<span style="font-size:20px">取扱説明書</span><br>
+<i><span style="font-size:18px">User&apos;s Guide</span></i></b><br>
+
+<a name="mokuji"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">目次</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<a href="#menu">メニューボタン</a><br>
+<hr class="hr">
+<a href="#env">環境設定</a><br>
+<hr class="hr">
+<a href="#ans">アンサーメモリー</a><br>
+<hr class="hr">
+<a href="#renzoku">連続演算機能</a><br>
+<hr class="hr">
+<a href="#val">数値入力</a><br>
+<hr class="hr">
+<a href="#kihon">基本計算</a><br>
+<hr class="hr">
+<a href="#memory">メモリー計算</a><br>
+<hr class="hr">
+<a href="#func">関数計算</a><br>
+<hr class="hr">
+<a href="#fract">分数計算</a><br>
+<hr class="hr">
+<a href="#complex">複素数計算</a><br>
+<hr class="hr">
+<a href="#int">n進計算</a><br>
+<hr class="hr">
+<a href="#time">時間計算</a><br>
+<hr class="hr">
+<a href="#conv_angle">角度単位変換ツール</a><br>
+<hr class="hr">
+<a href="#conv_radix">基数変換ツール</a><br>
+<hr class="hr">
+<a href="#conv_time">時間単位変換ツール</a><br>
+<hr class="hr">
+<a href="#program">プログラム機能</a><br>
+<hr class="hr">
+<a href="#gijyutu">技術情報</a><br>
+<hr class="hr">
+<a href="#button">ボタンの働き</a><br>
+
+<a name="menu"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">メニューボタン</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<button><img src="icon1.png" width="20" height="20"></button>電卓メイン画面<br>
+<hr class="hr">
+<button><img src="icon7.png" width="20" height="20"></button>エディター画面<br>
+<hr class="hr">
+<button><img src="icon6.png" width="20" height="20"></button>計算式の履歴／エラー表示<br>
+<hr class="hr">
+<button><img src="icon4.png" width="20" height="20"></button>変換ツール<br>
+<hr class="hr">
+<button><img src="icon3.png" width="20" height="20"></button>テキスト画面<br>
+<hr class="hr">
+<button><img src="icon2.png" width="20" height="20"></button>グラフィック画面<br>
+<hr class="hr">
+<button><img src="icon5.png" width="20" height="20"></button>環境設定画面<br>
+
+<a name="env"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">環境設定</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<button><img src="icon5.png" width="20" height="20"></button>ボタンを押すと、環境設定画面になります。<br>
+<hr class="hr">
+<b>□[Inv][Hyp]チェック状態を保持</b><br>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+チェックを付けると、[Inv]および[Hyp]を押した後に<button class="button_func">asin</button>等を押しても[Inv]および[Hyp]のチェック状態が保持されます。<br>
+チェックを外すと、<button class="button_func">asin</button>等を押した時点で[Inv]および[Hyp]のチェックが外れます。<br>
+</td></tr></table>
+<hr class="hr">
+<b>再計算</b><br>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+<b>□型の変更時</b><br>
+</td></tr></table>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="20"></td><td>
+計算の型の変更時に計算式を再計算させる場合、チェックを付けます。<br>
+</td></tr></table>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+<b>□角度の単位変更時</b><br>
+</td></tr></table>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="20"></td><td>
+角度指定(Deg、Rad、Grad)の変更時に計算式を再計算させる場合、チェックを付けます。<br>
+</td></tr></table>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+<b>□[STO]ボタンによる変数への代入前</b><br>
+</td></tr></table>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="20"></td><td>
+チェックを付けると、<button>STO</button>ボタンを押した時点で計算式を再計算し、計算結果が変数メモリーへ代入されます(<button>STO</button>ボタンが<button>=</button>ボタンの働きをかねます)。チェックを付けないと、現在表示されている答えが変数メモリーへ代入されます。<br>
+</td></tr></table>
+<hr class="hr">
+<b>□ボタン押下時に使用法を表示</b><br>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+チェックを付けると、ボタン押下時に使用法が表示されます。<br>
+</td></tr></table>
+<hr class="hr">
+<b>環境設定ｴｸｽﾎﾟｰﾄ</b><br>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+ボタンを押すと、環境設定内容がテキスト表示されます。テキスト内容を「すべて選択」してコピー(クリップボードにコピー)し、メモ帳などにペーストして保存しておいてください。<br>
+</td></tr></table>
+<hr class="hr">
+<b>環境設定ｲﾝﾎﾟｰﾄ</b><br>
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="10"></td><td>
+テキストエリアに環境設定内容を入力(メモ帳などからコピー&amp;ペースト)して、<button class="button_import">ｲﾝﾎﾟｰﾄする</button>ボタンを押してください。テキストエリアに入力する内容は、エクスポート時の内容全てである必要はありません。反映させたい内容のみを入力してください。<br>
+</td></tr></table>
+
+<a name="ans"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">アンサーメモリー</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●本機には、最新の計算結果を記憶しておくアンサーメモリーがあります。このメモリーは数値や数式等を入力し、<button>=</button>ボタンを押した結果(数式であれば答え)を記憶します。呼び出しは、変数<span class="span_expr">Ans</span>を選択して<button>RCL</button>で行います。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例&nbsp;&nbsp;</span><br>
+123+456=<u>579</u><br>
+789-<u>579</u>=210<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">123</span><button>+</button><span class="span_expr">456</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">579<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	<span class="span_expr">789</span><button>-</button>(<span class="span_expr">Ans</span>を選択)<button>RCL</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">210<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+●アンサーメモリーは、変数メモリーとは違い、<button>=</button>を押すと新たな数値がアンサーメモリーに自動で記憶されます(変数メモリーの場合は<button>STO</button>ボタンにより手動で記憶させます)。ただし、エラーが発生した場合は、前回のアンサーメモリーの内容は保護されています。</br>
+
+<a name="renzoku"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">連続演算機能</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<button>=</button>ボタンにより演算を終了させた結果に対して、さらに計算を続けることができます。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例&nbsp;&nbsp;</span> 「3*4=12」に続けて「/3.14=」を計算します。<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">3</span><button>*</button><span class="span_expr">4</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">12<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	(続けて)<button>/</button><span class="span_expr">3.14</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">3.82165605095541<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="val"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">数値入力</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<b>■浮動小数点／分数／帯分数</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 123.45<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">123</span><button>.</button><span class="span_expr">45</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> -1.2e+3 (指数表記)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\-</button><span class="span_expr">1</span><button>.</button><span class="span_expr">2</span><button>e+</button><span class="span_expr">3</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td valign="middle">1</td>
+		<td align="center">
+			2<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">2</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">3</span><br>
+	または<button>(</button><span class="span_expr">1</span><button>SP</button><span class="span_expr">2</span><button>SP</button><span class="span_expr">3</span><button>)</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 180deg (度)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">180</span><button>d</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span> 123grad (グラジアン)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">123</span><button>g</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> 3.14rad (ラジアン)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">3.14</span><button>r</button><br>
+</div>
+<hr class="hr">
+<b>■複素数</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 12.3+4.5i (実数部12.3と虚数部+4.5)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">12</span><button>.</button><span class="span_expr">3</span><button>\+</button><span class="span_expr">4</span><button>.</button><span class="span_expr">5</span><button>i</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 1e-2-3e+4i (実数部1e-2と虚数部-3e+4)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">1</span><button>e-</button><span class="span_expr">2</span><button>\-</button><span class="span_expr">3</span><button>e+</button><span class="span_expr">4</span><button>i</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> -i (実数部は省略できます。また、虚数部の1は省略できます。)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\-</button><button>i</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> (12 34) (実数部12と虚数部34)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>(</button><span class="span_expr">12</span><button>SP</button><span class="span_expr">34</span><button>)</button><br>
+</div>
+<hr class="hr">
+<b>■符号付き／符号なし</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 123<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">123</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> -456<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\-</button><span class="span_expr">456</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 1101<span class="span_opt">2</span> (2進数)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\b</button><span class="span_expr">1101</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 567<span class="span_opt">8</span> (8進数)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\0</button><span class="span_expr">567</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span> 369<span class="span_opt">10</span> (10進数)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\</button><span class="span_expr">369</span><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> FEDC<span class="span_opt">16</span> (16進数)<br>
+<hr class="hr">
+<div class="div_ex">
+	<button>\x</button><span class="span_expr">FEDC</span><br>
+</div>
+<hr class="hr">
+<b>■時間</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 12:34<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">12</span><button>:</button><span class="span_expr">34</span><br>
+	<hr class="hr">
+	※現在の時間の単位により解釈が異なります。<br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 1:23:45.6 (小数点が使用できます)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">1</span><button>:</button><span class="span_expr">23</span><button>:</button><span class="span_expr">45</span><button>.</button><span class="span_expr">6</span><br>
+	<hr class="hr">
+	※現在の時間の単位により解釈が異なります。<br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 12.5時<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">12</span><button>.</button><span class="span_expr">5</span><button>h</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 34分<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">34</span><button>m</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span> 4分56秒<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">4</span><button>:</button><span class="span_expr">56</span><button>s</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> 78フレーム<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">78</span><button>f</button><br>
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例7&nbsp;&nbsp;</span> 12時3分前<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">12</span><button>:</button><button>\-</button><span class="span_expr">3</span><button>m</button><br>
+</div>
+
+<a name="kihon"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">基本計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 23+4.5-53<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">23</span><button>+</button><span class="span_expr">4.5</span><button>-</button><span class="span_expr">53</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">-25.5<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 56*(-12)/(-2.5)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">56</span><button>*</button><button>\-</button><span class="span_expr">12</span><button>/</button><button>\-</button><span class="span_expr">2.5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">268.8<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 2/3*(10<span class="span_pow">20</span>)<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">2</span><button>/</button><span class="span_expr">3</span><button>*</button>(Inv)<button class="button_func">exp10</button><span class="span_expr">20</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">6.66666666666667e+19<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 7*8-4*5<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">7</span><button>*</button><span class="span_expr">8</span><button>-</button><span class="span_expr">4</span><button>*</button><span class="span_expr">5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">36<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			3*4<br>
+			<hr class="hr_fract" style="width:35px">
+			5
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	<button class="button_optional">(</button><span class="span_expr">3</span><button>*</button><span class="span_expr">4</span><button>)</button><button>/</button><span class="span_expr">5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">2.4<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> 2*(7+6*(5+4))<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">2</span><button>*</button><button>(</button><span class="span_expr">7</span><button>+</button><span class="span_expr">6</span><button>*</button><button>(</button><span class="span_expr">5</span><button>+</button><span class="span_expr">4</span><button class="button_optional">)</button><button class="button_optional">)</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">122<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+●計算式の先頭での<button>(</button>ボタンの操作(<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span>の場合)および<button>=</button>ボタンの前の<button>)</button>ボタンの操作(<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span>の場合)は省略することができます。<br>
+
+<a name="memory"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">メモリー計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●変数メモリーは26個(<span class="span_expr">@A</span>～<span class="span_expr">@Z</span>)あり、データや定数、答えなどの数値を自由に保存できます。<br>
+<hr class="hr">
+●変数メモリーの内容を消去するときは、例えば変数メモリー<span class="span_expr">@A</span>の内容を消去する場合、変数<span class="span_expr">@A</span>を選択して<button>Mcl</button>ボタンを押してください。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span><br>
+<u>193.2</u>/23=8.4<br>
+<u>193.2</u>/28=6.9<br>
+<u>193.2</u>/42=4.6<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">193.2</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">193.2<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	(<span class="span_expr">@A</span>を選択)<button>STO</button><br>
+	<button>RCL</button><button>/</button><span class="span_expr">23</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">8.4<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	<button>RCL</button><button>/</button><span class="span_expr">28</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">6.9<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	<button>RCL</button><button>/</button><span class="span_expr">42</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">4.6<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			9*6+3<br>
+			<hr class="hr_fract" style="width:60px">
+			(7-2)*8
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">9</span><button>*</button><span class="span_expr">6</span><button>+</button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">57<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	(<span class="span_expr">@B</span>を選択)<button>STO</button><br>
+	<button>(</button><span class="span_expr">7</span><button>-</button><span class="span_expr">2</span><button>)</button><button>*</button><span class="span_expr">8</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">40<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	(<span class="span_expr">@C</span>を選択)<button>STO</button><br>
+	(<span class="span_expr">@B</span>を選択)<button>RCL</button><button>/</button>(<span class="span_expr">@C</span>を選択)<button>RCL</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1.425<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+●環境設定で、[STO]ボタンによる変数への代入前に再計算するように設定されている場合、<button>STO</button>ボタンの操作の直前での<button>=</button>ボタンの操作は省略することができます。<br>
+(<button>STO</button>ボタンが<button>=</button>ボタンの働きをかねています。)<br>
+
+<a name="func"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">関数計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<b>■三角関数計算、逆三角関数計算</b><br>
+<hr class="hr">
+●浮動小数点、分数、帯分数型の場合、三角関数の引数に指定する値は角度指定(Deg、Rad、Grad)に依存します。<br>
+<hr class="hr">
+●浮動小数点、分数、帯分数型の場合、逆三角関数の計算結果は角度指定(Deg、Rad、Grad)に依存します。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> sin 63°<br>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をDegに<br>
+	<button class="button_func">sin</button><span class="span_expr">63</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.891006524188368<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td valign="middle">cos(</td>
+		<td align="center">
+			π<br>
+			<hr class="hr_fract" style="width:25px">
+			3
+		</td>
+		<td valign="middle">rad)</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をRadに<br>
+	<button class="button_func">cos</button><button>(</button><button class="button_func">pi</button><button>/</button><span class="span_expr">3</span><button>)</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.5<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> tan(-35grad)<br>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をGradに<br>
+	<button class="button_func">tan</button><button>\-</button><span class="span_expr">35</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">-0.612800788139932<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> sin<span class="span_inv">-1</span> 0.5=30° (sin(x)=0.5のxを求める)<br>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をDegに<br>
+	(Inv)<button class="button_func">asin</button><span class="span_expr">0.5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">30<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td width="40" valign="middle"><span style="vertical-align:2pt">cos<span class="span_inv">-1</span></span></td>
+		<td align="center">
+			√2<br>
+			<hr class="hr_fract" style="width:30px">
+			2
+		</td>
+		<td colspan="3" valign="middle">=0.785398163397448rad</td>
+	<tr>
+	<tr>
+		<td colspan="2"></td>
+		<td width="10" align="left" valign="middle">=</td>
+		<td width="25" align="center">
+			π<br>
+			<hr class="hr_fract" style="width:25px">
+			4
+		</td>
+		<td align="left" valign="middle">rad</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をRadに<br>
+	(Inv)<button class="button_func">acos</button><button>(</button>(Inv)<button class="button_func">sqrt</button><span class="span_expr">2</span><button>/</button><span class="span_expr">2</span><button>)</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.785398163397448<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	<button>/</button><button class="button_func">pi</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.25<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> tan<span class="span_inv">-1</span> 0.741=36.5384457651881°<br>
+<hr class="hr">
+<div class="div_ex">
+	角度指定をDegに<br>
+	(Inv)<button class="button_func">atan</button><span class="span_expr">0.741</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">36.5384457651881<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■双曲線／逆双曲線関数</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> sinh 3.6<br>
+<hr class="hr">
+<div class="div_ex">
+	(Hyp)<button class="button_func">sinh</button><span class="span_expr">3.6</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">18.2854553606153<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> sinh<span class="span_inv">-1</span> 30<br>
+<hr class="hr">
+<div class="div_ex">
+	(Inv)(Hyp)<button class="button_func">asinh</button><span class="span_expr">30</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">4.09462222433053<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■対数計算、指数計算</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> log<span class="span_opt">10</span> 1.23<br>
+<hr class="hr">
+<div class="div_ex">
+	(C言語モード)<button class="button_func">log10</button><span class="span_expr">1.23</span><button>=</button><br>
+	(電卓モード)<button class="button_func">log</button><span class="span_expr">1.23</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.0899051114393979<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> log<span class="span_opt">e</span> 90<br>
+<hr class="hr">
+<div class="div_ex">
+	(C言語モード)<button class="button_func">log</button><span class="span_expr">90</span><button>=</button><br>
+	(電卓モード)<button class="button_func">ln</button><span class="span_expr">90</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">4.49980967033027<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			log<span class="span_opt">10</span> 64<br>
+			<hr class="hr_fract" style="width:70px">
+			log<span class="span_opt">10</span> 4
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	(C言語モード)<button class="button_func">log10</button><span class="span_expr">64</span><button>/</button><button class="button_func">log10</button><span class="span_expr">4</span><button>=</button><br>
+	(電卓モード)<button class="button_func">log</button><span class="span_expr">64</span><button>/</button><button class="button_func">log</button><span class="span_expr">4</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> e<span class="span_pow">10</span><br>
+<hr class="hr">
+<div class="div_ex">
+	(Inv)<button class="button_func">exp</button><span class="span_expr">10</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">22026.4657948067<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span> 10<span class="span_pow">0.4</span> +5*e<span class="span_pow">-3</span><br>
+<hr class="hr">
+<div class="div_ex">
+	(Inv)<button class="button_func">exp10</button><span class="span_expr">0.4</span><button>+</button><span class="span_expr">5</span><button>*</button>(Inv)<button class="button_func">exp</button><button>\-</button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">2.7608217733489<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> 2<span class="span_pow">4</span><br>
+<hr class="hr">
+<div class="div_ex">
+	<button class="button_func">pow</button><span class="span_expr">2</span><button>SP</button><span class="span_expr">4</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">16<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例7&nbsp;&nbsp;</span> 2<span class="span_pow">-3</span><br>
+<hr class="hr">
+<div class="div_ex">
+	<button class="button_func">pow</button><span class="span_expr">2</span><button>SP</button><button>\-</button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.125<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■その他の関数(√、x<span class="span_pow">2</span>、乱数)</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> √2+√3*√5<br>
+<hr class="hr">
+<div class="div_ex">
+	(Inv)<button class="button_func">sqrt</button><span class="span_expr">2</span><button>+</button>(Inv)<button class="button_func">sqrt</button><span class="span_expr">3</span><button>*</button>(Inv)<button class="button_func">sqrt</button><span class="span_expr">5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">5.28719690858051<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 123+30<span class="span_pow">2</span><br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">123</span><button>+</button><button class="button_func">sqr</button><span class="span_expr">30</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1023<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 0から32767の間で乱数を発生させる<br>
+<hr class="hr">
+<div class="div_ex">
+	<button class="button_func">rand</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">7615<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="fract"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">分数計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<b>■分数計算</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			2<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+		<td valign="middle">+</td>
+		<td align="center">
+			4<br>
+			<hr class="hr_fract" style="width:20px">
+			5
+		</td>
+		<td valign="middle">=1</td>
+		<td align="center">
+			7<br>
+			<hr class="hr_fract" style="width:20px">
+			15
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	帯分数型に<br>
+	<span class="span_expr">2</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">3</span><button>+</button><span class="span_expr">4</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">5</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」7」15<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td valign="middle">3</td>
+		<td align="center">
+			1<br>
+			<hr class="hr_fract" style="width:20px">
+			4
+		</td>
+		<td valign="middle">+1</td>
+		<td align="center">
+			2<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+		<td valign="middle">=4</td>
+		<td align="center">
+			11<br>
+			<hr class="hr_fract" style="width:20px">
+			12
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	帯分数型に<br>
+	<span class="span_expr">3</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">4</span><button>+</button><span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">2</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">4」11」12<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			2<br>
+			<hr class="hr_fract" style="width:20px">
+			4
+		</td>
+		<td valign="middle">=</td>
+		<td align="center">
+			1<br>
+			<hr class="hr_fract" style="width:20px">
+			2
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">2</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">4</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」2<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+●浮動小数点型でも、分数の入力ができます。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			1<br>
+			<hr class="hr_fract" style="width:20px">
+			2
+		</td>
+		<td valign="middle">+1.6=2.1</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	浮動小数点型に<br>
+	<span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">2</span><button>+</button><span class="span_expr">1.6</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">2.1<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■小数→分数表示切り替え</b><br>
+<hr class="hr">
+●小数の演算結果表示を分数に切り替えることができます。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td valign="middle">2.75→2</td>
+		<td align="center">
+			3<br>
+			<hr class="hr_fract" style="width:20px">
+			4
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	浮動小数点型に<br>
+	<span class="span_expr">2.75</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">2.75<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	帯分数型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">2」3」4<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	分数型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">11」4<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■分数→小数表示切り替え</b><br>
+<hr class="hr">
+●分数の演算結果表示を小数に切り替えることができます。<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td align="center">
+			1<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+		<td valign="middle">←→0.333333...</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	分数型に<br>
+	<span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	浮動小数点型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">0.333333333333333<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	分数型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<b>■帯分数→仮分数表示切り替え</b><br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例&nbsp;&nbsp;</span><br>
+<table>
+	<tr>
+		<td valign="middle">1</td>
+		<td align="center">
+			2<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+		<td valign="middle">←→</td>
+		<td align="center">
+			5<br>
+			<hr class="hr_fract" style="width:20px">
+			3
+		</td>
+	<tr>
+</table>
+<hr class="hr">
+<div class="div_ex">
+	帯分数型に<br>
+	<span class="span_expr">1</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">2</span><button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」2」3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	分数型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">5」3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+	帯分数型に切り替え<br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">1」2」3<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="complex"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">複素数計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> (2+3i)+(4+5i)を計算する。<br>
+<hr class="hr">
+<div class="div_ex">
+	<span class="span_expr">2</span><button>\+</button><span class="span_expr">3</span><button>i</button><button>+</button><span class="span_expr">4</span><button>\+</button><span class="span_expr">5</span><button>i</button><button>=</button><br>
+	または<button>(</button><span class="span_expr">2</span><button>+</button><span class="span_expr">3</span><button>i</button><button>)</button><button>+</button><button>(</button><span class="span_expr">4</span><button>+</button><span class="span_expr">5</span><button>i</button><button>)</button><button>=</button><br>
+	または<button>(</button><span class="span_expr">2</span><button>SP</button><span class="span_expr">3</span><button>)</button><button>+</button><button>(</button><span class="span_expr">4</span><button>SP</button><span class="span_expr">5</span><button>)</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">6<br>+8i</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> √-23を計算する。<br>
+<hr class="hr">
+<div class="div_ex">
+	(Inv)<button class="button_func">sqrt</button><button>\-</button><span class="span_expr">23</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">4.79583152331272i<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="int"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">n進計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●n進計算をするには、符号付き型または符号なし型に切り替えます。<br>
+<hr class="hr">
+●n進の指示には、計算機全体に与える指示と、個別の数値に与える方法があります。<br>
+<hr class="hr">
+●計算機全体に与える指示では、2～16進の計算を指定することができます。<br>
+<hr class="hr">
+●個別の数値に与える指示では、2進、8進、10進、16進を指定することができます。<br>
+<hr class="hr">
+●n進計算では、数値間の論理演算を行うことができます。<br>
+論理積and(&amp;)、論理和or(|)、排他的論理和xor(^)<br>
+<hr class="hr">
+●n進計算では、数値のビットシフトを行うことができます。<br>
+左シフト(&lt;&lt;)、右シフト(&gt;&gt;)<br>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 10111<span class="span_opt">2</span>+11010<span class="span_opt">2</span> を計算し、2進数で結果を表示する。<br>
+<hr class="hr">
+<div class="div_ex">
+	基数(進)を<span class="span_expr">2</span>にする<br>
+	<span class="span_expr">10111</span><button>+</button><span class="span_expr">11010</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">110001<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 7654<span class="span_opt">8</span>/12<span class="span_opt">10</span> を計算し、8進数で結果を表示する。<br>
+<hr class="hr">
+<div class="div_ex">
+	基数(進)を<span class="span_expr">8</span>にする<br>
+	<span class="span_expr">7654</span><button>/</button><button>\</button><span class="span_expr">12</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">516<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 120<span class="span_opt">16</span> OR 1101<span class="span_opt">2</span> を計算し、16進数で結果を表示する。<br>
+<hr class="hr">
+<div class="div_ex">
+	基数(進)を<span class="span_expr">16</span>にする<br>
+	<span class="span_expr">120</span><button>|</button><button>\b</button><span class="span_expr">1101</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">12D<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 11001<span class="span_opt">2</span> を左に3ビットシフトさせ、2進数で結果を表示する。<br>
+<hr class="hr">
+<div class="div_ex">
+	基数(進)を<span class="span_expr">2</span>にする<br>
+	<span class="span_expr">11001</span><button>&lt;&lt;</button><button>\</button><span class="span_expr">3</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">11001000<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="time"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">時間計算</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<span class="span_example">&nbsp;&nbsp;例1&nbsp;&nbsp;</span> 1時間23分+45分-30秒<br>
+<hr class="hr">
+<div class="div_ex">
+	時間の単位を秒にする<br>
+	<span class="span_expr">1</span><button>:</button><span class="span_expr">23</span><button>:</button><span class="span_expr">0</span><button>+</button><span class="span_expr">45</span><button>:</button><span class="span_expr">0</span><button>-</button><span class="span_expr">0</span><button>:</button><span class="span_expr">30</span><button>=</button><br>
+	または<span class="span_expr">1</span><button>:</button><span class="span_expr">23</span><button>m</button><button>+</button><span class="span_expr">45</span><button>m</button><button>-</button><span class="span_expr">30</span><button>s</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">02:07:30<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例2&nbsp;&nbsp;</span> 1時間47分*10
+<hr class="hr">
+<div class="div_ex">
+	時間の単位を分にする<br>
+	<span class="span_expr">1</span><button>:</button><span class="span_expr">47</span><button>*</button><span class="span_expr">10</span><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">17:50<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+<hr class="hr">
+<span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 60fpsでの10000フレームは何分何秒?<br>
+<hr class="hr">
+<div class="div_ex">
+	時間の単位を秒にする<br>
+	フレーム数(fps)を<span class="span_expr">60.0</span>にする<br>
+	<span class="span_expr">10000</span><button>f</button><button>=</button><br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
+		<div class="div_ans">02:46.666666666666664<br>&nbsp;</div>
+	</td></tr></table>
+	<hr class="hr">
+</div>
+
+<a name="conv_angle"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">角度単位変換ツール</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●浮動小数点、分数、帯分数、複素数型で<button><img src="icon4.png" width="20" height="20"></button>ボタンを押すと、角度単位変換ツールが起動します。<br>
+<hr class="hr">
+●計算結果をリアルタイムに度、ラジアン、グラジアン変換し、表示します。現在の角度指定(Deg、Rad、Grad)により、計算結果と同じ値の表示場所が決定されます。<br>
+<hr class="hr">
+●度、ラジアン、グラジアンの何れかを直接入力することもできます。<br>
+
+<a name="conv_radix"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">基数変換ツール</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●符号付き、符号なし型で<button><img src="icon4.png" width="20" height="20"></button>ボタンを押すと、基数変換ツールが起動します。<br>
+<hr class="hr">
+●計算結果をリアルタイムに2、8、10、16進変換し、表示します。<br>
+<hr class="hr">
+●2、8、10、16進数の何れかを直接入力することもできます。<br>
+
+<a name="conv_time"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">時間単位変換ツール</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●時間型で<button><img src="icon4.png" width="20" height="20"></button>ボタンを押すと、時間単位変換ツールが起動します。<br>
+<hr class="hr">
+●計算結果をリアルタイムに時、分、秒、フレーム数に変換し、表示します。<br>
+<hr class="hr">
+●時、分、秒、フレーム数の何れかを直接入力することもできます。<br>
+
+<a name="program"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">プログラム機能</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+●<button><img src="icon7.png" width="20" height="20"></button>ボタンを押すと、エディターが起動します。<br>
+<hr class="hr">
+●プログラムメモリーは26個(<span class="span_expr">a</span>～<span class="span_expr">z</span>)あります。<br>
+<hr class="hr">
+●プログラムが変更されると<button class="button_savefunc">保存する</button>ボタンが表示されます。編集内容を保存するには<button class="button_savefunc">保存する</button>ボタンを押してください。<br>
+<hr class="hr">
+●呼び出しは<button>&lt;&lt;</button>ボタンで行います。計算式に関数として入力され、続けて関数パラメータを入力することができます。<br>
+<hr class="hr">
+●<button>&lt;&lt;</button>ボタンが押されると、自動で編集内容が保存されます。<br>
+<hr class="hr">
+●プログラム内で「<span class="span_expr">:parent</span>」コマンドを用いることで、変数メモリー(<span class="span_expr">@A</span>～<span class="span_expr">@Z</span>)を参照することができます。例えば変数メモリー<span class="span_expr">@A</span>を参照する場合、「<span class="span_expr">:parent @A</span>」のように記述します。<br>
+
+<a name="gijyutu"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">技術情報</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<b>■計算の優先順位</b><br>
+<hr class="hr">
+下記の順位で計算されます。<br>
+<hr class="hr">
+<table width="100%" border="1" cellspacing="1" cellpadding="0">
+<tr>
+<td width="100%">(1) [~]、[-]、^(累乗)、関数<br>
+(2) *、/、%<br>
+(3) +、-<br>
+(4) &lt;&lt;、&gt;&gt;<br>
+(5) &amp;<br>
+(6) ^(排他的論理和xor)<br>
+(7) |</td>
+</tr>
+</table>
+<hr class="hr">
+●関数が連続している時は右側から左側へ実行されます。<br>
+exp log sqrt 120 → exp(log(sqrt 120))<br>
+<hr class="hr">
+●同順位の演算子が連続している時は左側から右側へ実行されます。<br>
+12+34-56+78 → ((12+34)-56)+78<br>
+<hr class="hr">
+●括弧が使用された場合は、括弧内が最優先されます。<br>
+<hr class="hr">
+<b>■関数の入力範囲</b><br>
+<hr class="hr">
+<table width="100%" border="1" cellspacing="1" cellpadding="1">
+<tr>
+<td width="33%" bgcolor="#E0E0E0"><b>関数</b></td>
+<td width="67%" bgcolor="#E0E0E0"><b>入力範囲</b></td>
+</tr>
+<tr>
+<td width="33%">asin <i>x</i></td>
+<td width="67%">-1≦<i>x</i>≦1</td>
+</tr>
+<tr>
+<td width="33%">acos <i>x</i></td>
+<td width="67%">-1≦<i>x</i>≦1</td>
+</tr>
+<tr>
+<td width="33%">acosh <i>x</i></td>
+<td width="67%">1≦<i>x</i></td>
+</tr>
+<tr>
+<td width="33%">atanh <i>x</i></td>
+<td width="67%">-1＜<i>x</i>＜1</td>
+</tr>
+<tr>
+<td width="33%">ln <i>x</i></td>
+<td width="67%">0＜<i>x</i></td>
+</tr>
+<tr>
+<td width="33%">log <i>x</i></td>
+<td width="67%">0＜<i>x</i></td>
+</tr>
+<tr>
+<td width="33%">log10 <i>x</i></td>
+<td width="67%">0＜<i>x</i></td>
+</tr>
+<tr>
+<td width="33%">sqrt <i>x</i></td>
+<td width="67%">0≦<i>x</i></td>
+</tr>
+</table>
+<hr class="hr">
+●複素数型の場合は、指定できる値に制限はありません。<br>
+
+<a name="button"></a><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">ボタンの働き</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<button>0</button>～<button>9</button><br>
+<hr class="hr">
+<button>.</button><button>e+</button><button>e-</button>(浮動小数点、分数、帯分数、複素数、時間)<br>
+<hr class="hr">
+<button>d</button><button>g</button><button>r</button>(浮動小数点、分数、帯分数、複素数)<br>
+<hr class="hr">
+<button>h</button><button>m</button><button>s</button><button>f</button>(時間)<br>
+<hr class="hr">
+<button>a<span style="vertical-align:2pt">b</span>/<span style="vertical-align:-2pt">c</span></button>(浮動小数点、分数、帯分数)<br>
+<hr class="hr">
+<button>i</button>(複素数)<br>
+<hr class="hr">
+<button>:</button>(時間)<br>
+<hr class="hr">
+<button>A</button>～<button>F</button><button>\b</button><button>\0</button><button>\</button><button>\x</button>(符号付き、符号なし)<br>
+<hr class="hr">
+<button>\-</button><button>\+</button><br>
+<hr class="hr">
+<b>置数ボタン</b><br>
+数値を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>[-]</button><br>
+<hr class="hr">
+<b>負数ボタン</b><br>
+負の数を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>[~]</button><br>
+<hr class="hr">
+<b>補数ボタン</b>(符号付き、符号なし)<br>
+補数を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>+</button><button>-</button><button>*</button><button>/</button><button>%</button><br>
+<hr class="hr">
+<button>&amp;</button><button>^</button><button>|</button><button>&lt;&lt;</button><button>&gt;&gt;</button>(符号付き、符号なし)<br>
+<hr class="hr">
+<b>演算子ボタン</b><br>
+演算子を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<i>x</i><button>^</button><i>y</i><br>
+<hr class="hr">
+<b>累乗ボタン</b>(浮動小数点、分数、帯分数、複素数、時間)<br>
+<i>x</i>の<i>y</i>乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>(</button><button>)</button><br>
+<hr class="hr">
+<b>括弧入力ボタン</b><br>
+括弧を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>SP</button><br>
+<hr class="hr">
+<b>スペースボタン</b><br>
+空白文字を入力するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>DEL</button><br>
+<hr class="hr">
+<b>デリートボタン</b><br>
+間違えて入力した数値や関数を削除するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>AC</button><br>
+<hr class="hr">
+<b>オールクリアボタン</b><br>
+入力されている計算式を消去するときに押します。<br>
+
+<hr class="hr_border">
+
+<button style="height:50px">=</button><br>
+<hr class="hr">
+<b>計算実行ボタン</b><br>
+入力した計算式を実行するときに押します。<br>
+
+<hr class="hr_border">
+
+<button>STO</button><br>
+<hr class="hr">
+<b>ストアメモリーボタン</b><br>
+計算した結果をメモリーに記憶するときに押します。<br>
+※あらかじめ選択された変数が対象です。<br>
+
+<hr class="hr_border">
+
+<button>RCL</button><br>
+<hr class="hr">
+<b>リコールメモリーボタン</b><br>
+メモリーに記憶した数値を呼び出すときに押します。<br>
+※あらかじめ選択された変数が対象です。<br>
+
+<hr class="hr_border">
+
+<button>Mcl</button><br>
+<hr class="hr">
+<b>メモリークリア</b><br>
+メモリーを消去する時に押します。<br>
+※あらかじめ選択された変数が対象です。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">sin</button><i>x</i><br>
+<hr class="hr">
+<button class="button_func">cos</button><i>x</i><br>
+<hr class="hr">
+<button class="button_func">tan</button><i>x</i><br>
+<hr class="hr">
+<b>三角関数ボタン</b><br>
+三角関数を計算するときに押します。浮動小数点、分数、帯分数の場合、引数に指定する値は角度指定(Deg、Rad、Grad)に依存します。<br>
+
+<hr class="hr_border">
+
+(Inv)<button class="button_func">asin</button><i>x</i><br>
+<hr class="hr">
+(Inv)<button class="button_func">acos</button><i>x</i><br>
+<hr class="hr">
+(Inv)<button class="button_func">atan</button><i>x</i><br>
+<hr class="hr">
+<b>逆三角関数</b><br>
+逆三角関数を計算するときに押します。浮動小数点、分数、帯分数の場合、結果は角度指定(Deg、Rad、Grad)に依存します。<br>
+
+<hr class="hr_border">
+
+(Hyp)<button class="button_func">sinh</button><i>x</i><br>
+<hr class="hr">
+(Hyp)<button class="button_func">cosh</button><i>x</i><br>
+<hr class="hr">
+(Hyp)<button class="button_func">tanh</button><i>x</i><br>
+<hr class="hr">
+<b>双曲線関数</b><br>
+双曲線関数を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(Inv)(Hyp)<button class="button_func">asinh</button><i>x</i><br>
+<hr class="hr">
+(Inv)(Hyp)<button class="button_func">acosh</button><i>x</i><br>
+<hr class="hr">
+(Inv)(Hyp)<button class="button_func">atanh</button><i>x</i><br>
+<hr class="hr">
+<b>逆双曲線関数</b><br>
+逆双曲線関数を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(C言語モード)<button class="button_func">log</button><i>x</i><br>
+(電卓モード)<button class="button_func">ln</button><i>x</i><br>
+<hr class="hr">
+<b>自然対数ボタン</b><br>
+自然対数を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(Inv)<button class="button_func">exp</button><i>x</i><br>
+<hr class="hr">
+<b>eの<i>x</i>乗</b><br>
+eの<i>x</i>乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(C言語モード)<button class="button_func">log10</button><i>x</i><br>
+(電卓モード)<button class="button_func">log</button><i>x</i><br>
+<hr class="hr">
+<b>常用対数ボタン</b><br>
+常用対数を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(Inv)<button class="button_func">exp10</button><i>x</i><br>
+<hr class="hr">
+<b>10の<i>x</i>乗</b><br>
+10の<i>x</i>乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">sqr</button><i>x</i><br>
+<hr class="hr">
+<b>自乗ボタン</b><br>
+自乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+(Inv)<button class="button_func">sqrt</button><i>x</i><br>
+<hr class="hr">
+<b>ルートボタン</b><br>
+平方根(ルート)を計算するときに押します。<br>
+
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">その他の内部関数ボタン</span></td>
+	</tr>
+</table>
+<hr class="hr">
+
+<button class="button_func">atan2</button><i>y</i><button>SP</button><i>x</i><br>
+<hr class="hr">
+<i>y</i>/<i>x</i>の逆正接を計算します。浮動小数点、分数、帯分数の場合、結果は角度指定(Deg、Rad、Grad)に依存します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">pow</button><i>x</i><button>SP</button><i>y</i><br>
+<hr class="hr">
+<i>x</i>の<i>y</i>乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">abs</button><i>x</i><br>
+<hr class="hr">
+絶対値を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">ceil</button><i>x</i><br>
+<hr class="hr">
+<i>x</i>以上の最小の整数を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">floor</button><i>x</i><br>
+<hr class="hr">
+<i>x</i>以下の最大の整数を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">int</button><i>x</i><br>
+<hr class="hr">
+整数に丸めるときに押します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">num</button><i>x</i><br>
+<hr class="hr">
+分数の分子を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">denom</button><i>x</i><br>
+<hr class="hr">
+分数の分母を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">real</button><i>x</i><br>
+<hr class="hr">
+複素数の実数部を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">imag</button><i>x</i><br>
+<hr class="hr">
+複素数の虚数部を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">arg</button><i>x</i><br>
+<hr class="hr">
+複素数の位相角度を求めます。結果は角度指定(Deg、Rad、Grad)に依存します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">norm</button><i>x</i><br>
+<hr class="hr">
+絶対値の自乗を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">conjg</button><i>x</i><br>
+<hr class="hr">
+共役複素数を求めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">polar</button><i>rho</i><button>SP</button><i>theta</i><br>
+<hr class="hr">
+絶対値<i>rho</i>、位相角度<i>theta</i>の複素数値を求めます。<i>theta</i>は角度指定(Deg、Rad、Grad)に依存します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">ldexp</button><i>x</i><button>SP</button><i>exp</i><br>
+<hr class="hr">
+仮数<i>x</i>と指数<i>exp</i>から実数を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">frexp</button><i>x</i><button>SP</button>(変数を選択して)<button>RCL</button><br>
+<hr class="hr">
+<i>x</i>の仮数を求めます。変数には指数が格納されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">modf</button><i>x</i><button>SP</button>(変数を選択して)<button>RCL</button><br>
+<hr class="hr">
+<i>x</i>の小数部を求めます。変数には整数部が格納されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">rand</button><br>
+<hr class="hr">
+0から32767の間で疑似乱数を発生させます。<br>
+
+<hr class="hr_border">
+
+<button class="button_func">time</button><br>
+<hr class="hr">
+現在の時刻を秒単位で得ます。<br>
+
+<hr class="hr">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000"><span style="font-size:20px; color:#FFFFFF">外部関数ボタン</span></td>
+	</tr>
+</table>
+<hr class="hr">
+●<button class="button_loadextfunc">外部関数読み込み</button>ボタンが表示されている場合、読み込むためにボタンを押してください。<br>
+<hr class="hr">
+●ストレージクリアまたはCookieクリアを行うと、再度<button class="button_loadextfunc">外部関数読み込み</button>ボタンを押す必要があります。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">log1p</button><i>x</i><br>
+<hr class="hr">
+<i>x</i>に1を加えた値の対数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">expm1</button><i>x</i><br>
+<hr class="hr">
+<i>x</i>の指数から1を引いた値<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">trunc</button><i>x</i><br>
+<hr class="hr">
+0に近い方の整数値に丸めます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">pi</button><br>
+<hr class="hr">
+円周率<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">rad</button><i>val</i><br>
+<hr class="hr">
+度をラジアンに変換します。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">deg</button><i>val</i><br>
+<hr class="hr">
+ラジアンを度に変換します。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">e</button><br>
+<hr class="hr">
+自然対数の底<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">log2</button><i>val</i><br>
+<hr class="hr">
+底2の対数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">logn</button><i>n</i><button>SP</button><i>val</i><br>
+<hr class="hr">
+底<i>n</i>の対数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">cbrt</button><i>val</i><br>
+<hr class="hr">
+立方根<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">hypot</button><i>val</i><button>SP</button><i>val</i><br>
+<hr class="hr">
+直角三角形の斜辺の長さ<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">roff</button><i>val</i><button>SP</button><i>prec</i><br>
+<hr class="hr">
+小数点以下<i>prec</i>桁になるように四捨五入します。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">gcd</button><i>val</i> [<button>SP</button><i>val</i>...]<br>
+<hr class="hr">
+最大公約数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">lcm</button><i>val</i> [<button>SP</button><i>val</i>...]<br>
+<hr class="hr">
+最小公倍数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">mean</button><i>val</i> [<button>SP</button><i>val</i>...]<br>
+<hr class="hr">
+平均値<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">j</button><i>n</i><button>SP</button><i>x</i><br>
+<hr class="hr">
+第1種ベッセル関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">y</button><i>n</i><button>SP</button><i>x</i><br>
+<hr class="hr">
+第2種ベッセル関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">fib1</button><i>n</i><br>
+<hr class="hr">
+フィボナッチ数列の<i>n</i>番目の値<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">beta</button><i>val</i><button>SP</button><i>val</i><br>
+<hr class="hr">
+ベータ関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">gamma</button><i>val</i><br>
+<hr class="hr">
+ガンマ関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">loggamma</button><i>val</i><br>
+<hr class="hr">
+ガンマ関数の対数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">inv</button><i>angle</i><br>
+<hr class="hr">
+インボリュート関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">iinv</button><i>angle</i><br>
+<hr class="hr">
+逆インボリュート関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">phi</button><i>val</i><br>
+<hr class="hr">
+オイラーの関数<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">b</button><i>num</i><br>
+<hr class="hr">
+ベルヌーイ数<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">div</button><i>val</i><br>
+<hr class="hr">
+約数<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">egypfrac</button><i>分子</i><button>SP</button><i>分母</i><br>
+<hr class="hr">
+エジプトの分数<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">fact</button><i>val</i><br>
+<hr class="hr">
+素因数分解<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">fib</button><i>num</i><br>
+<hr class="hr">
+フィボナッチ数列<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">prim</button><i>max</i><br>
+<hr class="hr">
+素数<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">time</button><i>start</i><button>SP</button>(変数を選択して)<button>RCL</button><br>
+<hr class="hr">
+経過時間を出力します。変数には現在の時刻が格納されます。<br>
+※テキスト画面に表示されます。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">rgb</button><i>R値</i><button>SP</button><i>G値</i><button>SP</button><i>B値</i><br>
+<hr class="hr">
+RGBカラー値を取得します。<br>
+
+<hr class="hr_border">
+
+<button class="button_extfunc">color</button><i>RGBカラー値</i> [<button>SP</button><i>RGBカラー値</i>...]<br>
+<hr class="hr">
+色見本を表示します。<br>
+※グラフィック画面に表示されます。<br>
+
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="100%" bgcolor="#000000">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="100%" align="right"><i><span style="font-size:16px">ClipCalc Copyright (C) SatisKia</span></i></td>
+	</tr>
+</table>
+<a href="#mokuji">目次へ</a><br>
+<hr class="hr">
+
+</div>
+</body>
+</html>

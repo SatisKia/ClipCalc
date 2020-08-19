@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="電卓,関数電卓,calculator,clipcalc">
+<meta name="viewport" content="target-densitydpi=device-dpi, width=322, user-scalable=no">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
+<link rel="icon" href="favicon.ico">
+<title></title>
+
+<!--リリース用-->
+<script type="text/javascript" src="clip.js?v=200819"></script>
+<script type="text/javascript" src="Main.js?v=200819"></script>
+
+<!--デバッグ用
+<script type="text/javascript" src="clip.debug.js?v=200819"></script>
+<script type="text/javascript" src="Main.debug.js?v=200819"></script>
+-->
+
+<!--ライブラリ未使用版デバッグ用
+<script type="text/javascript" src="All.debug.js?v=200819"></script>
+-->
+
+<script type="text/javascript">
+
+window.androidTabletTest = false;
+window.iPadTest          = false;
+
+window.bodyHeight = 510;
+if(
+	window.androidTabletTest || window.iPadTest ||
+	((window.navigator.userAgent.indexOf( "Android" ) != -1) && (window.navigator.userAgent.indexOf( "Mobile" ) < 0)) ||
+	(window.navigator.userAgent.indexOf( "iPad" ) != -1)
+){
+	window.bodyHeight = 471;
+}
+
+window.dispUserAgent = false;	// 起動時にユーザーエージェントを表示するかどうか
+window.dispCache     = false;	// 起動時にキャッシュ内容を表示するかどうか
+window.conMaxLen     = 10000;	// コンソールの最大文字数
+window.errMaxLen     = 100;		// エラー出力の最大文字数
+window.retAssertProc = true;	// アサートに失敗した時に処理を停止するかどうか
+window.loopMax       = 65536;	// ループ回数上限
+window.useStorage    = true;	// ストレージを使用するかどうか
+window.lockGUpdate   = true;
+
+window.onerror = clip_onerror;
+
+// 外部関数
+window.extFuncFile = [
+	"log1p.cef",
+	"expm1.cef",
+	"trunc.cef",
+
+	"pi.cef",
+	"rad.cef",
+	"deg.cef",
+
+	"e.cef",
+	"log2.cef",
+	"logn.cef",
+
+	"cbrt.cef",
+	"hypot.cef",
+	"roff.cef",
+
+	"gcd.cef",
+	"lcm.cef",
+	"mean.cef",
+
+	"j.cef",
+	"y.cef",
+	"fib1.cef",
+
+	"beta.cef",
+	"gamma.cef",
+	"loggamma.cef",
+
+	"inv.cef",
+	"iinv.cef",
+	"phi.cef",
+
+	"b.cef",
+	"div.cef",
+	"egypfrac.cef",
+
+	"fact.cef",
+	"fib.cef",
+	"prim.cef",
+
+	"time.cef",
+	"rgb.cef",
+	"color.cef"
+];
+
+</script>
+<style type="text/css">
+html, body {
+	margin:0;
+	padding:0;
+	line-height:20px;
+}
+* {
+	color:#000000;
+}
+body::-webkit-scrollbar {
+	display:none;
+}
+table {
+	border-collapse:collapse;
+//	border-spacing:0px;
+	border:0px;
+}
+td {
+	padding:0px;
+}
+button {
+	-webkit-appearance:button;
+	padding:4px;
+	font-family:"Helvetica";
+	font-size:16px;
+	line-height:20px;
+	vertical-align:middle;
+	border-left:1px solid #E0E0E0;
+	border-top:1px solid #E0E0E0;
+	border-right:1px solid #808080;
+	border-bottom:1px solid #808080;
+}
+button:disabled {
+	color:#808080;
+}
+.button_common {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_cursor {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_del {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_menu {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_menu2 {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_shift {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_enter {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_rcl {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_sto {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_func {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_op {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_symbol {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.span_symbol {
+	color:#000000;
+}
+.button_topend {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_invhyp {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+.button_number {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:1px 1px #E0E0E0;
+}
+input:disabled {
+	color:#808080;
+	background-color:#E0E0E0;
+}
+.label_checkbox {
+	display:inline-block;
+	position:relative;
+	padding-left:20px;
+}
+.label_checkbox::before {
+	content:"";
+	position:absolute;
+	left:0;
+	top:50%;
+	margin-top:-8px;
+	width:16px;
+	height:16px;
+	background:#202020;
+	background:-webkit-gradient(linear,left top,right bottom,color-stop(0%,rgba(160,160,160,1)),color-stop(100%,rgba(224,224,224,1)));
+	-webkit-box-shadow:inset 0px 0px 1px 0px rgba(0,0,0,0.75);
+	box-shadow:inset 0px 0px 1px 0px rgba(0,0,0,0.75);
+}
+input[type="checkbox"]:checked + label::after {
+	content:"";
+	position:absolute;
+	left:4px;
+	top:50%;
+	margin-top:-4px;
+	width:8px;
+	height:8px;
+	background:#2080B0;
+}
+.label_radio {
+	display:inline-block;
+	position:relative;
+	padding-left:20px;
+}
+.label_radio::before {
+	content:"";
+	position:absolute;
+	left:0;
+	top:50%;
+	margin-top:-8px;
+	width:16px;
+	height:16px;
+	-webkit-border-radius:8px;
+	background:#202020;
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,rgba(160,160,160,1)),color-stop(100%,rgba(224,224,224,1)));
+	-webkit-box-shadow:inset 0px 0px 1px 0px rgba(0,0,0,0.75);
+	box-shadow:inset 0px 0px 1px 0px rgba(0,0,0,0.75);
+}
+input[type="radio"]:checked + label::after {
+	content:"";
+	position:absolute;
+	left:4px;
+	top:50%;
+	margin-top:-4px;
+	width:8px;
+	height:8px;
+	-webkit-border-radius:4px;
+	background:#2080B0;
+}
+select {
+	-webkit-appearance:button;
+	padding:4px;
+	font-family:"Helvetica";
+	font-size:16px;
+	border-left:1px solid #E0E0E0;
+	border-top:1px solid #E0E0E0;
+	border-right:1px solid #808080;
+	border-bottom:1px solid #808080;
+}
+select::-ms-expand {
+	display:none;
+}
+.select_common {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:0 0;
+}
+.select_var {
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:0 0;
+}
+.select_func {
+	padding-left:10px;
+	background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#E0E0E0),color-stop(100%,#A0A0A0));
+	color:#000000;
+	text-shadow:0 0;
+}
+.hr {
+	border:0;
+	margin:0;
+	height:4px;
+}
+.hr_border {
+	border-top:1px solid #808080;
+	margin-top:8px;
+	margin-bottom:7px;
+}
+.hr_nomargin {
+	border-top:1px solid #808080;
+	margin-top:0;
+	margin-bottom:0;
+}
+.span {
+	font-family:"Helvetica";
+	font-size:16px;
+	color:#000000;
+	text-shadow:0 0;
+}
+.span_ellipsis {
+	font-family:"Helvetica";
+	font-size:16px;
+	line-height:16px;
+	color:#000000;
+}
+.input {
+	padding:2px;
+	font-family:"Courier New";
+	font-size:18px;
+	border:1px solid #808080;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance:none;
+	margin:0;
+}
+.select_var_font {
+	font-family:"Courier New";
+	font-size:18px;
+}
+.select_func_font {
+	font-family:"Courier New";
+	font-size:18px;
+}
+.div_angle {
+	font-size:16px;
+	border:0;
+}
+.div_trig {
+	font-size:16px;
+	border:0;
+}
+.div_calculator {
+	font-size:16px;
+	border:0;
+}
+
+.height29 { height:29px; }
+.height35 { height:35px; }
+.height70 { height:70px; }
+
+.button3_1 { width:107px; }
+.button3_2 { width:107px; }
+.button3_3 { width:108px; }
+
+.button4_1 { width:81px; }
+.button4_2 { width:80px; }
+.button4_3 { width:80px; }
+.button4_4 { width:81px; }
+
+.button5_1 { width:65px; }
+.button5_2 { width:64px; }
+.button5_3 { width:64px; }
+.button5_4 { width:64px; }
+.button5_5 { width:65px; }
+
+.button6_1 { width:54px; }
+.button6_2 { width:53px; }
+.button6_3 { width:54px; }
+.button6_4 { width:53px; }
+.button6_5 { width:54px; }
+.button6_6 { width:54px; }
+
+.button8_1 { width:41px; }
+.button8_2 { width:40px; }
+.button8_3 { width:40px; }
+.button8_4 { width:40px; }
+.button8_5 { width:40px; }
+.button8_6 { width:40px; }
+.button8_7 { width:40px; }
+.button8_8 { width:41px; }
+
+.div_body {
+	width:322px;
+	height:510px;
+	background-color:#FFFFFF;
+}
+.div_ans {
+	width:316px;
+	height:50px;
+	padding:2px;
+	text-align:right;
+	background-color:#C0C0C0;
+	font-family:"Courier New";
+	font-size:22px;
+	border:1px solid #808080;
+}
+.span_ans {
+	color:#000000;
+}
+.div_edit {
+	width:316px;
+	height:20px;
+	padding:2px;
+	background-color:#C0C0C0;
+	font-family:"Courier New";
+	font-size:18px;
+	border-left:1px solid #808080;
+	border-right:1px solid #808080;
+	border-bottom:1px solid #808080;
+}
+.div_usage {
+	width:318px;
+	height:34px;
+	padding-top:2px;
+	font-family:"Helvetica";
+	font-size:16px;
+	line-height:16px;
+	color:#000000;
+	border:0;
+	text-shadow:0 0;
+}
+.div_log {
+	width:320px;
+	height:240px;
+	background-color:#FFFFFF;
+	font-family:"Courier New";
+	font-size:18px;
+	border:1px solid #808080;
+}
+.div_error {
+	overflow:scroll;
+	word-break:break-all;
+	overflow-wrap:break-word;
+	width:320px;
+	height:149px;
+	background-color:#C0C0C0;
+	font-family:"Courier New";
+	font-size:16px;
+	line-height:18px;
+	border:1px solid #808080;
+}
+.div_console {
+	overflow:scroll;
+	word-break:break-all;
+	overflow-wrap:break-word;
+	width:320px;
+	height:430px;
+	background-color:#C0C0C0;
+	font-family:"Courier New";
+	font-size:16px;
+	line-height:18px;
+	border:1px solid #808080;
+}
+.div_gworld {
+	width:322px;
+	height:464px;
+	border:0;
+}
+.div_option {
+	width:322px;
+	font-size:16px;
+}
+.div_selectimage {
+	width:320px;
+	height:426px;
+	background-color:#FFFFFF;
+	font-family:"Courier New";
+	font-size:18px;
+	border:1px solid #808080;
+}
+.textarea_profile {
+	word-break:break-all;
+	overflow-wrap:break-word;
+	width:316px;
+	height:454px;
+	background-color:#FFFFFF;
+	font-family:"Courier New";
+	font-size:16px;
+	line-height:18px;
+	border:1px solid #808080;
+}
+.input_file {
+	width:214px;
+	font-family:"Helvetica";
+	font-size:16px;
+}
+.textarea_func {
+	word-break:break-all;
+	overflow-wrap:break-word;
+	width:316px;
+	height:379px;
+	background-color:#FFFFFF;
+	font-family:"Courier New";
+	font-size:16px;
+	line-height:18px;
+	border:1px solid #808080;
+	tab-size:4;
+}
+.bg_gold {
+	background-image:url("gold.png");
+	background-size:100% 100%;
+}
+.bg_silver {
+	background-image:url("silver.png");
+	background-size:100% 100%;
+}
+.bg_iron {
+	background-image:url("iron.png");
+	background-size:100% 100%;
+}
+.bg_image {
+	background-image:none;
+	background-size:cover;
+	background-position:50% 50%;
+}
+</style>
+</head>
+<body onload="main( 'div0', 'div1', 'div2', 'div3', 'div4', 'canvas0', ['file0','file1','file2'], 'textarea0' )">
+<div id="calc_body" class="div_body">
+
+<table><tr><td valign="top">
+
+	<div id="calc_ui_menu">
+		<table>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIMain()">
+						<button type="submit" id="button_ui_main" class="button_menu button8_1" style="height:35px"><img src="icon1.png" width="25" height="25"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUIFunc()">
+						<button type="submit" id="button_ui_func" class="button_menu button8_2" style="height:35px"><img src="icon7.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUILog()">
+						<button type="submit" id="button_ui_log" class="button_menu button8_3" style="height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #FFFFFF, 1px -1px #FFFFFF, -1px 1px #FFFFFF, 1px 1px #FFFFFF"><img src="icon6.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUIConv()">
+						<button type="submit" id="button_ui_conv" class="button_menu button8_4" style="height:35px"><img src="icon4.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUIConsole()">
+						<button type="submit" id="button_ui_console" class="button_menu button8_5" style="height:35px"><img src="icon3.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUIGWorld()">
+						<button type="submit" id="button_ui_gworld" class="button_menu button8_6" style="height:35px"><img src="icon2.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+					<form action="javascript:doButtonUIOption()">
+						<button type="submit" id="button_ui_option" class="button_menu button8_7" style="height:35px"><img src="icon5.png" width="20" height="20"></button>
+					</form>
+				</td>
+				<td>
+<div id="lang_japanese">
+					<form action="http://www5d.biglobe.ne.jp/~satis/ClipCalc/guide.html" target="_blank">
+						<button type="submit" class="button_menu button8_8" style="height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">？</span></b></button>
+					</form>
+</div>
+<div id="lang_english" style="display:none">
+					<form action="http://www5d.biglobe.ne.jp/~satis/ClipCalc/guide_e.html" target="_blank">
+						<button type="submit" class="button_menu button8_8" style="height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">？</span></b></button>
+					</form>
+</div>
+				</td>
+			</tr>
+		</table>
+		<hr class="hr">
+	</div>
+	<div id="calc_ui_top">
+		<div id="calc_ans" class="div_ans"></div>
+		<div id="div0" class="div_edit"></div>
+	</div>
+	<div id="calc_ui_cursor">
+		<table>
+			<tr>
+				<td><button id="button_cursor_top" class="button_cursor button6_1 height35">|←</button></td>
+				<td><button id="button_cursor_backward" class="button_cursor button6_2 height35">←</button></td>
+				<td><button id="button_cursor_forward" class="button_cursor button6_3 height35">→</button></td>
+				<td><button id="button_cursor_end" class="button_cursor button6_4 height35">→|</button></td>
+				<td><button id="button_del" class="button_del button6_5 height35">DEL</button></td>
+				<td><button id="button_del_all" class="button_del button6_6 height35">AC</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_button_1">
+		<table width="322">
+			<tr>
+				<td id="td_mode" height="35">
+					<select id="calc_select_mode" class="select_common height35" style="width:113px" onchange="doChangeMode( this )">
+						<option value="0" selected>浮動小数点</option>
+						<option value="1">分数</option>
+						<option value="2">帯分数</option>
+						<option value="3">複素数</option>
+						<option value="4">符号付き</option>
+						<option value="5">符号なし</option>
+						<option value="6">時間</option>
+					</select>
+				</td>
+				<td>
+					<select id="calc_select_bit" class="select_common height35" style="width:65px; display:none" onchange="doChangeBit( this )">
+						<option value="0" selected>8bit</option>
+						<option value="1">16bit</option>
+						<option value="2">32bit</option>
+					</select>
+				</td>
+				<td><button id="button_radix_down" class="button_common height35" style="width:32px; display:none">&lt;</button></td>
+				<td>
+					<form id="calc_form_radix" action="javascript:doCalcEditRadix()" style="display:none">
+						<input type="number" step="0.00000000000000001" id="calc_edit_radix" class="input height29" style="width:36px" value="">
+					</form>
+				</td>
+				<td><button id="button_radix_up" class="button_common height35" style="width:32px; display:none">&gt;</button></td>
+				<td><span id="calc_static_radix" class="span" style="width:37px; display:none">進</span></td>
+				<td>
+					<select id="calc_select_time" class="select_common height35" style="width:65px; display:none" onchange="doChangeTime( this )">
+						<option value="0" selected>時</option>
+						<option value="1">分</option>
+						<option value="2">秒</option>
+						<option value="3">ﾌﾚｰﾑ</option>
+					</select>
+				</td>
+				<td><button id="button_fps_down" class="button_common height35" style="width:32px; display:none">&lt;</button></td>
+				<td>
+					<form id="calc_form_fps" action="javascript:doCalcEditFps()" style="display:none">
+						<input type="text" id="calc_edit_fps" class="input height29" style="width:43px" value="">
+					</form>
+				</td>
+				<td><button id="button_fps_up" class="button_common height35" style="width:32px; display:none">&gt;</button></td>
+				<td><span id="calc_static_fps" class="span" style="width:30px; display:none">fps</span></td>
+				<td width="209">
+					<div id="calc_select_angle" class="div_angle height35">
+						<table width="100%">
+							<tr>
+								<td id="td_angle" width="1" height="35"></td>
+								<td align="center">
+									<input type="radio" id="calc_radio_deg" style="display:none" onclick="javascript:doCalcDeg()">
+									<label for="calc_radio_deg" class="label_radio" onclick=""><span class="span">Deg</span></label>
+								</td>
+								<td align="center">
+									<input type="radio" id="calc_radio_rad" style="display:none" onclick="javascript:doCalcRad()">
+									<label for="calc_radio_rad" class="label_radio" onclick=""><span class="span">Rad</span></label>
+								</td>
+								<td align="center">
+									<input type="radio" id="calc_radio_grad" style="display:none" onclick="javascript:doCalcGrad()">
+									<label for="calc_radio_grad" class="label_radio" onclick=""><span class="span">Grad</span></label>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_top" class="button_topend button5_1 height35">(</button></td>
+				<td><button id="button_end" class="button_topend button5_2 height35">)</button></td>
+				<td><button id="button_rcl" class="button_rcl height35" style="width:49px">RCL</button></td>
+				<td>
+					<select id="calc_select_var" class="select_var select_var_font height35" style="width:50px" onchange="doChangeVar( this )">
+						<option value="0" selected>Ans</option>
+						<option value="65">@A</option>
+						<option value="66">@B</option>
+						<option value="67">@C</option>
+						<option value="68">@D</option>
+						<option value="69">@E</option>
+						<option value="70">@F</option>
+						<option value="71">@G</option>
+						<option value="72">@H</option>
+						<option value="73">@I</option>
+						<option value="74">@J</option>
+						<option value="75">@K</option>
+						<option value="76">@L</option>
+						<option value="77">@M</option>
+						<option value="78">@N</option>
+						<option value="79">@O</option>
+						<option value="80">@P</option>
+						<option value="81">@Q</option>
+						<option value="82">@R</option>
+						<option value="83">@S</option>
+						<option value="84">@T</option>
+						<option value="85">@U</option>
+						<option value="86">@V</option>
+						<option value="87">@W</option>
+						<option value="88">@X</option>
+						<option value="89">@Y</option>
+						<option value="90">@Z</option>
+					</select>
+				</td>
+				<td><button id="button_sto" class="button_sto height35" style="width:47px">STO</button></td>
+				<td><button id="button_mcl" class="button_sto height35" style="width:47px">Mcl</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_7" class="button_number button5_1 height35">7</button></td>
+				<td><button id="button_8" class="button_number button5_2 height35">8</button></td>
+				<td><button id="button_9" class="button_number button5_3 height35">9</button></td>
+				<td><button id="button_mul" class="button_op button5_4 height35">*</button></td>
+				<td><button id="button_div" class="button_op button5_5 height35">/</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_4" class="button_number button5_1 height35">4</button></td>
+				<td><button id="button_5" class="button_number button5_2 height35">5</button></td>
+				<td><button id="button_6" class="button_number button5_3 height35">6</button></td>
+				<td><button id="button_add" class="button_op button5_4 height35">+</button></td>
+				<td><button id="button_sub" class="button_op button5_5 height35">-</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<td><button id="button_1" class="button_number button5_1 height35">1</button></td>
+							<td><button id="button_2" class="button_number button5_2 height35">2</button></td>
+							<td><button id="button_3" class="button_number button5_3 height35">3</button></td>
+							<td><button id="button_mod" class="button_op button5_4 height35">%</button></td>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<td><button id="button_0" class="button_number button5_1 height35">0</button></td>
+							<td><button id="button_minus" class="button_number button5_2 height35">\-</button></td>
+							<td><button id="button_space" class="button_number button5_3 height35">SP</button></td>
+							<td><button id="button_unary_minus" class="button_op button5_4 height35">[-]</button></td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<button id="button_enter" class="button_enter button5_5 height70">=</button>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_point" class="button_number button5_1 height35">.</button></td>
+				<td><button id="button_plus" class="button_number button5_2 height35">\+</button></td>
+				<td><button id="button_fract" class="button_number button5_3 height35">a<span class="span_symbol" style="vertical-align:2pt">b</span>/<span class="span_symbol" style="vertical-align:-2pt">c</span></button></td>
+				<td><button id="button_i" class="button_number button5_3 height35" style="display:none">i</button></td>
+				<td><button id="button_time" class="button_number button5_3 height35" style="display:none">:</button></td>
+				<td><button id="button_eplus" class="button_symbol button5_4 height35">e+</button></td>
+				<td><button id="button_eminus" class="button_symbol button5_5 height35">e-</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_a" class="button_symbol button6_1 height35" style="display:none">A</button></td>
+				<td><button id="button_b" class="button_symbol button6_2 height35" style="display:none">B</button></td>
+				<td><button id="button_c" class="button_symbol button6_3 height35" style="display:none">C</button></td>
+				<td><button id="button_d" class="button_symbol button6_4 height35" style="display:none">D</button></td>
+				<td><button id="button_e" class="button_symbol button6_5 height35" style="display:none">E</button></td>
+				<td><button id="button_f" class="button_symbol button6_6 height35" style="display:none">F</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_deg" class="button_symbol button5_1 height35">d</button></td>
+				<td><button id="button_grad" class="button_symbol button5_2 height35">g</button></td>
+				<td><button id="button_rad" class="button_symbol button5_3 height35">r</button></td>
+				<td><button id="button_pow1" class="button_op button5_4 height35">^</button></td>
+				<td><button id="button_dummy" class="button_symbol button5_5 height35" disabled>&nbsp</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_hour" class="button_symbol button5_1 height35" style="display:none">h</button></td>
+				<td><button id="button_min" class="button_symbol button5_2 height35" style="display:none">m</button></td>
+				<td><button id="button_sec" class="button_symbol button5_3 height35" style="display:none">s</button></td>
+				<td><button id="button_frame" class="button_symbol button5_4 height35" style="display:none">f</button></td>
+				<td><button id="button_pow2" class="button_op button5_5 height35" style="display:none">^</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_and" class="button_op button6_1 height35" style="display:none">&amp;</button></td>
+				<td><button id="button_xor" class="button_op button6_2 height35" style="display:none">^</button></td>
+				<td><button id="button_or" class="button_op button6_3 height35" style="display:none">|</button></td>
+				<td><button id="button_complement" class="button_op button6_4 height35" style="display:none">[~]</button></td>
+				<td><button id="button_shiftl" class="button_op button6_5 height35" style="display:none">&lt;&lt;</button></td>
+				<td><button id="button_shiftr" class="button_op button6_6 height35" style="display:none">&gt;&gt;</button></td>
+			</tr>
+		</table>
+<div id="calc_button_lang">
+		<table>
+			<tr>
+				<td width="214">
+					<button id="button_lang" class="button_common height35" style="width:90px">&nbsp;</button>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+</div>
+<div id="calc_button_integer" style="display:none">
+		<table>
+			<tr>
+				<td><button id="button_bin" class="button_symbol button6_1 height35">\b</button></td>
+				<td><button id="button_oct" class="button_symbol button6_2 height35">\0</button></td>
+				<td><button id="button_dec" class="button_symbol button6_3 height35">\</button></td>
+				<td><button id="button_hex" class="button_symbol button6_4 height35">\x</button></td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+</div>
+	</div>
+	<div id="calc_ui_button_2" style="display:none">
+		<div class="div_trig height35" style="width:320px">
+			<table>
+				<tr>
+					<td id="td_trig" width="10" height="35"></td>
+					<td>
+						<input type="checkbox" id="check_inv" style="display:none" onchange="doCheckInv()">
+						<label for="check_inv" class="label_checkbox" onclick=""><span class="span">Inv</span></label>
+					</td>
+					<td width="30"></td>
+					<td>
+						<input type="checkbox" id="check_hyp" style="display:none" onchange="doCheckHyp()">
+						<label for="check_hyp" class="label_checkbox" onclick=""><span class="span">Hyp</span></label>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<table>
+			<tr>
+				<td><button id="button_sin" class="button_invhyp button4_1 height35">&nbsp;</button></td>
+				<td><button id="button_cos" class="button_invhyp button4_2 height35">&nbsp;</button></td>
+				<td><button id="button_tan" class="button_invhyp button4_3 height35">&nbsp;</button></td>
+				<td><button name="button_func" class="button_func button4_4 height35">atan2</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button id="button_log" class="button_invhyp button4_1 height35">&nbsp;</button></td>
+				<td><button id="button_log10" class="button_invhyp button4_2 height35">&nbsp;</button></td>
+				<td><button id="button_sqr" class="button_invhyp button4_3 height35">&nbsp;</button></td>
+				<td><button name="button_func" class="button_func button4_4 height35">pow</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_func" class="button_func button4_1 height35">abs</button></td>
+				<td><button name="button_func" class="button_func button4_2 height35">ceil</button></td>
+				<td><button name="button_func" class="button_func button4_3 height35">floor</button></td>
+				<td><button name="button_func" class="button_func button4_4 height35">int</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_func" class="button_func button4_1 height35">num</button></td>
+				<td><button name="button_func" class="button_func button4_2 height35">denom</button></td>
+				<td><button name="button_func" class="button_func button4_3 height35">real</button></td>
+				<td><button name="button_func" class="button_func button4_4 height35">imag</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_func" class="button_func button4_1 height35">arg</button></td>
+				<td><button name="button_func" class="button_func button4_2 height35">norm</button></td>
+				<td><button name="button_func" class="button_func button4_3 height35">conjg</button></td>
+				<td><button name="button_func" class="button_func button4_4 height35">polar</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_func" class="button_func button4_1 height35">ldexp</button></td>
+				<td><button name="button_func" class="button_func button4_2 height35">frexp</button></td>
+				<td><button name="button_func" class="button_func button4_3 height35">modf</button></td>
+				<td><button class="button_func button4_4 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_func" class="button_func button4_1 height35">rand</button></td>
+				<td><button name="button_func" class="button_func button4_2 height35">time</button></td>
+				<td><button class="button_func button4_3 height35" disabled>&nbsp;</button></td>
+				<td><button class="button_func button4_4 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="214">
+					<div class="div_calculator height35" style="width:213px">
+						<table>
+							<tr>
+								<td id="td_calculator" width="10" height="35"></td>
+								<td>
+									<input type="checkbox" id="check_calculator" style="display:none" onchange="doCheckCalculator()">
+									<label for="check_calculator" class="label_checkbox" onclick=""><span id="calc_static_calculator" class="span">電卓モード</span></label>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_button_3" style="display:none">
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="214">
+<div id="calc_button_loadextfunc">
+					<form action="javascript:doLoadExtFuncFile()">
+						<button type="submit" id="button_loadextfunc" class="button_common height35" style="width:180px">外部関数読み込み</button>
+					</form>
+</div>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_button_4" style="display:none">
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button id="last_button_extfunc" name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="214">
+<div id="calc_button_loadextfunc2">
+					<form action="javascript:doLoadExtFuncFile()">
+						<button type="submit" id="button_loadextfunc2" class="button_common height35" style="width:180px">外部関数読み込み</button>
+					</form>
+</div>
+<div id="calc_input_loadextfunc" style="display:none">
+					<input type="file" id="file0" class="input_file height35" multiple>
+</div>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_button_5" style="display:none">
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button id="last_button_extfunc2" name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="214">
+<div id="calc_input_loadextfunc2" style="display:none">
+					<input type="file" id="file1" class="input_file height35" multiple>
+</div>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_button_6" style="display:none">
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button name="button_extfunc" class="button_func button3_1 height35" disabled>&nbsp;</button></td>
+				<td><button name="button_extfunc" class="button_func button3_2 height35" disabled>&nbsp;</button></td>
+				<td><button id="last_button_extfunc3" name="button_extfunc" class="button_func button3_3 height35" disabled>&nbsp;</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td width="214">
+<div id="calc_input_loadextfunc3" style="display:none">
+					<input type="file" id="file2" class="input_file height35" multiple>
+</div>
+				</td>
+				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_usage">
+		<hr class="hr_nomargin">
+		<div id="calc_usage" class="div_usage"></div>
+	</div>
+	<div id="calc_ui_func" style="display:none">
+		<textarea id="textarea0" class="textarea_func" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+		<table>
+			<tr>
+				<td width="5"></td>
+				<td width="41">
+					<form action="javascript:callFunc()">
+						<button type="submit" class="button_common" style="width:41px; height:35px">&lt;&lt;</button>
+					</form>
+				</td>
+				<td width="5"></td>
+				<td width="50">
+					<select id="calc_select_func" class="select_func select_func_font" style="width:50px; height:35px" onchange="doChangeFunc( this )">
+						<option value="97" selected>a</option>
+						<option value="98">b</option>
+						<option value="99">c</option>
+						<option value="100">d</option>
+						<option value="101">e</option>
+						<option value="102">f</option>
+						<option value="103">g</option>
+						<option value="104">h</option>
+						<option value="105">i</option>
+						<option value="106">j</option>
+						<option value="107">k</option>
+						<option value="108">l</option>
+						<option value="109">m</option>
+						<option value="110">n</option>
+						<option value="111">o</option>
+						<option value="112">p</option>
+						<option value="113">q</option>
+						<option value="114">r</option>
+						<option value="115">s</option>
+						<option value="116">t</option>
+						<option value="117">u</option>
+						<option value="118">v</option>
+						<option value="119">w</option>
+						<option value="120">x</option>
+						<option value="121">y</option>
+						<option value="122">z</option>
+					</select>
+				</td>
+				<td width="5"></td>
+				<td width="176">
+<div id="calc_button_savefunc" style="display:none">
+					<form action="javascript:saveFunc()">
+						<button type="submit" id="button_savefunc" class="button_common" style="width:80px; height:35px">保存する</button>
+					</form>
+</div>
+				</td>
+				<td width="35">
+<div id="lang_japanese3">
+					<form action="http://www5d.biglobe.ne.jp/~satis/clip/language.html" target="_blank">
+						<button type="submit" class="button_common" style="width:35px; height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">！</span></b></button>
+					</form>
+</div>
+<div id="lang_english3" style="display:none">
+					<form action="http://www5d.biglobe.ne.jp/~satis/clip/language_e.html" target="_blank">
+						<button type="submit" class="button_common" style="width:35px; height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">！</span></b></button>
+					</form>
+</div>
+				</td>
+				<td width="5"></td>
+			</tr>
+		</table>
+		<hr class="hr">
+		<hr class="hr_nomargin">
+		<hr class="hr">
+		<table>
+			<tr>
+				<td width="5" height="35"></td>
+				<td>
+					<span id="calc_static_tab" class="span">Tab幅:</span>
+				</td>
+				<td width="2"></td>
+				<td width="26">
+					<button id="button_edit_tab_down" class="button_common" style="width:26px; height:30px">&lt;</button>
+				</td>
+				<td width="40">
+					<form action="javascript:onChangeTabWidth()">
+						<input type="text" id="tab_width" class="input" style="width:34px; height:24px" value="">
+					</form>
+				</td>
+				<td width="26">
+					<button id="button_edit_tab_up" class="button_common" style="width:26px; height:30px">&gt;</button>
+				</td>
+				<td width="20"></td>
+				<td>
+					<div>
+						<input type="checkbox" id="check_smart" style="display:none" onchange="doCheckSmart()">
+						<label for="check_smart" class="label_checkbox" onclick=""><span id="calc_static_smart" class="span">スマート</span></label>
+					</div>
+				</td>
+				<td width="5"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_log" style="display:none">
+		<div id="div1" class="div_log"></div>
+		<table width="322">
+			<tr>
+				<td width="46">
+					<form action="javascript:importLogExpr()">
+						<button type="submit" class="button_common" style="width:46px; height:35px">&lt;&lt;</button>
+					</form>
+				</td>
+				<td width="11"></td>
+				<td width="46">
+					<button id="button_log_up" class="button_common" style="width:46px; height:35px">↑</button>
+				</td>
+				<td width="46">
+					<button id="button_log_down" class="button_common" style="width:46px; height:35px">↓</button>
+				</td>
+				<td width="11"></td>
+				<td width="46">
+					<button id="button_log_del" class="button_common" style="width:46px; height:35px">消</button>
+				</td>
+				<td align="right">
+					<form action="javascript:delAllLogExpr()">
+						<button type="submit" id="button_log_delall" class="button_common" style="width:100px; height:35px">クリアする</button>
+					</form>
+				</td>
+			</tr>
+		</table>
+		<hr class="hr">
+		<div id="div3" class="div_error"></div>
+		<table width="322">
+			<tr>
+				<td align="right">
+					<form action="javascript:clearConsole( 1 )">
+						<button type="submit" id="button_console_clear" class="button_common" style="width:100px; height:35px">クリアする</button>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_conv" style="display:none">
+		<div class="div_option">
+			<hr class="hr">
+			<table width="100%">
+				<tr>
+					<td width="40" align="right"><span class="span" id="conv_static_1"></span></td>
+					<td width="5"></td>
+					<td>
+						<hr class="hr">
+						<form action="javascript:onChangeEdit1()">
+							<input type="text" id="conv_edit_1" class="input" style="width:100%; height:24px" value="">
+						</form>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+				</tr>
+				<tr>
+					<td align="right"><span class="span" id="conv_static_2"></span></td>
+					<td width="5"></td>
+					<td>
+						<hr class="hr">
+						<form action="javascript:onChangeEdit2()">
+							<input type="text" id="conv_edit_2" class="input" style="width:100%; height:24px" value="">
+						</form>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+				</tr>
+				<tr>
+					<td align="right"><span class="span" id="conv_static_3"></span></td>
+					<td width="5"></td>
+					<td>
+						<hr class="hr">
+						<form action="javascript:onChangeEdit3()">
+							<input type="text" id="conv_edit_3" class="input" style="width:100%; height:24px" value="">
+						</form>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+				</tr>
+				<tr>
+					<td align="right"><span class="span" id="conv_static_4"></span></td>
+					<td width="5"></td>
+					<td>
+						<hr class="hr">
+						<form action="javascript:onChangeEdit4()">
+							<input type="text" id="conv_edit_4" class="input" style="width:100%; height:24px" value="">
+						</form>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+				</tr>
+			</table>
+			<hr class="hr">
+		</div>
+	</div>
+	<div id="calc_ui_console" style="display:none">
+		<div id="div2" class="div_console"></div>
+		<table width="322">
+			<tr>
+				<td align="right">
+					<form action="javascript:clearConsole( 0 )">
+						<button type="submit" id="button_console_clear2" class="button_common" style="width:100px; height:35px">クリアする</button>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="calc_ui_gworld" style="display:none">
+		<div class="div_gworld">
+			<canvas id="canvas0" width="322" height="464"></canvas>
+		</div>
+	</div>
+	<div id="calc_ui_option" style="display:none">
+		<div class="div_option">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<table>
+							<tr>
+								<td><span id="calc_static_option1" class="span">計算結果:</span></td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>
+									<select id="calc_select_skin_ans" class="select_common" style="width:80px; height:35px" onchange="doChangeSkinAns( this )">
+										<option value="0" selected>ブラック</option>
+										<option value="1">グリーン</option>
+										<option value="2">オレンジ</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td width="11"></td>
+					<td>
+						<table>
+							<tr>
+								<td><span id="calc_static_option2" class="span">本体:</span></td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td>
+									<select id="calc_select_skin" class="select_common" style="width:100px; height:35px" onchange="doChangeSkin( this )">
+										<option value="0" selected>グリーン</option>
+										<option value="1">グレー</option>
+										<option value="2">パープル</option>
+										<option value="3">メタル(金)</option>
+										<option value="4">メタル(銀)</option>
+										<option value="5">メタル(鉄)</option>
+										<option value="6">カラー</option>
+										<option value="7">画像</option>
+									</select>
+								</td>
+								<td width="11"></td>
+								<td>
+									<select id="calc_select_skin_color" class="select_common" style="width:110px; height:35px" onchange="doChangeSkinColor( this )">
+										<option value="0" selected>グレー</option>
+										<option value="1">ブラウン</option>
+										<option value="2">レッド</option>
+										<option value="3">ピンク</option>
+										<option value="4">オレンジ</option>
+										<option value="5">クリーム</option>
+										<option value="6">グリーン</option>
+										<option value="7">スカイブルー</option>
+										<option value="8">ブルー</option>
+										<option value="9">パープル</option>
+										<option value="10">カスタム</option>
+									</select>
+									<select id="calc_select_skin_trans" class="select_common" style="width:110px; height:35px" onchange="doChangeSkinTrans( this )">
+										<option value="0" selected>100%透過</option>
+										<option value="1">90%透過</option>
+										<option value="2">80%透過</option>
+										<option value="3">70%透過</option>
+										<option value="4">60%透過</option>
+										<option value="5">50%透過</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+<div id="input_skin_color">
+			<hr class="hr">
+			<hr class="hr">
+			<table width="322">
+				<tr>
+					<td width="5"></td>
+					<td>
+						<span class="span">R:</span>
+						<hr class="hr">
+					</td>
+					<td colspan="2">
+						<div>
+							<input type="checkbox" id="check_color_r" style="display:none" onchange="doCheckColorR()">
+							<label for="check_color_r" class="label_checkbox" onclick=""><span id="calc_static_option3" class="span">固定</span></label>
+						</div>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+					<td>
+						<span class="span">G:</span>
+						<hr class="hr">
+					</td>
+					<td colspan="2">
+						<div>
+							<input type="checkbox" id="check_color_g" style="display:none" onchange="doCheckColorG()">
+							<label for="check_color_g" class="label_checkbox" onclick=""><span id="calc_static_option4" class="span">固定</span></label>
+						</div>
+						<hr class="hr">
+					</td>
+					<td width="10"></td>
+					<td>
+						<span class="span">B:</span>
+						<hr class="hr">
+					</td>
+					<td colspan="2">
+						<div>
+							<input type="checkbox" id="check_color_b" style="display:none" onchange="doCheckColorB()">
+							<label for="check_color_b" class="label_checkbox" onclick=""><span id="calc_static_option5" class="span">固定</span></label>
+						</div>
+						<hr class="hr">
+					</td>
+					<td width="6"></td>
+				</tr>
+				<tr>
+					<td width="5"></td>
+					<td width="26">
+						<button id="button_edit_r_down" class="button_common" style="width:26px; height:30px">&lt;</button>
+					</td>
+					<td width="45">
+						<form action="javascript:onChangeEditR()">
+							<input type="text" id="calc_edit_r" class="input" style="width:39px; height:24px" value="">
+						</form>
+					</td>
+					<td width="26">
+						<button id="button_edit_r_up" class="button_common" style="width:26px; height:30px">&gt;</button>
+					</td>
+					<td width="10"></td>
+					<td width="26">
+						<button id="button_edit_g_down" class="button_common" style="width:26px; height:30px">&lt;</button>
+					</td>
+					<td width="45">
+						<form action="javascript:onChangeEditG()">
+							<input type="text" id="calc_edit_g" class="input" style="width:39px; height:24px" value="">
+						</form>
+					</td>
+					<td width="26">
+						<button id="button_edit_g_up" class="button_common" style="width:26px; height:30px">&gt;</button>
+					</td>
+					<td width="10"></td>
+					<td width="26">
+						<button id="button_edit_b_down" class="button_common" style="width:26px; height:30px">&lt;</button>
+					</td>
+					<td width="45">
+						<form action="javascript:onChangeEditB()">
+							<input type="text" id="calc_edit_b" class="input" style="width:39px; height:24px" value="">
+						</form>
+					</td>
+					<td width="26">
+						<button id="button_edit_b_up" class="button_common" style="width:26px; height:30px">&gt;</button>
+					</td>
+					<td width="6"></td>
+				</tr>
+			</table>
+</div>
+<div id="input_skin_image">
+			<hr class="hr">
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="45" align="right"><span class="span">URL:</span></td>
+					<td width="2"></td>
+					<td>
+						<form action="javascript:doCalcEditSkinImage()">
+							<input type="text" id="calc_edit_skin_image" class="input" style="width:226px; height:24px; overflow:scroll" value="">
+						</form>
+					</td>
+					<td width="5"></td>
+					<td width="35">
+						<form action="javascript:doButtonUISelectImage()">
+							<button type="submit" class="button_common" style="width:35px; height:30px">...</button>
+						</form>
+					</td>
+					<td width="5"></td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<hr class="hr">
+			<table width="322">
+				<tr>
+					<td width="55" align="right"><span id="calc_static_option6" class="span">X方向:</span></td>
+					<td width="25">
+						<button id="button_edit_x_down" class="button_common" style="width:25px; height:30px">&lt;</button>
+					</td>
+					<td width="40">
+						<form action="javascript:onChangeEditX()">
+							<input type="text" id="calc_edit_x" class="input" style="width:34px; height:24px" value="">
+						</form>
+					</td>
+					<td width="25">
+						<button id="button_edit_x_up" class="button_common" style="width:25px; height:30px">&gt;</button>
+					</td>
+					<td width="17"><span class="span">%</span></td>
+					<td width="50" align="right"><span id="calc_static_option7" class="span">Y方向:</span></td>
+					<td width="25">
+						<button id="button_edit_y_down" class="button_common" style="width:25px; height:30px">&lt;</button>
+					</td>
+					<td width="40">
+						<form action="javascript:onChangeEditY()">
+							<input type="text" id="calc_edit_y" class="input" style="width:34px; height:24px" value="">
+						</form>
+					</td>
+					<td width="25">
+						<button id="button_edit_y_up" class="button_common" style="width:25px; height:30px">&gt;</button>
+					</td>
+					<td width="20"><span class="span">%</span></td>
+				</tr>
+			</table>
+</div>
+			<hr class="hr">
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_italic" style="display:none" onchange="doCheckItalic()">
+						<label for="check_italic" class="label_checkbox" onclick=""><span id="calc_static_option8" class="span">計算結果表示をイタリックに</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td><span id="calc_static_option9" class="span">桁区切り:</span></td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="calc_radio_sep_off" style="display:none" onclick="javascript:doCalcSepOff()">
+						<label for="calc_radio_sep_off" class="label_radio" onclick=""><span id="calc_static_option10" class="span">なし</span></label>
+					</td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="calc_radio_sep_upper" style="display:none" onclick="javascript:doCalcSepUpper()">
+						<label for="calc_radio_sep_upper" class="label_radio" onclick=""><span id="calc_static_option11" class="span">上部</span></label>
+					</td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="calc_radio_sep_lower" style="display:none" onclick="javascript:doCalcSepLower()">
+						<label for="calc_radio_sep_lower" class="label_radio" onclick=""><span id="calc_static_option12" class="span">下部</span></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr_border">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_keep_trig" style="display:none" onchange="doCheckKeepTrig()">
+						<label for="check_keep_trig" class="label_checkbox" onclick=""><span id="calc_static_option13" class="span">[Inv][Hyp]チェック状態を保持</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr_border">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td><span id="calc_static_option14" class="span">再計算:</span></td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_recalc_mode" style="display:none" onchange="doCheckRecalcMode()">
+						<label for="check_recalc_mode" class="label_checkbox" onclick=""><span id="calc_static_option15" class="span">型の変更時</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_recalc_angle" style="display:none" onchange="doCheckRecalcAngle()">
+						<label for="check_recalc_angle" class="label_checkbox" onclick=""><span id="calc_static_option16" class="span">角度の単位変更時</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_recalc_sto" style="display:none" onchange="doCheckRecalcSTO()">
+						<label for="check_recalc_sto" class="label_checkbox" onclick=""><span id="calc_static_option17" class="span">[STO]ボタンによる変数の代入前</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr_border">
+<div id="calc_radio_sound" style="display:none">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td><span id="calc_static_option19" class="span">ボタン音:</span></td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="sound_type_0" style="display:none" onclick="javascript:doSoundType0()">
+						<label for="sound_type_0" class="label_radio" onclick=""><span id="calc_static_option20" class="span">なし</span></label>
+					</td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="sound_type_1" style="display:none" onclick="javascript:doSoundType1()">
+						<label for="sound_type_1" class="label_radio" onclick=""><span id="calc_static_option21" class="span">あり</span></label>
+					</td>
+					<td width="10"></td>
+					<td>
+						<input type="radio" id="sound_type_2" style="display:none" onclick="javascript:doSoundType2()">
+						<label for="sound_type_2" class="label_radio" onclick=""><span id="calc_static_option22" class="span">振動</span></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+</div>
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_print_usage" style="display:none" onchange="doCheckPrintUsage()">
+						<label for="check_print_usage" class="label_checkbox" onclick=""><span id="calc_static_option18" class="span">ボタン押下時に使用法を表示</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr_border">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<form action="javascript:doExportProfile( 'profile' )">
+							<button type="submit" id="button_profile_export" class="button_common" style="width:95px; height:50px">環境設定<br>ｴｸｽﾎﾟｰﾄ</button>
+						</form>
+					</td>
+					<td width="11"></td>
+					<td>
+						<form action="javascript:doButtonUIProfile( false )">
+							<button type="submit" id="button_profile_import" class="button_common" style="width:95px; height:50px">環境設定<br>ｲﾝﾎﾟｰﾄ</button>
+						</form>
+					</td>
+					<td width="11"></td>
+					<td>
+						<form action="javascript:doClearStorage( 'button_storage_clear' )">
+							<button type="submit" id="button_storage_clear" class="button_common" style="width:95px; height:50px; display:none">ストレージ<br>クリア</button>
+						</form>
+					</td>
+					<td>
+						<form action="javascript:doClearCookie( 'button_cookie_clear' )">
+							<button type="submit" id="button_cookie_clear" class="button_common" style="width:95px; height:50px; display:none">Cookie<br>クリア</button>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div id="calc_ui_selectimage" style="display:none">
+		<div class="div_option">
+			<hr class="hr">
+			<table width="100%">
+				<tr>
+					<td width="5"></td>
+					<td>
+						<form action="javascript:doButtonUIOption()">
+							<button type="submit" id="button_return" class="button_common" style="width:75px; height:35px">戻る</button>
+						</form>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<div id="div4" class="div_selectimage"></div>
+			<table width="322">
+				<tr>
+					<td width="60">
+						<button id="button_selectimage_up" class="button_common" style="width:60px; height:35px">↑</button>
+					</td>
+					<td width="60">
+						<button id="button_selectimage_down" class="button_common" style="width:60px; height:35px">↓</button>
+					</td>
+					<td width="142"></td>
+					<td width="60">
+						<button id="button_selectimage_del" class="button_common" style="width:60px; height:35px">消</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div id="calc_ui_profile" style="display:none">
+		<div class="div_option">
+			<hr class="hr">
+			<table width="100%">
+				<tr>
+					<td width="5"></td>
+					<td>
+						<form action="javascript:doButtonUIOption()">
+							<button type="submit" id="button_return2" class="button_common" style="width:75px; height:35px">戻る</button>
+						</form>
+					</td>
+					<td width="122"></td>
+					<td>
+						<form action="javascript:doImportProfile( 'profile' )">
+							<button type="submit" id="button_profile_import2" class="button_common" style="width:115px; height:35px">ｲﾝﾎﾟｰﾄする</button>
+						</form>
+					</td>
+					<td width="5"></td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<textarea id="profile" class="textarea_profile" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+		</div>
+	</div>
+
+</td><td valign="top">
+
+	<div id="calc_ui_menu2" style="display:none">
+		<table>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIMain()">
+						<button type="submit" id="button_ui_main2" class="button_menu2" style="width:35px; height:35px"><img src="icon1.png" width="25" height="25"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIFunc()">
+						<button type="submit" id="button_ui_func2" class="button_menu2" style="width:35px; height:35px"><img src="icon7.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUILog()">
+						<button type="submit" id="button_ui_log2" class="button_menu2" style="width:35px; height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #FFFFFF, 1px -1px #FFFFFF, -1px 1px #FFFFFF, 1px 1px #FFFFFF"><img src="icon6.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIConv()">
+						<button type="submit" id="button_ui_conv2" class="button_menu2" style="width:35px; height:35px"><img src="icon4.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIConsole()">
+						<button type="submit" id="button_ui_console2" class="button_menu2" style="width:35px; height:35px"><img src="icon3.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIGWorld()">
+						<button type="submit" id="button_ui_gworld2" class="button_menu2" style="width:35px; height:35px"><img src="icon2.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form action="javascript:doButtonUIOption()">
+						<button type="submit" id="button_ui_option2" class="button_menu2" style="width:35px; height:35px"><img src="icon5.png" width="20" height="20"></button>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+<div id="lang_japanese2">
+					<form action="http://www5d.biglobe.ne.jp/~satis/ClipCalc/guide.html" target="_blank">
+						<button type="submit" class="button_menu2" style="width:35px; height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">？</span></b></button>
+					</form>
+</div>
+<div id="lang_english2" style="display:none">
+					<form action="http://www5d.biglobe.ne.jp/~satis/ClipCalc/guide_e.html" target="_blank">
+						<button type="submit" class="button_menu2" style="width:35px; height:35px; padding:0; font-size:18px; text-shadow:-1px -1px #404040, 1px -1px #404040, -1px 1px #404040, 1px 1px #404040"><b><span style="color:#FFFF00">？</span></b></button>
+					</form>
+</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</td></tr></table>
+
+</div>
+</body>
+</html>
