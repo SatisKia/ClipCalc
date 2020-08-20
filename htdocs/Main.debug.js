@@ -4242,6 +4242,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  logExpr.setLineNum( 12 );
  listImage = new ListBox();
  listImage.setLineNum( (isAndroidTablet() || isIPad()) ? 19 : 21 );
+ setDefineValue();
  setProcEnv( new _ProcEnv() );
  topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
  topProc._printAns = true;
