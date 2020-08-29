@@ -18180,15 +18180,24 @@ _Canvas.prototype = {
  fill : function( x, y, w, h ){
   this._context.fillRect( x, y, w, h );
  },
- line : function( x1, y1, x2, y2 ){
+ line : function( x1, y1, x2, y2, scale ){
   this._context.beginPath();
-  this._context.moveTo( x1 + 0.5, y1 + 0.5 );
-  this._context.lineTo( x2 + 0.5, y2 + 0.5 );
+  if( scale == undefined ){
+   this._context.moveTo( x1 + 0.5, y1 + 0.5 );
+   this._context.lineTo( x2 + 0.5, y2 + 0.5 );
+  } else {
+   this._context.moveTo( (x1 + 0.5) * scale, (y1 + 0.5) * scale );
+   this._context.lineTo( (x2 + 0.5) * scale, (y2 + 0.5) * scale );
+  }
   this._context.stroke();
   this._context.closePath();
  },
- rect : function( x, y, w, h ){
-  this._context.strokeRect( x + 0.5, y + 0.5, w, h );
+ rect : function( x, y, w, h, scale ){
+  if( scale == undefined ){
+   this._context.strokeRect( x + 0.5, y + 0.5, w, h );
+  } else {
+   this._context.strokeRect( (x + 0.5) * scale, (y + 0.5) * scale, w * scale, h * scale );
+  }
  },
  circle : function( cx, cy, r ){
   this._context.beginPath();
@@ -18958,7 +18967,8 @@ function ListBoxObj( obj ){
  this._before = null;
  this._next = null;
 }
-function ListBox(){
+function ListBox( id ){
+ this._e = document.getElementById( id );
  this._top = null;
  this._end = null;
  this._num = 0;
@@ -18967,6 +18977,23 @@ function ListBox(){
  this._scroll = 0;
 }
 ListBox.prototype = {
+ element : function(){
+  return this._e;
+ },
+ click : function( e, offsetY, lineHeight ){
+  var top = 0;
+  var tmp = this._e;
+  while( tmp ){
+   top += tmp.offsetTop;
+   tmp = tmp.offsetParent;
+  }
+  var index = _DIV( e.clientY - offsetY - top, lineHeight );
+  if( index < this._line ){
+   this.setIndex( this._scroll + index );
+   return true;
+  }
+  return false;
+ },
  _searchList : function( num ){
   if( num < 0 ){
    return null;
@@ -20650,8 +20677,6 @@ Electron.prototype = {
 };
 var electron = null;
 var divEdit;
-var divLog;
-var divSelectImage;
 var buttonMode = 0;
 var usageFlag = true;
 var englishFlag = false;
@@ -20771,8 +20796,6 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  soundType = getProfileInt( "ENV_", "Sound", 0 );
  updateSoundType();
  divEdit = document.getElementById( editId );
- divLog = document.getElementById( logId );
- divSelectImage = document.getElementById( selectImageId );
  regGWorldDefCharInfo( 0 );
  regGWorldDefCharInfoLarge( 1 );
  regGWorldBgColor( 0xC0C0C0 );
@@ -20786,10 +20809,21 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  procError = new _ProcError();
  editExpr = new EditExpr( 1 );
  editExpr.setDispLen( 28, 8 );
- logExpr = new ListBox();
+ logExpr = new ListBox( logId );
  logExpr.setLineNum( 12 );
- listImage = new ListBox();
+ _addCalcEventListener( logExpr.element(), "click", function( e ){
+  if( logExpr.click( e, 0, 18 ) ){
+   updateLogExpr();
+  }
+ });
+ listImage = new ListBox( selectImageId );
  listImage.setLineNum( (isAndroidTablet() || isIPad()) ? 19 : 21 );
+ _addCalcEventListener( listImage.element(), "click", function( e ){
+  if( listImage.click( e, 0, 18 ) ){
+   updateListImage();
+   getListImage();
+  }
+ });
  setDefineValue();
  setProcEnv( new _ProcEnv() );
  topProc = new _Proc( 0x0012, false, true, true );
@@ -20947,6 +20981,9 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  if( !common.isPC() ){
   cssSetStyleDisplayById( "calc_radio_sound", true );
+ }
+ if( common.isApp() ){
+  cssSetStyleDisplayById( "button_get_content", true );
  }
  if( getUrlParameter( "menu" ) == "option" ){
   doButtonUIOption();
@@ -21420,7 +21457,7 @@ function doChangeSkinTrans( select ){
 }
 function doCalcEditSkinImage(){
  skinImage = document.getElementById( "calc_edit_skin_image" ).value;
- if( skinImage.indexOf( "://" ) < 0 ){
+ if( (skinImage.indexOf( "://" ) < 0) && !skinImage.startsWith( "data:" ) ){
   skinImage = "http://" + skinImage;
   document.getElementById( "calc_edit_skin_image" ).value = skinImage;
  }
@@ -21732,7 +21769,7 @@ function updateLogExpr(){
   }
  }
  html += "</table>";
- divLog.innerHTML = html;
+ logExpr.element().innerHTML = html;
 }
 function addLogExpr(){
  var expr = new _String();
@@ -21884,7 +21921,7 @@ function updateListImage(){
   }
  }
  html += "</table>";
- divSelectImage.innerHTML = html;
+ listImage.element().innerHTML = html;
 }
 function upListImage( e ){
  listImage.up();
@@ -23514,6 +23551,7 @@ function updateLanguage(){
  document.getElementById( "button_profile_export" ).innerHTML = englishFlag ? "Export<br>profile" : "環境設定<br>ｴｸｽﾎﾟｰﾄ";
  document.getElementById( "button_profile_import" ).innerHTML = englishFlag ? "Import<br>profile" : "環境設定<br>ｲﾝﾎﾟｰﾄ";
  document.getElementById( "button_return" ).innerHTML = englishFlag ? "Return" : "戻る";
+ document.getElementById( "button_get_content" ).innerHTML = englishFlag ? "Album..." : "アルバム...";
  document.getElementById( "button_selectimage_del" ).innerHTML = englishFlag ? "Del" : "消";
  document.getElementById( "button_return2" ).innerHTML = englishFlag ? "Return" : "戻る";
  document.getElementById( "button_profile_import2" ).innerHTML = englishFlag ? "Import" : "ｲﾝﾎﾟｰﾄする";
@@ -24225,4 +24263,16 @@ function updateSelectFunc(){
  for( var i = 0; i < 26; i++ ){
   updateSelectFunc1( select, i );
  }
+}
+function getContent(){
+ if( nativeRequest ){
+  nativeRequest.send( "get_content" );
+ }
+}
+function onContentBase64( data ){
+ skinImage = data;
+ document.getElementById( "calc_edit_skin_image" ).value = skinImage;
+ updateSkin();
+ writeProfileString( "ENV_", "SkinImage", skinImage );
+ addListImage();
 }

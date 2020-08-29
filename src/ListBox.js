@@ -6,7 +6,9 @@ function ListBoxObj( obj ){
 }
 
 // リストボックス
-function ListBox(){
+function ListBox( id ){
+	this._e = document.getElementById( id );
+
 	this._top = null;	// オブジェクト
 	this._end = null;	// オブジェクト
 	this._num = 0;		// オブジェクトの個数
@@ -17,6 +19,26 @@ function ListBox(){
 }
 
 ListBox.prototype = {
+
+	element : function(){
+		return this._e;
+	},
+	click : function( e, offsetY, lineHeight ){
+		// 要素の上端のY座標
+		var top = 0;
+		var tmp = this._e;
+		while( tmp ){
+			top += tmp.offsetTop;
+			tmp = tmp.offsetParent;
+		}
+
+		var index = _DIV( e.clientY - offsetY - top, lineHeight );
+		if( index < this._line ){
+			this.setIndex( this._scroll + index );
+			return true;
+		}
+		return false;
+	},
 
 	// リストを検索する
 	_searchList : function( num ){

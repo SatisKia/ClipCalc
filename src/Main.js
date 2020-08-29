@@ -176,8 +176,6 @@ var nativeRequest = null;
 var electron = null;
 
 var divEdit;
-var divLog;
-var divSelectImage;
 
 var buttonMode = 0;
 var usageFlag  = true;
@@ -338,9 +336,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	soundType = getProfileInt( "ENV_", "Sound", 0 );
 	updateSoundType();
 
-	divEdit        = document.getElementById( editId        );
-	divLog         = document.getElementById( logId         );
-	divSelectImage = document.getElementById( selectImageId );
+	divEdit = document.getElementById( editId );
 
 	// 文字情報を登録する
 	regGWorldDefCharInfo( 0 );
@@ -365,10 +361,22 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	editExpr = new EditExpr( 1 );
 	editExpr.setDispLen( 28, 8 );
-	logExpr = new ListBox();
+	logExpr = new ListBox( logId );
 	logExpr.setLineNum( 12 );
-	listImage = new ListBox();
+	_addCalcEventListener( logExpr.element(), "click", function( e ){
+		if( logExpr.click( e, 0, 18 ) ){
+			updateLogExpr();
+		}
+	});
+	listImage = new ListBox( selectImageId );
 	listImage.setLineNum( (isAndroidTablet() || isIPad()) ? 19 : 21 );
+	_addCalcEventListener( listImage.element(), "click", function( e ){
+		if( listImage.click( e, 0, 18 ) ){
+			updateListImage();
+
+			getListImage();
+		}
+	});
 
 	// 定義定数の値（regGWorldBgColorより後に設定）
 	setDefineValue();
@@ -567,6 +575,10 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	if( !common.isPC() ){
 		cssSetStyleDisplayById( "calc_radio_sound", true );
+	}
+
+	if( common.isApp() ){
+		cssSetStyleDisplayById( "button_get_content", true );
 	}
 
 	if( getUrlParameter( "menu" ) == "option" ){
@@ -1166,7 +1178,7 @@ function doChangeSkinTrans( select ){
 }
 function doCalcEditSkinImage(){
 	skinImage = document.getElementById( "calc_edit_skin_image" ).value;
-	if( skinImage.indexOf( "://" ) < 0 ){
+	if( (skinImage.indexOf( "://" ) < 0) && !skinImage.startsWith( "data:" ) ){
 		skinImage = "http://" + skinImage;
 		document.getElementById( "calc_edit_skin_image" ).value = skinImage;
 	}
@@ -1518,7 +1530,7 @@ function updateLogExpr(){
 		}
 	}
 	html += "</table>";
-	divLog.innerHTML = html;
+	logExpr.element().innerHTML = html;
 }
 
 function addLogExpr(){
@@ -1697,7 +1709,7 @@ function updateListImage(){
 		}
 	}
 	html += "</table>";
-	divSelectImage.innerHTML = html;
+	listImage.element().innerHTML = html;
 }
 
 function upListImage( e ){
@@ -3146,6 +3158,7 @@ function updateLanguage(){
 	document.getElementById( "button_profile_export" ).innerHTML = englishFlag ? "Export<br>profile" : "環境設定<br>ｴｸｽﾎﾟｰﾄ";
 	document.getElementById( "button_profile_import" ).innerHTML = englishFlag ? "Import<br>profile" : "環境設定<br>ｲﾝﾎﾟｰﾄ";
 	document.getElementById( "button_return" ).innerHTML = englishFlag ? "Return" : "戻る";
+	document.getElementById( "button_get_content" ).innerHTML = englishFlag ? "Album..." : "アルバム...";
 	document.getElementById( "button_selectimage_del" ).innerHTML = englishFlag ? "Del" : "消";
 	document.getElementById( "button_return2" ).innerHTML = englishFlag ? "Return" : "戻る";
 	document.getElementById( "button_profile_import2" ).innerHTML = englishFlag ? "Import" : "ｲﾝﾎﾟｰﾄする";
@@ -3938,4 +3951,19 @@ function updateSelectFunc(){
 	for( var i = 0; i < 26; i++ ){
 		updateSelectFunc1( select, i );
 	}
+}
+
+function getContent(){
+	if( nativeRequest ){
+		nativeRequest.send( "get_content" );
+	}
+}
+function onContentBase64( data ){
+	skinImage = data;
+	document.getElementById( "calc_edit_skin_image" ).value = skinImage;
+	updateSkin();
+
+	writeProfileString( "ENV_", "SkinImage", skinImage );
+
+	addListImage();
 }
