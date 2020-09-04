@@ -3990,10 +3990,10 @@ function onKeyDown( key ){
 	}
 
 	switch( key ){
-	case _KEY_UP   : topEditExpr(); break;
-	case _KEY_DOWN : endEditExpr(); break;
-	case _KEY_LEFT : backwardEditExpr(); break;
-	case _KEY_RIGHT: forwardEditExpr(); break;
+	case _KEY_UP   : topEditExpr(); return true;
+	case _KEY_DOWN : endEditExpr(); return true;
+	case _KEY_LEFT : backwardEditExpr(); return true;
+	case _KEY_RIGHT: forwardEditExpr(); return true;
 
 	case _KEY_BACKSPACE: delEditExpr(); break;
 	case _KEY_DELETE   : delEditExpr(); break;

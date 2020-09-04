@@ -24336,10 +24336,10 @@ function onKeyDown( key ){
   return false;
  }
  switch( key ){
- case 38 : topEditExpr(); break;
- case 40 : endEditExpr(); break;
- case 37 : backwardEditExpr(); break;
- case 39: forwardEditExpr(); break;
+ case 38 : topEditExpr(); return true;
+ case 40 : endEditExpr(); return true;
+ case 37 : backwardEditExpr(); return true;
+ case 39: forwardEditExpr(); return true;
  case 8: delEditExpr(); break;
  case 46 : delEditExpr(); break;
  case 48 : doButton0(); break;
