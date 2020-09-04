@@ -172,6 +172,10 @@ var nativeRequest = null;
 
 #include "Profile.js"
 
+// キー関連
+#include "KeyEvent.js"
+var keyShiftOnly = false;
+
 #include "Electron.js"
 var electron = null;
 
@@ -364,14 +368,14 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	logExpr = new ListBox( logId );
 	logExpr.setLineNum( 12 );
 	_addCalcEventListener( logExpr.element(), "click", function( e ){
-		if( logExpr.click( e, 0, 18 ) ){
+		if( logExpr.click( e, 0, 20 ) ){
 			updateLogExpr();
 		}
 	});
 	listImage = new ListBox( selectImageId );
 	listImage.setLineNum( (isAndroidTablet() || isIPad()) ? 19 : 21 );
 	_addCalcEventListener( listImage.element(), "click", function( e ){
-		if( listImage.click( e, 0, 18 ) ){
+		if( listImage.click( e, 0, 20 ) ){
 			updateListImage();
 
 			getListImage();
@@ -670,6 +674,10 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 		nativeRequest.setScheme( "native" );
 		nativeRequest.send( "start_load_extfunc/" + extFuncFile[loadNum] );
 	}
+
+	// キー関連
+	_addCalcEventListener( document, "keydown", keyDown );
+	_addCalcEventListener( document, "keyup", keyUp );
 
 	if( electron != null ){
 		setEnglish( electron.isEnglish() );
@@ -1364,60 +1372,60 @@ function delAllEditExpr( e ){
 	document.getElementById( "calc_usage" ).innerHTML = "";
 }
 
-function doButton0( e ){ sound(); insEditExpr( "0" ); }
-function doButton1( e ){ sound(); insEditExpr( "1" ); }
-function doButton2( e ){ sound(); insEditExpr( "2" ); }
-function doButton3( e ){ sound(); insEditExpr( "3" ); }
-function doButton4( e ){ sound(); insEditExpr( "4" ); }
-function doButton5( e ){ sound(); insEditExpr( "5" ); }
-function doButton6( e ){ sound(); insEditExpr( "6" ); }
-function doButton7( e ){ sound(); insEditExpr( "7" ); }
-function doButton8( e ){ sound(); insEditExpr( "8" ); }
-function doButton9( e ){ sound(); insEditExpr( "9" ); }
-function doButtonA( e ){ sound(); insEditExpr( "A" ); }
-function doButtonB( e ){ sound(); insEditExpr( "B" ); }
-function doButtonC( e ){ sound(); insEditExpr( "C" ); }
-function doButtonD( e ){ sound(); insEditExpr( "D" ); }
-function doButtonE( e ){ sound(); insEditExpr( "E" ); }
-function doButtonF( e ){ sound(); insEditExpr( "F" ); }
+function doButton0( e ){ if( e != undefined ) sound(); insEditExpr( "0" ); }
+function doButton1( e ){ if( e != undefined ) sound(); insEditExpr( "1" ); }
+function doButton2( e ){ if( e != undefined ) sound(); insEditExpr( "2" ); }
+function doButton3( e ){ if( e != undefined ) sound(); insEditExpr( "3" ); }
+function doButton4( e ){ if( e != undefined ) sound(); insEditExpr( "4" ); }
+function doButton5( e ){ if( e != undefined ) sound(); insEditExpr( "5" ); }
+function doButton6( e ){ if( e != undefined ) sound(); insEditExpr( "6" ); }
+function doButton7( e ){ if( e != undefined ) sound(); insEditExpr( "7" ); }
+function doButton8( e ){ if( e != undefined ) sound(); insEditExpr( "8" ); }
+function doButton9( e ){ if( e != undefined ) sound(); insEditExpr( "9" ); }
+function doButtonA( e ){ if( e != undefined ) sound(); insEditExpr( "A" ); }
+function doButtonB( e ){ if( e != undefined ) sound(); insEditExpr( "B" ); }
+function doButtonC( e ){ if( e != undefined ) sound(); insEditExpr( "C" ); }
+function doButtonD( e ){ if( e != undefined ) sound(); insEditExpr( "D" ); }
+function doButtonE( e ){ if( e != undefined ) sound(); insEditExpr( "E" ); }
+function doButtonF( e ){ if( e != undefined ) sound(); insEditExpr( "F" ); }
 
-function doButtonPoint( e ){ sound(); insEditExpr( "." ); }
-function doButtonPlus( e ){ sound(); insEditExpr( "\\+" ); }
-function doButtonMinus( e ){ sound(); insEditExpr( "\\-" ); }
-function doButtonSpace( e ){ sound(); insEditExpr( " " ); }
-function doButtonEPlus( e ){ sound(); insEditExpr( "e+" ); }
-function doButtonEMinus( e ){ sound(); insEditExpr( "e-" ); }
+function doButtonPoint( e ){ if( e != undefined ) sound(); insEditExpr( "." ); }
+function doButtonPlus( e ){ if( e != undefined ) sound(); insEditExpr( "\\+" ); }
+function doButtonMinus( e ){ if( e != undefined ) sound(); insEditExpr( "\\-" ); }
+function doButtonSpace( e ){ if( e != undefined ) sound(); insEditExpr( " " ); }
+function doButtonEPlus( e ){ if( e != undefined ) sound(); insEditExpr( "e+" ); }
+function doButtonEMinus( e ){ if( e != undefined ) sound(); insEditExpr( "e-" ); }
 
-function doButtonFract( e ){ sound(); insEditExpr( "_" ); }
-function doButtonI( e ){ sound(); insEditExpr( "i" ); }
-function doButtonTime( e ){ sound(); insEditExpr( ":" ); }
+function doButtonFract( e ){ if( e != undefined ) sound(); insEditExpr( "_" ); }
+function doButtonI( e ){ if( e != undefined ) sound(); insEditExpr( "i" ); }
+function doButtonTime( e ){ if( e != undefined ) sound(); insEditExpr( ":" ); }
 
-function doButtonMul( e ){ sound(); insEditExpr( "*" ); }
-function doButtonDiv( e ){ sound(); insEditExpr( "/" ); }
-function doButtonMod( e ){ sound(); insEditExpr( "%" ); }
-function doButtonAdd( e ){ sound(); insEditExpr( "+" ); }
-function doButtonSub( e ){ sound(); insEditExpr( "-" ); }
-function doButtonShiftL( e ){ sound(); insEditExpr( "<<" ); }
-function doButtonShiftR( e ){ sound(); insEditExpr( ">>" ); }
-function doButtonComplement( e ){ sound(); insEditExpr( "[~]" ); }
-function doButtonUnaryMinus( e ){ sound(); insEditExpr( "[-]" ); }
-function doButtonAND( e ){ sound(); insEditExpr( "&" ); }
-function doButtonXOR( e ){ sound(); insEditExpr( "^" ); }
-function doButtonOR( e ){ sound(); insEditExpr( "|" ); }
+function doButtonMul( e ){ if( e != undefined ) sound(); insEditExpr( "*" ); }
+function doButtonDiv( e ){ if( e != undefined ) sound(); insEditExpr( "/" ); }
+function doButtonMod( e ){ if( e != undefined ) sound(); insEditExpr( "%" ); }
+function doButtonAdd( e ){ if( e != undefined ) sound(); insEditExpr( "+" ); }
+function doButtonSub( e ){ if( e != undefined ) sound(); insEditExpr( "-" ); }
+function doButtonShiftL( e ){ if( e != undefined ) sound(); insEditExpr( "<<" ); }
+function doButtonShiftR( e ){ if( e != undefined ) sound(); insEditExpr( ">>" ); }
+function doButtonComplement( e ){ if( e != undefined ) sound(); insEditExpr( "[~]" ); }
+function doButtonUnaryMinus( e ){ if( e != undefined ) sound(); insEditExpr( "[-]" ); }
+function doButtonAND( e ){ if( e != undefined ) sound(); insEditExpr( "&" ); }
+function doButtonXOR( e ){ if( e != undefined ) sound(); insEditExpr( "^" ); }
+function doButtonOR( e ){ if( e != undefined ) sound(); insEditExpr( "|" ); }
 
-function doButtonDeg( e ){ sound(); insEditExpr( "d" ); }
-function doButtonGrad( e ){ sound(); insEditExpr( "g" ); }
-function doButtonRad( e ){ sound(); insEditExpr( "r" ); }
-function doButtonBIN( e ){ sound(); insEditExpr( "\\b" ); }
-function doButtonOCT( e ){ sound(); insEditExpr( "\\0" ); }
-function doButtonDEC( e ){ sound(); insEditExpr( "\\" ); }
-function doButtonHEX( e ){ sound(); insEditExpr( "\\x" ); }
-function doButtonHour( e ){ sound(); insEditExpr( "h" ); }
-function doButtonMin( e ){ sound(); insEditExpr( "m" ); }
-function doButtonSec( e ){ sound(); insEditExpr( "s" ); }
-function doButtonFrame( e ){ sound(); insEditExpr( "f" ); }
+function doButtonDeg( e ){ if( e != undefined ) sound(); insEditExpr( "d" ); }
+function doButtonGrad( e ){ if( e != undefined ) sound(); insEditExpr( "g" ); }
+function doButtonRad( e ){ if( e != undefined ) sound(); insEditExpr( "r" ); }
+function doButtonBIN( e ){ if( e != undefined ) sound(); insEditExpr( "\\b" ); }
+function doButtonOCT( e ){ if( e != undefined ) sound(); insEditExpr( "\\0" ); }
+function doButtonDEC( e ){ if( e != undefined ) sound(); insEditExpr( "\\" ); }
+function doButtonHEX( e ){ if( e != undefined ) sound(); insEditExpr( "\\x" ); }
+function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
+function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
+function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
+function doButtonFrame( e ){ if( e != undefined ) sound(); insEditExpr( "f" ); }
 
-function doButtonPow( e ){ sound(); insEditExpr( "^" ); }
+function doButtonPow( e ){ if( e != undefined ) sound(); insEditExpr( "^" ); }
 
 function doButtonSin( e ){
 	sound();
@@ -1468,8 +1476,8 @@ function doButtonExtFunc( e ){
 	setButtonMode( 0 );
 }
 
-function doButtonTop( e ){ sound(); insEditExpr( "(" ); }
-function doButtonEnd( e ){ sound(); insEditExpr( ")" ); }
+function doButtonTop( e ){ if( e != undefined ) sound(); insEditExpr( "(" ); }
+function doButtonEnd( e ){ if( e != undefined ) sound(); insEditExpr( ")" ); }
 
 function doButtonSTO( e ){
 	sound();
@@ -1486,7 +1494,7 @@ function doButtonMCL( e ){
 	updateSelectVar();
 }
 function doButtonEnter( e ){
-	sound();
+	if( e != undefined ) sound();
 	onCalcButtonEnter();
 }
 
@@ -3966,4 +3974,130 @@ function onContentBase64( data ){
 	writeProfileString( "ENV_", "SkinImage", skinImage );
 
 	addListImage();
+}
+
+// キー関連
+function onKeyDown( key ){
+	if( menu != _UI_CALC_MENU_MAIN ){
+		return false;
+	}
+
+	if(
+		(document.activeElement == document.getElementById( "calc_edit_radix" )) ||
+		(document.activeElement == document.getElementById( "calc_edit_fps"   ))
+	){
+		return false;
+	}
+
+	switch( key ){
+	case _KEY_UP   : topEditExpr(); break;
+	case _KEY_DOWN : endEditExpr(); break;
+	case _KEY_LEFT : backwardEditExpr(); break;
+	case _KEY_RIGHT: forwardEditExpr(); break;
+
+	case _KEY_BACKSPACE: delEditExpr(); break;
+	case _KEY_DELETE   : delEditExpr(); break;
+
+	case _KEY_0    : doButton0(); break;
+	case _KEY_NUM_0: doButton0(); break;
+	case _KEY_1    : doButton1(); break;
+	case _KEY_NUM_1: doButton1(); break;
+	case _KEY_2    : doButton2(); break;
+	case _KEY_NUM_2: doButton2(); break;
+	case _KEY_3    : doButton3(); break;
+	case _KEY_NUM_3: doButton3(); break;
+	case _KEY_4    : doButton4(); break;
+	case _KEY_NUM_4: doButton4(); break;
+	case _KEY_5    : doButton5(); break;
+	case _KEY_NUM_5: doButton5(); break;
+	case _KEY_6    : doButton6(); break;
+	case _KEY_NUM_6: doButton6(); break;
+	case _KEY_7    : doButton7(); break;
+	case _KEY_NUM_7: doButton7(); break;
+	case _KEY_8:
+	if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton8();
+		} else {
+			doButtonTop();
+		}
+		break;
+	case _KEY_NUM_8: doButton8(); break;
+	case _KEY_9:
+	if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton9();
+		} else {
+			doButtonEnd();
+		}
+		break;
+	case _KEY_NUM_9: doButton9(); break;
+	case _KEY_A    : doButtonA(); break;
+	case _KEY_B    : doButtonB(); break;
+	case _KEY_C    : doButtonC(); break;
+	case _KEY_D    : doButtonD(); break;
+	case _KEY_E    : doButtonE(); break;
+	case _KEY_F    : doButtonF(); break;
+
+	case _KEY_NUM_POINT: doButtonPoint(); break;
+	case 190: doButtonPoint(); break;	// .>キー
+	case 187:	// ;+キー
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButtonPlus();
+		} else {
+			doButtonAdd();
+		}
+		break;
+	case 189:	// -=キー
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButtonSub();
+		} else {
+			doButtonMinus();
+		}
+		break;
+	case _KEY_SPACE: doButtonSpace(); break;
+
+	case 226: doButtonFract(); break;	// \_キー
+	case _KEY_I: doButtonI(); break;
+	case 186:	// :*キー
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButtonTime();
+		} else {
+			doButtonMul();
+		}
+		break;
+
+	case _KEY_NUM_MUL: doButtonMul(); break;
+	case _KEY_NUM_DIV: doButtonDiv(); break;
+	case 191: doButtonDiv(); break;	// /?キー
+	case _KEY_NUM_ADD:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButtonAdd();
+		} else {
+			doButtonPlus();
+		}
+		break;
+	case _KEY_NUM_SUB:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButtonSub();
+		} else {
+			doButtonMinus();
+		}
+		break;
+
+	case _KEY_ENTER: doButtonEnter(); break;
+	}
+
+	if( key == _KEY_SHIFT ){
+		keyShiftOnly = true;
+	} else {
+		keyShiftOnly = false;
+	}
+
+	return false;
+}
+function onKeyUp( key ){
+	if( (key == _KEY_SHIFT) && keyShiftOnly ){
+		doButtonSHIFT();
+	}
+
+	return false;
 }
