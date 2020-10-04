@@ -509,6 +509,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	_addCalcEventListenerById( "button_sec", event, doButtonSec );
 	_addCalcEventListenerById( "button_frame", event, doButtonFrame );
 
+	_addCalcEventListenerById( "button_factorial", event, doButtonFactorial );
+
 	_addCalcEventListenerById( "button_pow1", event, doButtonPow );
 	_addCalcEventListenerById( "button_pow2", event, doButtonPow );
 
@@ -1424,6 +1426,8 @@ function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
 function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
 function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
 function doButtonFrame( e ){ if( e != undefined ) sound(); insEditExpr( "f" ); }
+
+function doButtonFactorial( e ){ if( e != undefined ) sound(); insEditExpr( "!" ); }
 
 function doButtonPow( e ){ if( e != undefined ) sound(); insEditExpr( "^" ); }
 
@@ -2880,11 +2884,11 @@ function updateButton(){
 		flag = false;
 		break;
 	}
-	cssSetStyleDisplayById( "button_deg"  , flag );
-	cssSetStyleDisplayById( "button_grad" , flag );
-	cssSetStyleDisplayById( "button_rad"  , flag );
-	cssSetStyleDisplayById( "button_dummy", flag );
-	cssSetStyleDisplayById( "button_pow1" , flag );
+	cssSetStyleDisplayById( "button_deg"      , flag );
+	cssSetStyleDisplayById( "button_grad"     , flag );
+	cssSetStyleDisplayById( "button_rad"      , flag );
+	cssSetStyleDisplayById( "button_factorial", flag );
+	cssSetStyleDisplayById( "button_pow1"     , flag );
 
 	switch( calcUI._mode ){
 	case _UI_CALC_MODE_TIME:
@@ -3989,107 +3993,308 @@ function onKeyDown( key ){
 		return false;
 	}
 
+	if( key == _KEY_SHIFT ){
+		keyShiftOnly = true;
+	} else {
+		keyShiftOnly = false;
+	}
+
 	switch( key ){
 	case _KEY_UP   : topEditExpr(); return true;
 	case _KEY_DOWN : endEditExpr(); return true;
 	case _KEY_LEFT : backwardEditExpr(); return true;
 	case _KEY_RIGHT: forwardEditExpr(); return true;
 
-	case _KEY_BACKSPACE: delEditExpr(); break;
-	case _KEY_DELETE   : delEditExpr(); break;
+	case _KEY_BACKSPACE: delEditExpr(); return true;
+	case _KEY_DELETE   : delEditExpr(); return true;
 
-	case _KEY_0    : doButton0(); break;
-	case _KEY_NUM_0: doButton0(); break;
-	case _KEY_1    : doButton1(); break;
-	case _KEY_NUM_1: doButton1(); break;
-	case _KEY_2    : doButton2(); break;
-	case _KEY_NUM_2: doButton2(); break;
-	case _KEY_3    : doButton3(); break;
-	case _KEY_NUM_3: doButton3(); break;
-	case _KEY_4    : doButton4(); break;
-	case _KEY_NUM_4: doButton4(); break;
-	case _KEY_5    : doButton5(); break;
-	case _KEY_NUM_5: doButton5(); break;
-	case _KEY_6    : doButton6(); break;
-	case _KEY_NUM_6: doButton6(); break;
-	case _KEY_7    : doButton7(); break;
-	case _KEY_NUM_7: doButton7(); break;
+	case _KEY_0:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton0();
+			return true;
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonOCT();
+			return true;
+		}
+		break;
+	case _KEY_NUM_0: doButton0(); return true;
+	case _KEY_1:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton1();
+			return true;
+		} else {
+			switch( calcUI._mode ){
+			case _UI_CALC_MODE_FLOAT:
+			case _UI_CALC_MODE_FRACT:
+			case _UI_CALC_MODE_MFRACT:
+			case _UI_CALC_MODE_COMPLEX:
+				doButtonFactorial();
+				return true;
+			}
+		}
+		break;
+	case _KEY_NUM_1: doButton1(); return true;
+	case _KEY_2    : doButton2(); return true;
+	case _KEY_NUM_2: doButton2(); return true;
+	case _KEY_3    : doButton3(); return true;
+	case _KEY_NUM_3: doButton3(); return true;
+	case _KEY_4    : doButton4(); return true;
+	case _KEY_NUM_4: doButton4(); return true;
+	case _KEY_5:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton5();
+		} else {
+			doButtonMod();
+		}
+		return true;
+	case _KEY_NUM_5: doButton5(); return true;
+	case _KEY_6:
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+			doButton6();
+			return true;
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonAND();
+			return true;
+		}
+		break;
+	case _KEY_NUM_6: doButton6(); return true;
+	case _KEY_7    : doButton7(); return true;
+	case _KEY_NUM_7: doButton7(); return true;
 	case _KEY_8:
-	if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButton8();
 		} else {
 			doButtonTop();
 		}
-		break;
-	case _KEY_NUM_8: doButton8(); break;
+		return true;
+	case _KEY_NUM_8: doButton8(); return true;
 	case _KEY_9:
-	if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButton9();
 		} else {
 			doButtonEnd();
 		}
+		return true;
+	case _KEY_NUM_9: doButton9(); return true;
+	case _KEY_A:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonA();
+			return true;
+		}
 		break;
-	case _KEY_NUM_9: doButton9(); break;
-	case _KEY_A    : doButtonA(); break;
-	case _KEY_B    : doButtonB(); break;
-	case _KEY_C    : doButtonC(); break;
-	case _KEY_D    : doButtonD(); break;
-	case _KEY_E    : doButtonE(); break;
-	case _KEY_F    : doButtonF(); break;
+	case _KEY_B:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+				doButtonB();
+			} else {
+				doButtonBIN();
+			}
+			return true;
+		}
+		break;
+	case _KEY_C:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonC();
+			return true;
+		}
+		break;
+	case _KEY_D:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonD();
+			return true;
+		} else {
+			switch( calcUI._mode ){
+			case _UI_CALC_MODE_FLOAT:
+			case _UI_CALC_MODE_FRACT:
+			case _UI_CALC_MODE_MFRACT:
+			case _UI_CALC_MODE_COMPLEX:
+				doButtonDeg();
+				return true;
+			}
+		}
+		break;
+	case _KEY_E:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonE();
+		} else {
+			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+				doButtonEPlus();
+			} else {
+				doButtonEMinus();
+			}
+		}
+		return true;
+	case _KEY_F:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonF();
+			return true;
+		} else if( calcUI._mode == _UI_CALC_MODE_TIME ){
+			doButtonFrame();
+			return true;
+		}
+		break;
+	case _KEY_G:
+		switch( calcUI._mode ){
+		case _UI_CALC_MODE_FLOAT:
+		case _UI_CALC_MODE_FRACT:
+		case _UI_CALC_MODE_MFRACT:
+		case _UI_CALC_MODE_COMPLEX:
+			doButtonGrad();
+			return true;
+		}
+		break;
+	case _KEY_H:
+		if( calcUI._mode == _UI_CALC_MODE_TIME ){
+			doButtonHour();
+			return true;
+		}
+		break;
+	case _KEY_M:
+		if( calcUI._mode == _UI_CALC_MODE_TIME ){
+			doButtonMin();
+			return true;
+		}
+		break;
+	case _KEY_R:
+		switch( calcUI._mode ){
+		case _UI_CALC_MODE_FLOAT:
+		case _UI_CALC_MODE_FRACT:
+		case _UI_CALC_MODE_MFRACT:
+		case _UI_CALC_MODE_COMPLEX:
+			doButtonRad();
+			return true;
+		}
+		break;
+	case _KEY_S:
+		if( calcUI._mode == _UI_CALC_MODE_TIME ){
+			doButtonSec();
+			return true;
+		}
+		break;
+	case _KEY_X:
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonHEX();
+			return true;
+		}
+		break;
 
-	case _KEY_NUM_POINT: doButtonPoint(); break;
-	case 190: doButtonPoint(); break;	// .>キー
+	case _KEY_NUM_POINT:
+		switch( calcUI._mode ){
+		case _UI_CALC_MODE_FLOAT:
+		case _UI_CALC_MODE_FRACT:
+		case _UI_CALC_MODE_MFRACT:
+		case _UI_CALC_MODE_COMPLEX:
+			doButtonPoint();
+			return true;
+		}
+		break;
+	case 190:	// .>キー
+		switch( calcUI._mode ){
+		case _UI_CALC_MODE_FLOAT:
+		case _UI_CALC_MODE_FRACT:
+		case _UI_CALC_MODE_MFRACT:
+		case _UI_CALC_MODE_COMPLEX:
+			doButtonPoint();
+			return true;
+		case _UI_CALC_MODE_SIGNED:
+		case _UI_CALC_MODE_UNSIGNED:
+			doButtonShiftR();
+			return true;
+		}
+		break;
 	case 187:	// ;+キー
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButtonPlus();
 		} else {
 			doButtonAdd();
 		}
-		break;
+		return true;
 	case 189:	// -=キー
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButtonSub();
 		} else {
 			doButtonMinus();
 		}
-		break;
-	case _KEY_SPACE: doButtonSpace(); break;
+		return true;
 
-	case 226: doButtonFract(); break;	// \_キー
-	case _KEY_I: doButtonI(); break;
+	case 226:	// \_キー
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonDEC();
+		} else {
+			doButtonFract();
+		}
+		return true;
+	case _KEY_I:
+		switch( calcUI._mode ){
+		case _UI_CALC_MODE_FLOAT:
+		case _UI_CALC_MODE_FRACT:
+		case _UI_CALC_MODE_MFRACT:
+		case _UI_CALC_MODE_COMPLEX:
+			doButtonI();
+			return true;
+		}
+		break;
 	case 186:	// :*キー
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
-			doButtonTime();
+			if( calcUI._mode == _UI_CALC_MODE_TIME ){
+				doButtonTime();
+				return true;
+			}
 		} else {
 			doButtonMul();
+			return true;
 		}
 		break;
 
-	case _KEY_NUM_MUL: doButtonMul(); break;
-	case _KEY_NUM_DIV: doButtonDiv(); break;
-	case 191: doButtonDiv(); break;	// /?キー
 	case _KEY_NUM_ADD:
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButtonAdd();
 		} else {
 			doButtonPlus();
 		}
-		break;
+		return true;
 	case _KEY_NUM_SUB:
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButtonSub();
 		} else {
 			doButtonMinus();
 		}
+		return true;
+	case _KEY_NUM_MUL: doButtonMul(); return true;
+	case _KEY_NUM_DIV: doButtonDiv(); return true;
+	case 191: doButtonDiv(); return true;	// /?キー
+
+	case 222:	// ^~キー
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+				doButtonXOR();
+			} else {
+				doButtonComplement();
+			}
+		} else {
+			doButtonPow();
+		}
+		return true;
+	case 220:	// \|キー
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+				doButtonDEC();
+			} else {
+				doButtonOR();
+			}
+			return true;
+		}
+		break;
+	case 188:	// ,<キー
+		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonShiftL();
+			return true;
+		}
 		break;
 
-	case _KEY_ENTER: doButtonEnter(); break;
-	}
+	case _KEY_SPACE: doButtonSpace(); return true;
 
-	if( key == _KEY_SHIFT ){
-		keyShiftOnly = true;
-	} else {
-		keyShiftOnly = false;
+	case _KEY_ENTER: doButtonEnter(); return true;
 	}
 
 	return false;
@@ -4097,6 +4302,7 @@ function onKeyDown( key ){
 function onKeyUp( key ){
 	if( (key == _KEY_SHIFT) && keyShiftOnly ){
 		doButtonSHIFT();
+		return true;
 	}
 
 	return false;

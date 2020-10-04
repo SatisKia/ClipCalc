@@ -1278,6 +1278,34 @@ function _UNSIGNED( x, umax ){
  if( x < 0 ) return x + umax;
  return x;
 }
+function _MODF( x, _int ){
+ var tmp = x.toString().split( "." );
+ var k;
+ if( tmp[1] ){
+  if( (tmp[1].indexOf( "e" ) >= 0) || (tmp[1].indexOf( "E" ) >= 0) ){
+   k = 1;
+  } else {
+   k = _POW( 10, tmp[1].length );
+  }
+ } else {
+  k = 1;
+ }
+ var i = _INT( x );
+ _int.set( i );
+ return (x * k - i * k) / k;
+}
+function _FACTORIAL( x ){
+ var m = false;
+ if( x < 0 ){
+  m = true;
+  x = 0 - x;
+ }
+ var f = 1;
+ for( var i = 2; i <= x; i++ ){
+  f *= i;
+ }
+ return m ? -f : f;
+}
 function _CHAR( chr ){
  return chr.charCodeAt( 0 );
 }
@@ -2081,14 +2109,15 @@ _Time.prototype = {
  },
  _reduce1 : function(){
   var _m, _s, _f;
-  _m = this._hour - _INT( this._hour );
-  this._hour = _INT( this._hour );
+  var _int = new _Float();
+  _m = _MODF( this._hour, _int );
+  this._hour = _int.val();
   this._min += _m * 60.0;
-  _s = this._min - _INT( this._min );
-  this._min = _INT( this._min );
+  _s = _MODF( this._min, _int );
+  this._min = _int.val();
   this._sec += _s * 60.0;
-  _f = this._sec - _INT( this._sec );
-  this._sec = _INT( this._sec );
+  _f = _MODF( this._sec, _int );
+  this._sec = _int.val();
   this._frame += _f * this._fps;
  },
  _reduce2 : function(){
@@ -3030,10 +3059,10 @@ _Value.prototype = {
   return floatToValue( x );
  },
  modf : function( _int ){
-  var x = this.toFloat();
-  var i = _INT( x );
-  _int.set( i );
-  return floatToValue( x - i );
+  return floatToValue( _MODF( this.toFloat(), _int ) );
+ },
+ factorial : function(){
+  return floatToValue( _FACTORIAL( this.toFloat() ) );
  },
  farg : function(){
   return this._complex().farg();
@@ -3491,7 +3520,7 @@ __ArrayNode.prototype = {
    this._vector[i].ass( value[i] );
   }
  },
- setVector2 : function( real, imag, num ){
+ setComplexVector : function( real, imag, num ){
   if( num > this._vectorNum ){
    this._newVector( num - 1 );
   } else {
@@ -3500,6 +3529,25 @@ __ArrayNode.prototype = {
   for( var i = 0; i < num; i++ ){
    this._vector[i].setReal( real[i] );
    this._vector[i].setImag( imag[i] );
+  }
+ },
+ setFractVector : function( value, denom, num ){
+  if( num > this._vectorNum ){
+   this._newVector( num - 1 );
+  } else {
+   this._resizeVector( num - 1 );
+  }
+  var nu;
+  for( var i = 0; i < num; i++ ){
+   nu = value[i];
+   if( nu < 0 ){
+    this._vector[i].fractSetMinus( true );
+    nu = -nu;
+   } else {
+    this._vector[i].fractSetMinus( false );
+   }
+   this._vector[i].setNum( nu );
+   this._vector[i].setDenom( denom[i] );
   }
  },
  val : function( index ){
@@ -3573,11 +3621,17 @@ _Array.prototype = {
   }
   this._node[index].setVector( value, num );
  },
- setVector2 : function( index, real, imag, num, moveFlag ){
+ setComplexVector : function( index, real, imag, num, moveFlag ){
   if( moveFlag ){
    this.move( index );
   }
-  this._node[index].setVector2( real, imag, num );
+  this._node[index].setComplexVector( real, imag, num );
+ },
+ setFractVector : function( index, value, denom, num, moveFlag ){
+  if( moveFlag ){
+   this.move( index );
+  }
+  this._node[index].setFractVector( value, denom, num );
  },
  setMatrix : function( index, src, moveFlag ){
   if( moveFlag ){
@@ -3585,11 +3639,33 @@ _Array.prototype = {
   }
   this._mat[index].ass( src );
  },
- setMatrix2 : function( index, real, imag, moveFlag ){
+ setComplexMatrix : function( index, real, imag, moveFlag ){
   if( real._len == imag._len ){
-   var src = dupMatrix( real );
+   var src = new _Matrix( real._row, real._col );
    for( var i = 0; i < real._len; i++ ){
-    src._mat[i].setImag( imag._mat[i].real() );
+    src._mat[i].setReal( real._mat[i].toFloat() );
+    src._mat[i].setImag( imag._mat[i].toFloat() );
+   }
+   if( moveFlag ){
+    this.move( index );
+   }
+   this._mat[index].ass( src );
+  }
+ },
+ setFractMatrix : function( index, value, denom, moveFlag ){
+  if( value._len == denom._len ){
+   var src = new _Matrix( value._row, value._col );
+   var nu;
+   for( var i = 0; i < value._len; i++ ){
+    nu = value._mat[i].toFloat();
+    if( nu < 0 ){
+     src._mat[i].fractSetMinus( true );
+     nu = -nu;
+    } else {
+     src._mat[i].fractSetMinus( false );
+    }
+    src._mat[i].setNum( nu );
+    src._mat[i].setDenom( denom._mat[i].toFloat() );
    }
    if( moveFlag ){
     this.move( index );
@@ -9367,6 +9443,15 @@ _Proc.prototype = {
   }
   return 0x00;
  },
+ _funcFact : function( _this, param, code, token, value, seFlag ){
+  var ret;
+  var tmpValue = new _Matrix();
+  if( (ret = _this._getFuncParam( param, code, token, tmpValue, seFlag )) != 0x00 ){
+   return ret;
+  }
+  value.ass( tmpValue._mat[0].factorial() );
+  return 0x00;
+ },
  _funcInt : function( _this, param, code, token, value, seFlag ){
   var ret;
   var tmpValue = new _Matrix();
@@ -9522,7 +9607,7 @@ _Proc.prototype = {
     if( val == 0 ){
      var i;
      switch( token ){
-     case 68:
+     case 69:
       for( i = 0; i < str1.length; i++ ){
        val = str1.charCodeAt( i ) - str2.charCodeAt( i );
        if( val != 0 ){
@@ -9530,7 +9615,7 @@ _Proc.prototype = {
        }
       }
       break;
-     case 69:
+     case 70:
       var chr1, chr2;
       for( i = 0; i < str1.length; i++ ){
        chr1 = str1.charCodeAt( i );
@@ -9585,7 +9670,7 @@ _Proc.prototype = {
   } else {
    _this._curLine._token.unlock( lock );
   }
-  value.ass( (token == 73) ? procGWorld()._color : doFuncGColor24( procGWorld()._color ) );
+  value.ass( (token == 74) ? procGWorld()._color : doFuncGColor24( procGWorld()._color ) );
   return 0x00;
  },
  _funcGCX : function( _this, param, code, token, value, seFlag ){
@@ -9707,7 +9792,7 @@ _Proc.prototype = {
   ret = doFuncEval( _this, childProc, childParam, string.str(), value );
   childProc.end();
   childParam.end();
-  return ret;
+  return (ret == 0x00) ? 0x00 : _this._retError( 0x2110, code, token );
  },
  doFuncEval : function( childProc, childParam, string, value ){
   var ret;
@@ -13767,6 +13852,7 @@ var _procSubFunc = [
  _Proc.prototype._funcLdexp,
  _Proc.prototype._funcFrexp,
  _Proc.prototype._funcModf,
+ _Proc.prototype._funcFact,
  _Proc.prototype._funcInt,
  _Proc.prototype._funcReal,
  _Proc.prototype._funcImag,
@@ -14269,6 +14355,7 @@ var _TOKEN_FUNC = [
  "ldexp",
  "frexp",
  "modf",
+ "fact",
  "int",
  "real",
  "imag",
@@ -14704,7 +14791,51 @@ _Token.prototype = {
   case '-': top++ ; swi = true ; break;
   default : top = 0; swi = false; break;
   }
-  if( string.charAt( top ) == '\'' ){
+  if( string.charAt( string.length - 1 ) == '!' ){
+   var tmpString = string.substring( top, string.length - 1 );
+   if( isCharEscape( tmpString, top ) ){
+    switch( tmpString.charAt( top + 1 ) ){
+    case 'b':
+    case 'B':
+     value.ass( stringToInt( tmpString, top + 2, stop, 2 ) );
+     break;
+    case '0':
+     value.ass( stringToInt( tmpString, top + 2, stop, 8 ) );
+     break;
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+     value.ass( stringToInt( tmpString, top + 1, stop, 10 ) );
+     break;
+    case 'x':
+    case 'X':
+     value.ass( stringToInt( tmpString, top + 2, stop, 16 ) );
+     break;
+    default:
+     return false;
+    }
+   } else {
+    if( (param._mode & 0x0100) != 0 ){
+     value.ass( stringToInt( tmpString, 0, stop, param._radix ) );
+    } else {
+     value.ass( stringToInt( tmpString, 0, stop, 10 ) );
+    }
+   }
+   if( stop._val < tmpString.length ){
+    return false;
+   }
+   if( swi ){
+    value.ass( value.factorial().minus() );
+   } else {
+    value.ass( value.factorial() );
+   }
+  } else if( string.charAt( top ) == '\'' ){
    value.ass( 0.0 );
    j = 0;
    for( i = 1; ; i++ ){
@@ -14742,15 +14873,9 @@ _Token.prototype = {
    case 'b':
    case 'B':
     value.ass( stringToInt( string, top + 2, stop, 2 ) );
-    if( stop._val < string.length ){
-     return false;
-    }
     break;
    case '0':
     value.ass( stringToInt( string, top + 2, stop, 8 ) );
-    if( stop._val < string.length ){
-     return false;
-    }
     break;
    case '1':
    case '2':
@@ -14762,18 +14887,15 @@ _Token.prototype = {
    case '8':
    case '9':
     value.ass( stringToInt( string, top + 1, stop, 10 ) );
-    if( stop._val < string.length ){
-     return false;
-    }
     break;
    case 'x':
    case 'X':
     value.ass( stringToInt( string, top + 2, stop, 16 ) );
-    if( stop._val < string.length ){
-     return false;
-    }
     break;
    default:
+    return false;
+   }
+   if( stop._val < string.length ){
     return false;
    }
    if( swi ){
@@ -18559,6 +18681,10 @@ function getProcErrorDefString( err, token, isCalculator, isEnglish ){
   if( isEnglish ) error = "Function call failed.";
   else error = "関数呼び出しに失敗しました";
   break;
+ case 0x2110:
+  if( isEnglish ) error = "Execution of evaluation was interrupted.";
+  else error = "evalの実行が中断されました";
+  break;
  case 0x2120:
   if( isEnglish ) error = "\"" + token + "\" too many nests.";
   else error = token + "のネスト数が多すぎます";
@@ -19592,6 +19718,7 @@ function doButtonDownInt( id, step, min ){
 }
 function printUsage( token, proc, param, isEnglish, divId ){
  var usage = new String();
+ if( token == "!" ){ usage = isEnglish ? "factorial" : "階乗"; }
  if( token == "e+" ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
  if( token == "e-" ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
  if( token == "d" ){ usage = isEnglish ? "degrees" : "度"; }
@@ -19638,7 +19765,7 @@ function printUsage( token, proc, param, isEnglish, divId ){
  if( token == "acosh " ){ usage = "acosh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic cosine" : "逆双曲線余弦"); }
  if( token == "atanh " ){ usage = "atanh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic tangent" : "逆双曲線正接"); }
  if( token == "ln " ){ usage = "ln &lt;x&gt; : " + (isEnglish ? "natural logarithm" : "自然対数"); }
-if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
+ if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
  if( token == "log10 " ){ usage = "log10 &lt;x&gt; : " + (isEnglish ? "base 10 logarithm" : "底10の対数"); }
  if( token == "exp " ){ usage = "exp &lt;x&gt; : " + (isEnglish ? "exponent" : "指数"); }
  if( token == "exp10 " ){ usage = "exp10 &lt;x&gt; : " + (isEnglish ? "base 10 exponent" : "底10の指数"); }
@@ -19653,6 +19780,7 @@ if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEngl
  if( token == "frexp " ){ usage = "frexp &lt;x&gt; &lt;var_exp&gt; : " + (isEnglish ? "returns the mantissa of &lt;x&gt;, stores the exponent in &lt;var_exp&gt;" : "&lt;x&gt;の仮数を返し、変数&lt;var_exp&gt;に指数を格納"); }
  if( token == "modf " ){ usage = "modf &lt;x&gt; &lt;var_int&gt; : " + (isEnglish ? "returns the fraction part of &lt;x&gt;, stores the integer part in &lt;var_int&gt;" : "&lt;x&gt;の小数部を返し、変数&lt;var_int&gt;に整数部を格納"); }
  if( token == "pow " ){ usage = "pow &lt;x&gt; &lt;y&gt; : " + (isEnglish ? "the &lt;y&gt; power of &lt;x&gt;" : "&lt;x&gt;の&lt;y&gt;乗"); }
+ if( token == "fact " ){ usage = "fact &lt;x&gt; : " + (isEnglish ? "factorial of &lt;x&gt;" : "&lt;x&gt;の階乗"); }
  if( token == "num " ){ usage = "num &lt;x&gt; : " + (isEnglish ? "numerator of fraction" : "分数の分子"); }
  if( token == "denom " ){ usage = "denom &lt;x&gt; : " + (isEnglish ? "denominator of fraction" : "分数の分母"); }
  if( token == "real " ){ usage = "real &lt;x&gt; : " + (isEnglish ? "real part of complex number" : "複素数の実数部"); }
@@ -20973,6 +21101,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_min", event, doButtonMin );
  _addCalcEventListenerById( "button_sec", event, doButtonSec );
  _addCalcEventListenerById( "button_frame", event, doButtonFrame );
+ _addCalcEventListenerById( "button_factorial", event, doButtonFactorial );
  _addCalcEventListenerById( "button_pow1", event, doButtonPow );
  _addCalcEventListenerById( "button_pow2", event, doButtonPow );
  _addCalcEventListenerById( "button_lang", "click", doButtonLang );
@@ -21719,6 +21848,7 @@ function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
 function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
 function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
 function doButtonFrame( e ){ if( e != undefined ) sound(); insEditExpr( "f" ); }
+function doButtonFactorial( e ){ if( e != undefined ) sound(); insEditExpr( "!" ); }
 function doButtonPow( e ){ if( e != undefined ) sound(); insEditExpr( "^" ); }
 function doButtonSin( e ){
  sound();
@@ -23339,7 +23469,7 @@ function updateButton(){
  cssSetStyleDisplayById( "button_deg" , flag );
  cssSetStyleDisplayById( "button_grad" , flag );
  cssSetStyleDisplayById( "button_rad" , flag );
- cssSetStyleDisplayById( "button_dummy", flag );
+ cssSetStyleDisplayById( "button_factorial", flag );
  cssSetStyleDisplayById( "button_pow1" , flag );
  switch( calcUI._mode ){
  case 6:
@@ -24335,106 +24465,306 @@ function onKeyDown( key ){
  ){
   return false;
  }
+ if( key == 16 ){
+  keyShiftOnly = true;
+ } else {
+  keyShiftOnly = false;
+ }
  switch( key ){
  case 38 : topEditExpr(); return true;
  case 40 : endEditExpr(); return true;
  case 37 : backwardEditExpr(); return true;
  case 39: forwardEditExpr(); return true;
- case 8: delEditExpr(); break;
- case 46 : delEditExpr(); break;
- case 48 : doButton0(); break;
- case 96: doButton0(); break;
- case 49 : doButton1(); break;
- case 97: doButton1(); break;
- case 50 : doButton2(); break;
- case 98: doButton2(); break;
- case 51 : doButton3(); break;
- case 99: doButton3(); break;
- case 52 : doButton4(); break;
- case 100: doButton4(); break;
- case 53 : doButton5(); break;
- case 101: doButton5(); break;
- case 54 : doButton6(); break;
- case 102: doButton6(); break;
- case 55 : doButton7(); break;
- case 103: doButton7(); break;
+ case 8: delEditExpr(); return true;
+ case 46 : delEditExpr(); return true;
+ case 48:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton0();
+   return true;
+  } else if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonOCT();
+   return true;
+  }
+  break;
+ case 96: doButton0(); return true;
+ case 49:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton1();
+   return true;
+  } else {
+   switch( calcUI._mode ){
+   case 0:
+   case 1:
+   case 2:
+   case 3:
+    doButtonFactorial();
+    return true;
+   }
+  }
+  break;
+ case 97: doButton1(); return true;
+ case 50 : doButton2(); return true;
+ case 98: doButton2(); return true;
+ case 51 : doButton3(); return true;
+ case 99: doButton3(); return true;
+ case 52 : doButton4(); return true;
+ case 100: doButton4(); return true;
+ case 53:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton5();
+  } else {
+   doButtonMod();
+  }
+  return true;
+ case 101: doButton5(); return true;
+ case 54:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton6();
+   return true;
+  } else if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonAND();
+   return true;
+  }
+  break;
+ case 102: doButton6(); return true;
+ case 55 : doButton7(); return true;
+ case 103: doButton7(); return true;
  case 56:
- if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButton8();
   } else {
    doButtonTop();
   }
-  break;
- case 104: doButton8(); break;
+  return true;
+ case 104: doButton8(); return true;
  case 57:
- if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButton9();
   } else {
    doButtonEnd();
   }
+  return true;
+ case 105: doButton9(); return true;
+ case 65:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonA();
+   return true;
+  }
   break;
- case 105: doButton9(); break;
- case 65 : doButtonA(); break;
- case 66 : doButtonB(); break;
- case 67 : doButtonC(); break;
- case 68 : doButtonD(); break;
- case 69 : doButtonE(); break;
- case 70 : doButtonF(); break;
- case 110: doButtonPoint(); break;
- case 190: doButtonPoint(); break;
+ case 66:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonB();
+   } else {
+    doButtonBIN();
+   }
+   return true;
+  }
+  break;
+ case 67:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonC();
+   return true;
+  }
+  break;
+ case 68:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonD();
+   return true;
+  } else {
+   switch( calcUI._mode ){
+   case 0:
+   case 1:
+   case 2:
+   case 3:
+    doButtonDeg();
+    return true;
+   }
+  }
+  break;
+ case 69:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonE();
+  } else {
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonEPlus();
+   } else {
+    doButtonEMinus();
+   }
+  }
+  return true;
+ case 70:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonF();
+   return true;
+  } else if( calcUI._mode == 6 ){
+   doButtonFrame();
+   return true;
+  }
+  break;
+ case 71:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonGrad();
+   return true;
+  }
+  break;
+ case 72:
+  if( calcUI._mode == 6 ){
+   doButtonHour();
+   return true;
+  }
+  break;
+ case 77:
+  if( calcUI._mode == 6 ){
+   doButtonMin();
+   return true;
+  }
+  break;
+ case 82:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonRad();
+   return true;
+  }
+  break;
+ case 83:
+  if( calcUI._mode == 6 ){
+   doButtonSec();
+   return true;
+  }
+  break;
+ case 88:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonHEX();
+   return true;
+  }
+  break;
+ case 110:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonPoint();
+   return true;
+  }
+  break;
+ case 190:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonPoint();
+   return true;
+  case 4:
+  case 5:
+   doButtonShiftR();
+   return true;
+  }
+  break;
  case 187:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonPlus();
   } else {
    doButtonAdd();
   }
-  break;
+  return true;
  case 189:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonSub();
   } else {
    doButtonMinus();
   }
-  break;
- case 32: doButtonSpace(); break;
- case 226: doButtonFract(); break;
- case 73: doButtonI(); break;
- case 186:
-  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
-   doButtonTime();
+  return true;
+ case 226:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonDEC();
   } else {
-   doButtonMul();
+   doButtonFract();
+  }
+  return true;
+ case 73:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonI();
+   return true;
   }
   break;
- case 106: doButtonMul(); break;
- case 111: doButtonDiv(); break;
- case 191: doButtonDiv(); break;
+ case 186:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   if( calcUI._mode == 6 ){
+    doButtonTime();
+    return true;
+   }
+  } else {
+   doButtonMul();
+   return true;
+  }
+  break;
  case 107:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonAdd();
   } else {
    doButtonPlus();
   }
-  break;
+  return true;
  case 109:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonSub();
   } else {
    doButtonMinus();
   }
+  return true;
+ case 106: doButtonMul(); return true;
+ case 111: doButtonDiv(); return true;
+ case 191: doButtonDiv(); return true;
+ case 222:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonXOR();
+   } else {
+    doButtonComplement();
+   }
+  } else {
+   doButtonPow();
+  }
+  return true;
+ case 220:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonDEC();
+   } else {
+    doButtonOR();
+   }
+   return true;
+  }
   break;
- case 13: doButtonEnter(); break;
- }
- if( key == 16 ){
-  keyShiftOnly = true;
- } else {
-  keyShiftOnly = false;
+ case 188:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonShiftL();
+   return true;
+  }
+  break;
+ case 32: doButtonSpace(); return true;
+ case 13: doButtonEnter(); return true;
  }
  return false;
 }
 function onKeyUp( key ){
  if( (key == 16) && keyShiftOnly ){
   doButtonSHIFT();
+  return true;
  }
  return false;
 }

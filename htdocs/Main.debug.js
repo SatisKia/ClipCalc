@@ -2003,6 +2003,10 @@ function getProcErrorDefString( err, token, isCalculator, isEnglish ){
   if( isEnglish ) error = "Function call failed.";
   else error = "関数呼び出しに失敗しました";
   break;
+ case _CLIP_PROC_ERR_EVAL:
+  if( isEnglish ) error = "Execution of evaluation was interrupted.";
+  else error = "evalの実行が中断されました";
+  break;
  case _CLIP_PROC_ERR_STAT_IF:
   if( isEnglish ) error = "\"" + token + "\" too many nests.";
   else error = token + "のネスト数が多すぎます";
@@ -3036,6 +3040,7 @@ function doButtonDownInt( id, step, min ){
 }
 function printUsage( token, proc, param, isEnglish, divId ){
  var usage = new String();
+ if( token == "!" ){ usage = isEnglish ? "factorial" : "階乗"; }
  if( token == "e+" ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
  if( token == "e-" ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
  if( token == "d" ){ usage = isEnglish ? "degrees" : "度"; }
@@ -3082,7 +3087,7 @@ function printUsage( token, proc, param, isEnglish, divId ){
  if( token == "acosh " ){ usage = "acosh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic cosine" : "逆双曲線余弦"); }
  if( token == "atanh " ){ usage = "atanh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic tangent" : "逆双曲線正接"); }
  if( token == "ln " ){ usage = "ln &lt;x&gt; : " + (isEnglish ? "natural logarithm" : "自然対数"); }
-if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
+ if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
  if( token == "log10 " ){ usage = "log10 &lt;x&gt; : " + (isEnglish ? "base 10 logarithm" : "底10の対数"); }
  if( token == "exp " ){ usage = "exp &lt;x&gt; : " + (isEnglish ? "exponent" : "指数"); }
  if( token == "exp10 " ){ usage = "exp10 &lt;x&gt; : " + (isEnglish ? "base 10 exponent" : "底10の指数"); }
@@ -3097,6 +3102,7 @@ if( token == "log " ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEngl
  if( token == "frexp " ){ usage = "frexp &lt;x&gt; &lt;var_exp&gt; : " + (isEnglish ? "returns the mantissa of &lt;x&gt;, stores the exponent in &lt;var_exp&gt;" : "&lt;x&gt;の仮数を返し、変数&lt;var_exp&gt;に指数を格納"); }
  if( token == "modf " ){ usage = "modf &lt;x&gt; &lt;var_int&gt; : " + (isEnglish ? "returns the fraction part of &lt;x&gt;, stores the integer part in &lt;var_int&gt;" : "&lt;x&gt;の小数部を返し、変数&lt;var_int&gt;に整数部を格納"); }
  if( token == "pow " ){ usage = "pow &lt;x&gt; &lt;y&gt; : " + (isEnglish ? "the &lt;y&gt; power of &lt;x&gt;" : "&lt;x&gt;の&lt;y&gt;乗"); }
+ if( token == "fact " ){ usage = "fact &lt;x&gt; : " + (isEnglish ? "factorial of &lt;x&gt;" : "&lt;x&gt;の階乗"); }
  if( token == "num " ){ usage = "num &lt;x&gt; : " + (isEnglish ? "numerator of fraction" : "分数の分子"); }
  if( token == "denom " ){ usage = "denom &lt;x&gt; : " + (isEnglish ? "denominator of fraction" : "分数の分母"); }
  if( token == "real " ){ usage = "real &lt;x&gt; : " + (isEnglish ? "real part of complex number" : "複素数の実数部"); }
@@ -4417,6 +4423,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_min", event, doButtonMin );
  _addCalcEventListenerById( "button_sec", event, doButtonSec );
  _addCalcEventListenerById( "button_frame", event, doButtonFrame );
+ _addCalcEventListenerById( "button_factorial", event, doButtonFactorial );
  _addCalcEventListenerById( "button_pow1", event, doButtonPow );
  _addCalcEventListenerById( "button_pow2", event, doButtonPow );
  _addCalcEventListenerById( "button_lang", "click", doButtonLang );
@@ -5163,6 +5170,7 @@ function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
 function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
 function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
 function doButtonFrame( e ){ if( e != undefined ) sound(); insEditExpr( "f" ); }
+function doButtonFactorial( e ){ if( e != undefined ) sound(); insEditExpr( "!" ); }
 function doButtonPow( e ){ if( e != undefined ) sound(); insEditExpr( "^" ); }
 function doButtonSin( e ){
  sound();
@@ -6783,7 +6791,7 @@ function updateButton(){
  cssSetStyleDisplayById( "button_deg" , flag );
  cssSetStyleDisplayById( "button_grad" , flag );
  cssSetStyleDisplayById( "button_rad" , flag );
- cssSetStyleDisplayById( "button_dummy", flag );
+ cssSetStyleDisplayById( "button_factorial", flag );
  cssSetStyleDisplayById( "button_pow1" , flag );
  switch( calcUI._mode ){
  case 6:
@@ -7779,106 +7787,306 @@ function onKeyDown( key ){
  ){
   return false;
  }
+ if( key == 16 ){
+  keyShiftOnly = true;
+ } else {
+  keyShiftOnly = false;
+ }
  switch( key ){
  case 38 : topEditExpr(); return true;
  case 40 : endEditExpr(); return true;
  case 37 : backwardEditExpr(); return true;
  case 39: forwardEditExpr(); return true;
- case 8: delEditExpr(); break;
- case 46 : delEditExpr(); break;
- case 48 : doButton0(); break;
- case 96: doButton0(); break;
- case 49 : doButton1(); break;
- case 97: doButton1(); break;
- case 50 : doButton2(); break;
- case 98: doButton2(); break;
- case 51 : doButton3(); break;
- case 99: doButton3(); break;
- case 52 : doButton4(); break;
- case 100: doButton4(); break;
- case 53 : doButton5(); break;
- case 101: doButton5(); break;
- case 54 : doButton6(); break;
- case 102: doButton6(); break;
- case 55 : doButton7(); break;
- case 103: doButton7(); break;
+ case 8: delEditExpr(); return true;
+ case 46 : delEditExpr(); return true;
+ case 48:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton0();
+   return true;
+  } else if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonOCT();
+   return true;
+  }
+  break;
+ case 96: doButton0(); return true;
+ case 49:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton1();
+   return true;
+  } else {
+   switch( calcUI._mode ){
+   case 0:
+   case 1:
+   case 2:
+   case 3:
+    doButtonFactorial();
+    return true;
+   }
+  }
+  break;
+ case 97: doButton1(); return true;
+ case 50 : doButton2(); return true;
+ case 98: doButton2(); return true;
+ case 51 : doButton3(); return true;
+ case 99: doButton3(); return true;
+ case 52 : doButton4(); return true;
+ case 100: doButton4(); return true;
+ case 53:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton5();
+  } else {
+   doButtonMod();
+  }
+  return true;
+ case 101: doButton5(); return true;
+ case 54:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   doButton6();
+   return true;
+  } else if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonAND();
+   return true;
+  }
+  break;
+ case 102: doButton6(); return true;
+ case 55 : doButton7(); return true;
+ case 103: doButton7(); return true;
  case 56:
- if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButton8();
   } else {
    doButtonTop();
   }
-  break;
- case 104: doButton8(); break;
+  return true;
+ case 104: doButton8(); return true;
  case 57:
- if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButton9();
   } else {
    doButtonEnd();
   }
+  return true;
+ case 105: doButton9(); return true;
+ case 65:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonA();
+   return true;
+  }
   break;
- case 105: doButton9(); break;
- case 65 : doButtonA(); break;
- case 66 : doButtonB(); break;
- case 67 : doButtonC(); break;
- case 68 : doButtonD(); break;
- case 69 : doButtonE(); break;
- case 70 : doButtonF(); break;
- case 110: doButtonPoint(); break;
- case 190: doButtonPoint(); break;
+ case 66:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonB();
+   } else {
+    doButtonBIN();
+   }
+   return true;
+  }
+  break;
+ case 67:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonC();
+   return true;
+  }
+  break;
+ case 68:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonD();
+   return true;
+  } else {
+   switch( calcUI._mode ){
+   case 0:
+   case 1:
+   case 2:
+   case 3:
+    doButtonDeg();
+    return true;
+   }
+  }
+  break;
+ case 69:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonE();
+  } else {
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonEPlus();
+   } else {
+    doButtonEMinus();
+   }
+  }
+  return true;
+ case 70:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonF();
+   return true;
+  } else if( calcUI._mode == 6 ){
+   doButtonFrame();
+   return true;
+  }
+  break;
+ case 71:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonGrad();
+   return true;
+  }
+  break;
+ case 72:
+  if( calcUI._mode == 6 ){
+   doButtonHour();
+   return true;
+  }
+  break;
+ case 77:
+  if( calcUI._mode == 6 ){
+   doButtonMin();
+   return true;
+  }
+  break;
+ case 82:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonRad();
+   return true;
+  }
+  break;
+ case 83:
+  if( calcUI._mode == 6 ){
+   doButtonSec();
+   return true;
+  }
+  break;
+ case 88:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonHEX();
+   return true;
+  }
+  break;
+ case 110:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonPoint();
+   return true;
+  }
+  break;
+ case 190:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonPoint();
+   return true;
+  case 4:
+  case 5:
+   doButtonShiftR();
+   return true;
+  }
+  break;
  case 187:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonPlus();
   } else {
    doButtonAdd();
   }
-  break;
+  return true;
  case 189:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonSub();
   } else {
    doButtonMinus();
   }
-  break;
- case 32: doButtonSpace(); break;
- case 226: doButtonFract(); break;
- case 73: doButtonI(); break;
- case 186:
-  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
-   doButtonTime();
+  return true;
+ case 226:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonDEC();
   } else {
-   doButtonMul();
+   doButtonFract();
+  }
+  return true;
+ case 73:
+  switch( calcUI._mode ){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+   doButtonI();
+   return true;
   }
   break;
- case 106: doButtonMul(); break;
- case 111: doButtonDiv(); break;
- case 191: doButtonDiv(); break;
+ case 186:
+  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+   if( calcUI._mode == 6 ){
+    doButtonTime();
+    return true;
+   }
+  } else {
+   doButtonMul();
+   return true;
+  }
+  break;
  case 107:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonAdd();
   } else {
    doButtonPlus();
   }
-  break;
+  return true;
  case 109:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
    doButtonSub();
   } else {
    doButtonMinus();
   }
+  return true;
+ case 106: doButtonMul(); return true;
+ case 111: doButtonDiv(); return true;
+ case 191: doButtonDiv(); return true;
+ case 222:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonXOR();
+   } else {
+    doButtonComplement();
+   }
+  } else {
+   doButtonPow();
+  }
+  return true;
+ case 220:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
+    doButtonDEC();
+   } else {
+    doButtonOR();
+   }
+   return true;
+  }
   break;
- case 13: doButtonEnter(); break;
- }
- if( key == 16 ){
-  keyShiftOnly = true;
- } else {
-  keyShiftOnly = false;
+ case 188:
+  if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
+   doButtonShiftL();
+   return true;
+  }
+  break;
+ case 32: doButtonSpace(); return true;
+ case 13: doButtonEnter(); return true;
  }
  return false;
 }
 function onKeyUp( key ){
  if( (key == 16) && keyShiftOnly ){
   doButtonSHIFT();
+  return true;
  }
  return false;
 }

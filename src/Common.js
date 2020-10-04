@@ -152,6 +152,7 @@ function doButtonDownInt( id, step, min ){
 function printUsage( token, proc, param, isEnglish, divId ){
 	var usage = new String();
 
+	if( token == "!"   ){ usage = isEnglish ? "factorial" : "階乗"; }
 	if( token == "e+"  ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
 	if( token == "e-"  ){ usage = isEnglish ? "exponent part of floating point constant" : "浮動小数点定数の指数部"; }
 	if( token == "d"   ){ usage = isEnglish ? "degrees" : "度"; }
@@ -199,7 +200,7 @@ function printUsage( token, proc, param, isEnglish, divId ){
 	if( token == "acosh " ){ usage = "acosh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic cosine" : "逆双曲線余弦"); }
 	if( token == "atanh " ){ usage = "atanh &lt;x&gt; : " + (isEnglish ? "inverse hyperbolic tangent" : "逆双曲線正接"); }
 	if( token == "ln "    ){ usage = "ln &lt;x&gt; : " + (isEnglish ? "natural logarithm" : "自然対数"); }
-if( token == "log "   ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
+	if( token == "log "   ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEnglish ? "base 10 logarithm" : "底10の対数") : (isEnglish ? "natural logarithm" : "自然対数")); }
 	if( token == "log10 " ){ usage = "log10 &lt;x&gt; : " + (isEnglish ? "base 10 logarithm" : "底10の対数"); }
 	if( token == "exp "   ){ usage = "exp &lt;x&gt; : " + (isEnglish ? "exponent" : "指数"); }
 	if( token == "exp10 " ){ usage = "exp10 &lt;x&gt; : " + (isEnglish ? "base 10 exponent" : "底10の指数"); }
@@ -214,6 +215,7 @@ if( token == "log "   ){ usage = "log &lt;x&gt; : " + (param._calculator ? (isEn
 	if( token == "frexp " ){ usage = "frexp &lt;x&gt; &lt;var_exp&gt; : " + (isEnglish ? "returns the mantissa of &lt;x&gt;, stores the exponent in &lt;var_exp&gt;" : "&lt;x&gt;の仮数を返し、変数&lt;var_exp&gt;に指数を格納"); }
 	if( token == "modf "  ){ usage = "modf &lt;x&gt; &lt;var_int&gt; : " + (isEnglish ? "returns the fraction part of &lt;x&gt;, stores the integer part in &lt;var_int&gt;" : "&lt;x&gt;の小数部を返し、変数&lt;var_int&gt;に整数部を格納"); }
 	if( token == "pow "   ){ usage = "pow &lt;x&gt; &lt;y&gt; : " + (isEnglish ? "the &lt;y&gt; power of &lt;x&gt;" : "&lt;x&gt;の&lt;y&gt;乗"); }
+	if( token == "fact "  ){ usage = "fact &lt;x&gt; : " + (isEnglish ? "factorial of &lt;x&gt;" : "&lt;x&gt;の階乗"); }
 	if( token == "num "   ){ usage = "num &lt;x&gt; : " + (isEnglish ? "numerator of fraction" : "分数の分子"); }
 	if( token == "denom " ){ usage = "denom &lt;x&gt; : " + (isEnglish ? "denominator of fraction" : "分数の分母"); }
 	if( token == "real "  ){ usage = "real &lt;x&gt; : " + (isEnglish ? "real part of complex number" : "複素数の実数部"); }
