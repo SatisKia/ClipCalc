@@ -167,7 +167,7 @@ var calcUI;
 #include "ConvUI.js"
 var convUI = null;
 
-#include "NativeRequest.js"
+#include "_NativeRequest.js"
 var nativeRequest = null;
 
 #include "Profile.js"
@@ -1787,7 +1787,7 @@ function doCheckPrintUsage(){
 #include "_Cookie.js"
 #include "_Storage.js"
 #include "_Preference.js"
-#include "HttpRequest.js"
+#include "_HttpRequest.js"
 var loadNum = 0;
 var loading = false;
 function doLoadExtFuncFile(){
