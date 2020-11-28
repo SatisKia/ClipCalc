@@ -1188,7 +1188,7 @@ function doChangeSkinTrans( select ){
 }
 function doCalcEditSkinImage(){
 	skinImage = document.getElementById( "calc_edit_skin_image" ).value;
-	if( (skinImage.indexOf( "://" ) < 0) && !skinImage.startsWith( "data:" ) ){
+	if( (skinImage.indexOf( "://" ) < 0) && (skinImage.indexOf( "data:" ) != 0) ){
 		skinImage = "http://" + skinImage;
 		document.getElementById( "calc_edit_skin_image" ).value = skinImage;
 	}

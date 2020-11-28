@@ -1714,7 +1714,7 @@ function _onInputFileChange( e ){
  if( files.length == 0 ){
   return;
  }
- if( files[0].type.startsWith( "image/" ) ){
+ if( files[0].type.indexOf( "image/" ) == 0 ){
   var name = files[0].name;
   var reader = new FileReader();
   reader.onload = function(){
@@ -4957,7 +4957,7 @@ function doChangeSkinTrans( select ){
 }
 function doCalcEditSkinImage(){
  skinImage = document.getElementById( "calc_edit_skin_image" ).value;
- if( (skinImage.indexOf( "://" ) < 0) && !skinImage.startsWith( "data:" ) ){
+ if( (skinImage.indexOf( "://" ) < 0) && (skinImage.indexOf( "data:" ) != 0) ){
   skinImage = "http://" + skinImage;
   document.getElementById( "calc_edit_skin_image" ).value = skinImage;
  }
