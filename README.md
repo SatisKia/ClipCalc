@@ -1,5 +1,7 @@
 # ClipCalc
 
+[English version is here](./README_E.md)
+
 プログラム関数電卓です。CLIP言語で記述されたプログラムを外部関数として呼び出し、実行することができます。
 
 ## ビルド方法
