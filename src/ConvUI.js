@@ -97,7 +97,7 @@ ConvUI.prototype = {
 	},
 
 	getTimeString : function( value, mode, string/*_String*/ ){
-		switch( mode ){
+		switch( mode & _CLIP_MODE_MASK ){
 		case _CLIP_MODE_H_TIME:
 			string.set( floatToString( value.toFloat() / 3600.0 ) );
 			break;
@@ -139,7 +139,7 @@ ConvUI.prototype = {
 		var tmpString = new String();
 
 		tmpString = string;
-		switch( mode ){
+		switch( mode & _CLIP_MODE_MASK ){
 		case _CLIP_MODE_H_TIME: tmpString += "h"; break;
 		case _CLIP_MODE_M_TIME: tmpString += "m"; break;
 		case _CLIP_MODE_S_TIME: tmpString += "s"; break;

@@ -165,10 +165,9 @@ function printUsage( token, proc, param, isEnglish, divId ){
 	if( token == "_"   ){ usage = isEnglish ? "fraction" : "分数"; }
 	if( token == "i"   ){ usage = isEnglish ? "imaginary part of complex number" : "複素数の虚数部"; }
 	if( token == ":"   ){ usage = isEnglish ? "time" : "時間"; }
-	if( token == "\\b" ){ usage = isEnglish ? "in binary notation" : "2進表記"; }
-	if( token == "\\0" ){ usage = isEnglish ? "octal notation" : "8進表記"; }
-	if( token == "\\"  ){ usage = isEnglish ? "decimal notation" : "10進表記"; }
-	if( token == "\\x" ){ usage = isEnglish ? "hexadecimal notation" : "16進表記"; }
+	if( token == "\\"  ){ usage = isEnglish ? "n-ary notation" : "n進表記"; }
+	if( token == "b"   ){ usage = isEnglish ? "in binary notation" : "2進表記"; }
+	if( token == "x"   ){ usage = isEnglish ? "hexadecimal notation" : "16進表記"; }
 	if( token == "\\-" ){ usage = isEnglish ? "unary minus (for constant)" : "単項マイナス(定数用)"; }
 	if( token == "\\+" ){ usage = isEnglish ? "unary plus (for constant)" : "単項プラス(定数用)"; }
 	if( token == "[-]" ){ usage = isEnglish ? "unary minus" : "単項マイナス"; }

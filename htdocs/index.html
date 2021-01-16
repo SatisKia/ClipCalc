@@ -9,16 +9,16 @@
 <title></title>
 
 <!--リリース用-->
-<script type="text/javascript" src="clip.js?v=201112"></script>
-<script type="text/javascript" src="Main.js?v=201112"></script>
+<script type="text/javascript" src="clip.js?v=210116"></script>
+<script type="text/javascript" src="Main.js?v=210116"></script>
 
 <!--デバッグ用
-<script type="text/javascript" src="clip.debug.js?v=201112"></script>
-<script type="text/javascript" src="Main.debug.js?v=201112"></script>
+<script type="text/javascript" src="clip.debug.js?v=210116"></script>
+<script type="text/javascript" src="Main.debug.js?v=210116"></script>
 -->
 
 <!--ライブラリ未使用版デバッグ用
-<script type="text/javascript" src="All.debug.js?v=201112"></script>
+<script type="text/javascript" src="All.debug.js?v=210116"></script>
 -->
 
 <script type="text/javascript">
@@ -43,8 +43,6 @@ window.retAssertProc = true;	// アサートに失敗した時に処理を停止
 window.loopMax       = 65536;	// ループ回数上限
 window.useStorage    = true;	// ストレージを使用するかどうか
 window.lockGUpdate   = true;
-
-window.onerror = clip_onerror;
 
 // 外部関数
 window.extFuncFile = [
@@ -783,7 +781,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				<td><button id="button_deg" class="button_symbol button5_1 height35">d</button></td>
 				<td><button id="button_grad" class="button_symbol button5_2 height35">g</button></td>
 				<td><button id="button_rad" class="button_symbol button5_3 height35">r</button></td>
-				<td><button id="button_factorial" class="button_symbol button5_4 height35">!</button></td>
+				<td><button id="button_factorial1" class="button_symbol button5_4 height35">!</button></td>
 				<td><button id="button_pow1" class="button_op button5_5 height35">^</button></td>
 			</tr>
 		</table>
@@ -819,10 +817,10 @@ input[type="number"]::-webkit-inner-spin-button {
 <div id="calc_button_integer" style="display:none">
 		<table>
 			<tr>
-				<td><button id="button_bin" class="button_symbol button6_1 height35">\b</button></td>
-				<td><button id="button_oct" class="button_symbol button6_2 height35">\0</button></td>
-				<td><button id="button_dec" class="button_symbol button6_3 height35">\</button></td>
-				<td><button id="button_hex" class="button_symbol button6_4 height35">\x</button></td>
+				<td><button id="button_esc" class="button_symbol button6_1 height35">\</button></td>
+				<td><button id="button_bin" class="button_symbol button6_2 height35">b</button></td>
+				<td><button id="button_hex" class="button_symbol button6_3 height35">x</button></td>
+				<td><button id="button_factorial2" class="button_symbol button6_4 height35">!</button></td>
 				<td><button name="button_shift" class="button_shift height35" style="width:108px">SHIFT</button></td>
 			</tr>
 		</table>

@@ -414,13 +414,13 @@ button {
 <span class="span_example">&nbsp;&nbsp;例3&nbsp;&nbsp;</span> 1101<span class="span_opt">2</span> (2進数)<br>
 <hr class="hr">
 <div class="div_ex">
-	<button>\b</button><span class="span_expr">1101</span><br>
+	<button>\</button><button>b</button><span class="span_expr">1101</span><br>
 </div>
 <hr class="hr">
 <span class="span_example">&nbsp;&nbsp;例4&nbsp;&nbsp;</span> 567<span class="span_opt">8</span> (8進数)<br>
 <hr class="hr">
 <div class="div_ex">
-	<button>\0</button><span class="span_expr">567</span><br>
+	<button>\</button><button>0</button><span class="span_expr">567</span><br>
 </div>
 <hr class="hr">
 <span class="span_example">&nbsp;&nbsp;例5&nbsp;&nbsp;</span> 369<span class="span_opt">10</span> (10進数)<br>
@@ -432,7 +432,7 @@ button {
 <span class="span_example">&nbsp;&nbsp;例6&nbsp;&nbsp;</span> FEDC<span class="span_opt">16</span> (16進数)<br>
 <hr class="hr">
 <div class="div_ex">
-	<button>\x</button><span class="span_expr">FEDC</span><br>
+	<button>\</button><button>x</button><span class="span_expr">FEDC</span><br>
 </div>
 <hr class="hr">
 <b>■時間</b><br>
@@ -1202,7 +1202,7 @@ button {
 <hr class="hr">
 <div class="div_ex">
 	基数(進)を<span class="span_expr">16</span>にする<br>
-	<span class="span_expr">120</span><button>|</button><button>\b</button><span class="span_expr">1101</span><button>=</button><br>
+	<span class="span_expr">120</span><button>|</button><button>\</button><button>b</button><span class="span_expr">1101</span><button>=</button><br>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="25%"></td><td>
 		<div class="div_ans">12D<br>&nbsp;</div>
 	</td></tr></table>
@@ -1339,13 +1339,14 @@ button {
 <hr class="hr">
 <table width="100%" border="1" cellspacing="1" cellpadding="0">
 <tr>
-<td width="100%">(1) [~]、[-]、^(累乗)、関数<br>
-(2) *、/、%<br>
-(3) +、-<br>
-(4) &lt;&lt;、&gt;&gt;<br>
-(5) &amp;<br>
-(6) ^(排他的論理和xor)<br>
-(7) |</td>
+<td width="100%">(1) !(階乗)<br>
+(2) [~]、[-]、^(累乗)、関数<br>
+(3) *、/、%<br>
+(4) +、-<br>
+(5) &lt;&lt;、&gt;&gt;<br>
+(6) &amp;<br>
+(7) ^(排他的論理和xor)<br>
+(8) |</td>
 </tr>
 </table>
 <hr class="hr">
@@ -1412,7 +1413,7 @@ exp log sqrt 120 → exp(log(sqrt 120))<br>
 <hr class="hr">
 <button>.</button><button>e+</button><button>e-</button>(浮動小数点、分数、帯分数、複素数、時間)<br>
 <hr class="hr">
-<button>d</button><button>g</button><button>r</button><button>!</button>(浮動小数点、分数、帯分数、複素数)<br>
+<button>d</button><button>g</button><button>r</button>(浮動小数点、分数、帯分数、複素数)<br>
 <hr class="hr">
 <button>h</button><button>m</button><button>s</button><button>f</button>(時間)<br>
 <hr class="hr">
@@ -1422,7 +1423,7 @@ exp log sqrt 120 → exp(log(sqrt 120))<br>
 <hr class="hr">
 <button>:</button>(時間)<br>
 <hr class="hr">
-<button>A</button>～<button>F</button><button>\b</button><button>\0</button><button>\</button><button>\x</button>(符号付き、符号なし)<br>
+<button>A</button>～<button>F</button><button>\</button><button>b</button><button>x</button>(符号付き、符号なし)<br>
 <hr class="hr">
 <button>\-</button><button>\+</button><br>
 <hr class="hr">
@@ -1458,6 +1459,13 @@ exp log sqrt 120 → exp(log(sqrt 120))<br>
 <hr class="hr">
 <b>累乗ボタン</b>(浮動小数点、分数、帯分数、複素数、時間)<br>
 <i>x</i>の<i>y</i>乗を計算するときに押します。<br>
+
+<hr class="hr_border">
+
+<i>x</i><button>!</button><br>
+<hr class="hr">
+<b>階乗ボタン</b>(浮動小数点、分数、帯分数、複素数、符号付き、符号なし)<br>
+<i>x</i>の階乗を計算するときに押します。<br>
 
 <hr class="hr_border">
 
@@ -2107,22 +2115,22 @@ RGBカラー値を取得します。<br>
 <td width="50%"><button>A</button>～<button>F</button></td>
 </tr>
 <tr>
-<td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;B&nbsp;</span></td>
-<td><button>\b</button></td>
-</tr>
-<tr>
-<td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;0&nbsp;</span></td>
-<td><button>\0</button></td>
-</tr>
-<tr>
 <td><span class="span_key">&nbsp;<span style="vertical-align:-2pt">\</span> <span style="vertical-align:2pt">|</span>&nbsp;</span><br>
 <hr class="hr_key">
 <span class="span_key">&nbsp;<span style="vertical-align:-2pt">\</span> <span style="vertical-align:10pt">_</span>&nbsp;</span></td>
 <td><button>\</button></td>
 </tr>
 <tr>
+<td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;B&nbsp;</span></td>
+<td><button>b</button></td>
+</tr>
+<tr>
 <td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;X&nbsp;</span> (<span class="span_key">&nbsp;X&nbsp;</span>)</td>
-<td><button>\x</button></td>
+<td><button>x</button></td>
+</tr>
+<tr>
+<td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;<span style="vertical-align:-2pt">1</span> <span style="vertical-align:2pt">!</span>&nbsp;</span></td>
+<td><button>!</button></td>
 </tr>
 <tr>
 <td><span class="span_key">&nbsp;Shift&nbsp;</span>+<span class="span_key">&nbsp;<span style="vertical-align:-6pt">^</span> <span style="vertical-align:2pt">~</span>&nbsp;</span></td>

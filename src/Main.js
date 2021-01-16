@@ -11,6 +11,10 @@
 //window.useStorage;	// ストレージを使用するかどうか
 //window.lockGUpdate;
 
+#ifndef DEBUG
+window.onerror = clip_onerror;
+#endif // DEBUG
+
 #define PROFILE_PREFIX	"_CLIPCALC_"
 
 // 外部関数
@@ -385,9 +389,12 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	// 定義定数の値（regGWorldBgColorより後に設定）
 	setDefineValue();
 
+	// 多倍長演算サポート
+	newProcMultiPrec();
+
 	// 計算処理メイン・クラスを生成する
 	setProcEnv( new _ProcEnv() );
-	topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
+	topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
 	topProc._printAns = true;
 	setProcWarnFlowFlag( true );
 	setProcLoopMax( loopMax );
@@ -500,16 +507,16 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	_addCalcEventListenerById( "button_deg", event, doButtonDeg );
 	_addCalcEventListenerById( "button_grad", event, doButtonGrad );
 	_addCalcEventListenerById( "button_rad", event, doButtonRad );
+	_addCalcEventListenerById( "button_esc", event, doButtonEsc );
 	_addCalcEventListenerById( "button_bin", event, doButtonBIN );
-	_addCalcEventListenerById( "button_oct", event, doButtonOCT );
-	_addCalcEventListenerById( "button_dec", event, doButtonDEC );
 	_addCalcEventListenerById( "button_hex", event, doButtonHEX );
 	_addCalcEventListenerById( "button_hour", event, doButtonHour );
 	_addCalcEventListenerById( "button_min", event, doButtonMin );
 	_addCalcEventListenerById( "button_sec", event, doButtonSec );
 	_addCalcEventListenerById( "button_frame", event, doButtonFrame );
 
-	_addCalcEventListenerById( "button_factorial", event, doButtonFactorial );
+	_addCalcEventListenerById( "button_factorial1", event, doButtonFactorial );
+	_addCalcEventListenerById( "button_factorial2", event, doButtonFactorial );
 
 	_addCalcEventListenerById( "button_pow1", event, doButtonPow );
 	_addCalcEventListenerById( "button_pow2", event, doButtonPow );
@@ -1418,10 +1425,9 @@ function doButtonOR( e ){ if( e != undefined ) sound(); insEditExpr( "|" ); }
 function doButtonDeg( e ){ if( e != undefined ) sound(); insEditExpr( "d" ); }
 function doButtonGrad( e ){ if( e != undefined ) sound(); insEditExpr( "g" ); }
 function doButtonRad( e ){ if( e != undefined ) sound(); insEditExpr( "r" ); }
-function doButtonBIN( e ){ if( e != undefined ) sound(); insEditExpr( "\\b" ); }
-function doButtonOCT( e ){ if( e != undefined ) sound(); insEditExpr( "\\0" ); }
-function doButtonDEC( e ){ if( e != undefined ) sound(); insEditExpr( "\\" ); }
-function doButtonHEX( e ){ if( e != undefined ) sound(); insEditExpr( "\\x" ); }
+function doButtonEsc( e ){ if( e != undefined ) sound(); insEditExpr( "\\" ); }
+function doButtonBIN( e ){ if( e != undefined ) sound(); insEditExpr( "b" ); }
+function doButtonHEX( e ){ if( e != undefined ) sound(); insEditExpr( "x" ); }
 function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
 function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
 function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
@@ -2311,7 +2317,7 @@ function doCommandGUpdate( gWorld ){
 }
 function doCommandPlot( parentProc, parentParam, graph, start, end, step ){
 	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
+	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
 	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
 	childParam._enableCommand = false;
 	childParam._enableStat = false;
@@ -2323,7 +2329,7 @@ _CATCH
 }
 function doCommandRePlot( parentProc, parentParam, graph, start, end, step ){
 	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
+	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
 	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
 	childParam._enableCommand = false;
 	childParam._enableStat = false;
@@ -2840,6 +2846,7 @@ function updateButton(){
 	cssSetStyleDisplayById( "button_and"       , flag );
 	cssSetStyleDisplayById( "button_xor"       , flag );
 	cssSetStyleDisplayById( "button_or"        , flag );
+	cssSetStyleDisplayById( "button_factorial2", flag );
 
 	switch( calcUI._mode ){
 	case _UI_CALC_MODE_FLOAT:
@@ -2884,11 +2891,11 @@ function updateButton(){
 		flag = false;
 		break;
 	}
-	cssSetStyleDisplayById( "button_deg"      , flag );
-	cssSetStyleDisplayById( "button_grad"     , flag );
-	cssSetStyleDisplayById( "button_rad"      , flag );
-	cssSetStyleDisplayById( "button_factorial", flag );
-	cssSetStyleDisplayById( "button_pow1"     , flag );
+	cssSetStyleDisplayById( "button_deg"       , flag );
+	cssSetStyleDisplayById( "button_grad"      , flag );
+	cssSetStyleDisplayById( "button_rad"       , flag );
+	cssSetStyleDisplayById( "button_factorial1", flag );
+	cssSetStyleDisplayById( "button_pow1"      , flag );
 
 	switch( calcUI._mode ){
 	case _UI_CALC_MODE_TIME:
@@ -4008,15 +4015,7 @@ function onKeyDown( key ){
 	case _KEY_BACKSPACE: delEditExpr(); return true;
 	case _KEY_DELETE   : delEditExpr(); return true;
 
-	case _KEY_0:
-		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
-			doButton0();
-			return true;
-		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			doButtonOCT();
-			return true;
-		}
-		break;
+	case _KEY_0    : doButton0(); return true;
 	case _KEY_NUM_0: doButton0(); return true;
 	case _KEY_1:
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
@@ -4028,6 +4027,8 @@ function onKeyDown( key ){
 			case _UI_CALC_MODE_FRACT:
 			case _UI_CALC_MODE_MFRACT:
 			case _UI_CALC_MODE_COMPLEX:
+			case _UI_CALC_MODE_SIGNED:
+			case _UI_CALC_MODE_UNSIGNED:
 				doButtonFactorial();
 				return true;
 			}
@@ -4219,7 +4220,7 @@ function onKeyDown( key ){
 
 	case 226:	// \_キー
 		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			doButtonDEC();
+			doButtonEsc();
 		} else {
 			doButtonFract();
 		}
@@ -4278,7 +4279,7 @@ function onKeyDown( key ){
 	case 220:	// \|キー
 		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
-				doButtonDEC();
+				doButtonEsc();
 			} else {
 				doButtonOR();
 			}

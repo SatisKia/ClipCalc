@@ -3053,10 +3053,9 @@ function printUsage( token, proc, param, isEnglish, divId ){
  if( token == "_" ){ usage = isEnglish ? "fraction" : "分数"; }
  if( token == "i" ){ usage = isEnglish ? "imaginary part of complex number" : "複素数の虚数部"; }
  if( token == ":" ){ usage = isEnglish ? "time" : "時間"; }
- if( token == "\\b" ){ usage = isEnglish ? "in binary notation" : "2進表記"; }
- if( token == "\\0" ){ usage = isEnglish ? "octal notation" : "8進表記"; }
- if( token == "\\" ){ usage = isEnglish ? "decimal notation" : "10進表記"; }
- if( token == "\\x" ){ usage = isEnglish ? "hexadecimal notation" : "16進表記"; }
+ if( token == "\\" ){ usage = isEnglish ? "n-ary notation" : "n進表記"; }
+ if( token == "b" ){ usage = isEnglish ? "in binary notation" : "2進表記"; }
+ if( token == "x" ){ usage = isEnglish ? "hexadecimal notation" : "16進表記"; }
  if( token == "\\-" ){ usage = isEnglish ? "unary minus (for constant)" : "単項マイナス(定数用)"; }
  if( token == "\\+" ){ usage = isEnglish ? "unary plus (for constant)" : "単項プラス(定数用)"; }
  if( token == "[-]" ){ usage = isEnglish ? "unary minus" : "単項マイナス"; }
@@ -3663,7 +3662,7 @@ ConvUI.prototype = {
   param.end();
  },
  getTimeString : function( value, mode, string ){
-  switch( mode ){
+  switch( mode & _CLIP_MODE_MASK ){
   case _CLIP_MODE_H_TIME:
    string.set( floatToString( value.toFloat() / 3600.0 ) );
    break;
@@ -3697,7 +3696,7 @@ ConvUI.prototype = {
   var param = new _Param( 0, this._param, false );
   var tmpString = new String();
   tmpString = string;
-  switch( mode ){
+  switch( mode & _CLIP_MODE_MASK ){
   case _CLIP_MODE_H_TIME: tmpString += "h"; break;
   case _CLIP_MODE_M_TIME: tmpString += "m"; break;
   case _CLIP_MODE_S_TIME: tmpString += "s"; break;
@@ -4322,8 +4321,9 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   }
  });
  setDefineValue();
+ newProcMultiPrec();
  setProcEnv( new _ProcEnv() );
- topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
+ topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
  topProc._printAns = true;
  setProcWarnFlowFlag( true );
  setProcLoopMax( loopMax );
@@ -4415,15 +4415,15 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_deg", event, doButtonDeg );
  _addCalcEventListenerById( "button_grad", event, doButtonGrad );
  _addCalcEventListenerById( "button_rad", event, doButtonRad );
+ _addCalcEventListenerById( "button_esc", event, doButtonEsc );
  _addCalcEventListenerById( "button_bin", event, doButtonBIN );
- _addCalcEventListenerById( "button_oct", event, doButtonOCT );
- _addCalcEventListenerById( "button_dec", event, doButtonDEC );
  _addCalcEventListenerById( "button_hex", event, doButtonHEX );
  _addCalcEventListenerById( "button_hour", event, doButtonHour );
  _addCalcEventListenerById( "button_min", event, doButtonMin );
  _addCalcEventListenerById( "button_sec", event, doButtonSec );
  _addCalcEventListenerById( "button_frame", event, doButtonFrame );
- _addCalcEventListenerById( "button_factorial", event, doButtonFactorial );
+ _addCalcEventListenerById( "button_factorial1", event, doButtonFactorial );
+ _addCalcEventListenerById( "button_factorial2", event, doButtonFactorial );
  _addCalcEventListenerById( "button_pow1", event, doButtonPow );
  _addCalcEventListenerById( "button_pow2", event, doButtonPow );
  _addCalcEventListenerById( "button_lang", "click", doButtonLang );
@@ -5162,10 +5162,9 @@ function doButtonOR( e ){ if( e != undefined ) sound(); insEditExpr( "|" ); }
 function doButtonDeg( e ){ if( e != undefined ) sound(); insEditExpr( "d" ); }
 function doButtonGrad( e ){ if( e != undefined ) sound(); insEditExpr( "g" ); }
 function doButtonRad( e ){ if( e != undefined ) sound(); insEditExpr( "r" ); }
-function doButtonBIN( e ){ if( e != undefined ) sound(); insEditExpr( "\\b" ); }
-function doButtonOCT( e ){ if( e != undefined ) sound(); insEditExpr( "\\0" ); }
-function doButtonDEC( e ){ if( e != undefined ) sound(); insEditExpr( "\\" ); }
-function doButtonHEX( e ){ if( e != undefined ) sound(); insEditExpr( "\\x" ); }
+function doButtonEsc( e ){ if( e != undefined ) sound(); insEditExpr( "\\" ); }
+function doButtonBIN( e ){ if( e != undefined ) sound(); insEditExpr( "b" ); }
+function doButtonHEX( e ){ if( e != undefined ) sound(); insEditExpr( "x" ); }
 function doButtonHour( e ){ if( e != undefined ) sound(); insEditExpr( "h" ); }
 function doButtonMin( e ){ if( e != undefined ) sound(); insEditExpr( "m" ); }
 function doButtonSec( e ){ if( e != undefined ) sound(); insEditExpr( "s" ); }
@@ -6291,7 +6290,7 @@ function doCommandGUpdate( gWorld ){
  gUpdate( gWorld );
 }
 function doCommandPlot( parentProc, parentParam, graph, start, end, step ){
- var childProc = new _Proc( parentParam._mode, parentProc._printAssert, parentProc._printWarn, false );
+ var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false );
  var childParam = new _Param( parentProc._curLine._num, parentParam, true );
  childParam._enableCommand = false;
  childParam._enableStat = false;
@@ -6302,7 +6301,7 @@ try {
  childProc.end();
 }
 function doCommandRePlot( parentProc, parentParam, graph, start, end, step ){
- var childProc = new _Proc( parentParam._mode, parentProc._printAssert, parentProc._printWarn, false );
+ var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false );
  var childParam = new _Param( parentProc._curLine._num, parentParam, true );
  childParam._enableCommand = false;
  childParam._enableStat = false;
@@ -6748,6 +6747,7 @@ function updateButton(){
  cssSetStyleDisplayById( "button_and" , flag );
  cssSetStyleDisplayById( "button_xor" , flag );
  cssSetStyleDisplayById( "button_or" , flag );
+ cssSetStyleDisplayById( "button_factorial2", flag );
  switch( calcUI._mode ){
  case 0:
  case 1:
@@ -6791,7 +6791,7 @@ function updateButton(){
  cssSetStyleDisplayById( "button_deg" , flag );
  cssSetStyleDisplayById( "button_grad" , flag );
  cssSetStyleDisplayById( "button_rad" , flag );
- cssSetStyleDisplayById( "button_factorial", flag );
+ cssSetStyleDisplayById( "button_factorial1", flag );
  cssSetStyleDisplayById( "button_pow1" , flag );
  switch( calcUI._mode ){
  case 6:
@@ -7799,15 +7799,7 @@ function onKeyDown( key ){
  case 39: forwardEditExpr(); return true;
  case 8: delEditExpr(); return true;
  case 46 : delEditExpr(); return true;
- case 48:
-  if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
-   doButton0();
-   return true;
-  } else if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
-   doButtonOCT();
-   return true;
-  }
-  break;
+ case 48 : doButton0(); return true;
  case 96: doButton0(); return true;
  case 49:
   if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
@@ -7819,6 +7811,8 @@ function onKeyDown( key ){
    case 1:
    case 2:
    case 3:
+   case 4:
+   case 5:
     doButtonFactorial();
     return true;
    }
@@ -8008,7 +8002,7 @@ function onKeyDown( key ){
   return true;
  case 226:
   if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
-   doButtonDEC();
+   doButtonEsc();
   } else {
    doButtonFract();
   }
@@ -8065,7 +8059,7 @@ function onKeyDown( key ){
  case 220:
   if( (calcUI._mode == 4) || (calcUI._mode == 5) ){
    if( _AND( _key_state, keyBit( 16 ) ) == 0 ){
-    doButtonDEC();
+    doButtonEsc();
    } else {
     doButtonOR();
    }
