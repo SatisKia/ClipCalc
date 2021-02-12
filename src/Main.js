@@ -389,13 +389,9 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	// 定義定数の値（regGWorldBgColorより後に設定）
 	setDefineValue();
 
-	// 多倍長演算サポート
-	newProcMultiPrec();
-
 	// 計算処理メイン・クラスを生成する
 	setProcEnv( new _ProcEnv() );
-	topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
-	topProc._printAns = true;
+	topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, true, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
 	setProcWarnFlowFlag( true );
 	setProcLoopMax( loopMax );
 
@@ -407,6 +403,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	topParam._enableStat = false;
 	topParam._var._label.setLabel( 0 , "Ans", true );
 	setGlobalParam( topParam );
+
+	initProc();	// setProcEnvより後に実行
 
 	// 乱数を初期化する
 	srand( time() );
@@ -1607,7 +1605,6 @@ function delAllLogExpr(){
 }
 
 function updateSelectVar(){
-	var _token = new _Token();
 	var _real = new _String();
 	var _imag = new _String();
 
@@ -1620,7 +1617,7 @@ function updateSelectVar(){
 		if( topParam.isZero( index ) ){
 			select.options[i].innerHTML = (index == 0) ? "Ans" : "@" + String.fromCharCode( index );
 		} else {
-			_token.valueToString( topParam, topParam.val( index ), _real, _imag );
+			procToken().valueToString( topParam, topParam.val( index ), _real, _imag );
 			select.options[i].innerHTML = ((index == 0) ? "Ans" : "@" + String.fromCharCode( index ) + "&nbsp;") + "&nbsp;=&nbsp;" + _real.str() + _imag.str();
 		}
 		if( started && (select.options[i].innerHTML != old) ){
@@ -2082,9 +2079,41 @@ function errorProc( err, num, func, token ){
 	}
 }
 
-function printAnsMatrix( param, array/*_Token*/ ){
-	var _token = new _Token();
+function printAnsComplex( real, imag ){
+	// 桁区切り
+	var _real = new _String( real );
+	var _imag = new _String( imag );
+	switch( calcUI.sepType() ){
+	case _UI_CALC_SEP_UPPER:
+		procToken().sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
+		procToken().sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
+		break;
+	case _UI_CALC_SEP_LOWER:
+		procToken().sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
+		procToken().sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
+		break;
+	}
 
+	real = _real.replace( "⏌", "<span class='span_ans' style='font-size:15px'>⏌</span>" ).str();
+	imag = _imag.replace( "⏌", "<span class='span_ans' style='font-size:15px'>⏌</span>" ).str();
+
+	if( real.length > 0 ){
+		if( calcUI.italic() ){
+			document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + real + "<br>" + imag + "</span></b></i>";
+		} else {
+			document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + real + "<br>" + imag + "</span></b>";
+		}
+	} else {
+		if( calcUI.italic() ){
+			document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + imag + "</span></b></i>";
+		} else {
+			document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + imag + "</span></b>";
+		}
+	}
+
+	convUI.update();
+}
+function printAnsMatrix( param, array/*_Token*/ ){
 	var i;
 	var code;
 	var token;
@@ -2108,7 +2137,7 @@ function printAnsMatrix( param, array/*_Token*/ ){
 			}
 			enter = false;
 		}
-		string += _token.tokenString( param, code, token );
+		string += procToken().tokenString( param, code, token );
 		string += "&nbsp;";
 		if( code == _CLIP_CODE_ARRAY_TOP ){
 			indent += 2;
@@ -2120,39 +2149,6 @@ function printAnsMatrix( param, array/*_Token*/ ){
 	}
 	con[0].println( string );
 	con[0].setColor();
-}
-function printAnsComplex( real, imag ){
-	var _token = new _Token();
-
-	// 桁区切り
-	var _real = new _String( real );
-	var _imag = new _String( imag );
-	switch( calcUI.sepType() ){
-	case _UI_CALC_SEP_UPPER:
-		_token.sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
-		_token.sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
-		break;
-	case _UI_CALC_SEP_LOWER:
-		_token.sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
-		_token.sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
-		break;
-	}
-
-	if( _real.str().length > 0 ){
-		if( calcUI.italic() ){
-			document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + _real.str() + "<br>" + _imag.str() + "</span></b></i>";
-		} else {
-			document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + _real.str() + "<br>" + _imag.str() + "</span></b>";
-		}
-	} else {
-		if( calcUI.italic() ){
-			document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + _imag.str() + "</span></b></i>";
-		} else {
-			document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + _imag.str() + "</span></b>";
-		}
-	}
-
-	convUI.update();
 }
 function printWarn( warn, num, func ){
 	con[1].newLine();
@@ -2317,7 +2313,7 @@ function doCommandGUpdate( gWorld ){
 }
 function doCommandPlot( parentProc, parentParam, graph, start, end, step ){
 	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
+	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
 	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
 	childParam._enableCommand = false;
 	childParam._enableStat = false;
@@ -2329,7 +2325,7 @@ _CATCH
 }
 function doCommandRePlot( parentProc, parentParam, graph, start, end, step ){
 	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
+	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
 	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
 	childParam._enableCommand = false;
 	childParam._enableStat = false;

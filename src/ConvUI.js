@@ -76,7 +76,7 @@ ConvUI.prototype = {
 
 		param.setMode( this._param._mode );
 		param.setRadix( radix );
-		string.set( (new _Token()).tokenString( param, _CLIP_CODE_CONSTANT, value ) );
+		string.set( procToken().tokenString( param, _CLIP_CODE_CONSTANT, value ) );
 		string.replace( "\\", "" );
 
 		param.end();
@@ -90,7 +90,7 @@ ConvUI.prototype = {
 		param.setPrec( 0 );
 		tmpValue.ass( value );
 		tmpValue.angToAng( oldType, newType );
-		string.set( (new _Token()).tokenString( param, _CLIP_CODE_CONSTANT, tmpValue ) );
+		string.set( procToken().tokenString( param, _CLIP_CODE_CONSTANT, tmpValue ) );
 		string.replace( "\\", "" );
 
 		param.end();
@@ -118,7 +118,7 @@ ConvUI.prototype = {
 
 		param.setMode( this._param._mode );
 		param.setRadix( radix );
-		(new _Token()).stringToValue( param, string, value );
+		procToken().stringToValue( param, string, value );
 
 		param.end();
 	},
@@ -128,7 +128,7 @@ ConvUI.prototype = {
 
 		param.setMode( this._param._mode );
 		param.setPrec( 0 );
-		(new _Token()).stringToValue( param, string, value );
+		procToken().stringToValue( param, string, value );
 		value.angToAng( oldType, newType );
 
 		param.end();
@@ -147,7 +147,7 @@ ConvUI.prototype = {
 		}
 		param.setMode( mode );
 		param.setFps( this._param._fps );
-		(new _Token()).stringToValue( param, tmpString, value );
+		procToken().stringToValue( param, tmpString, value );
 
 		param.end();
 	},

@@ -2095,6 +2095,10 @@ function getProcErrorDefString( err, token, isCalculator, isEnglish ){
   if( isEnglish ) error = "You can only specify up to 10 arguments for the command \"" + token.slice( 1 ) + "\".";
   else error = "コマンド" + token.slice( 1 ) + "の引数は10個までしか指定できません";
   break;
+ case _CLIP_PROC_ERR_COMMAND_RADIX:
+  if( isEnglish ) error = "Command \"" + token.slice( 1 ) + "\" is invalid.";
+  else error = "コマンド" + token.slice( 1 ) + "は無効です";
+  break;
  case _CLIP_PROC_ERR_FUNC_OPEN:
   if( isEnglish ) error = "The external function \"" + token.slice( 1 ) + "\" can not be opened.";
   else error = "外部関数" + token.slice( 1 ) + "がオープンできません";
@@ -3646,7 +3650,7 @@ ConvUI.prototype = {
   var param = new _Param( 0, this._param, false );
   param.setMode( this._param._mode );
   param.setRadix( radix );
-  string.set( (new _Token()).tokenString( param, _CLIP_CODE_CONSTANT, value ) );
+  string.set( procToken().tokenString( param, _CLIP_CODE_CONSTANT, value ) );
   string.replace( "\\", "" );
   param.end();
  },
@@ -3657,7 +3661,7 @@ ConvUI.prototype = {
   param.setPrec( 0 );
   tmpValue.ass( value );
   tmpValue.angToAng( oldType, newType );
-  string.set( (new _Token()).tokenString( param, _CLIP_CODE_CONSTANT, tmpValue ) );
+  string.set( procToken().tokenString( param, _CLIP_CODE_CONSTANT, tmpValue ) );
   string.replace( "\\", "" );
   param.end();
  },
@@ -3681,14 +3685,14 @@ ConvUI.prototype = {
   var param = new _Param( 0, this._param, false );
   param.setMode( this._param._mode );
   param.setRadix( radix );
-  (new _Token()).stringToValue( param, string, value );
+  procToken().stringToValue( param, string, value );
   param.end();
  },
  getAngleValue : function( string, oldType, newType, value ){
   var param = new _Param( 0, this._param, false );
   param.setMode( this._param._mode );
   param.setPrec( 0 );
-  (new _Token()).stringToValue( param, string, value );
+  procToken().stringToValue( param, string, value );
   value.angToAng( oldType, newType );
   param.end();
  },
@@ -3704,7 +3708,7 @@ ConvUI.prototype = {
   }
   param.setMode( mode );
   param.setFps( this._param._fps );
-  (new _Token()).stringToValue( param, tmpString, value );
+  procToken().stringToValue( param, tmpString, value );
   param.end();
  },
  getValue : function( type, value ){
@@ -4321,10 +4325,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   }
  });
  setDefineValue();
- newProcMultiPrec();
  setProcEnv( new _ProcEnv() );
- topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
- topProc._printAns = true;
+ topProc = new _Proc( _PROC_DEF_PARENT_MODE, _PROC_DEF_PARENT_MP_PREC, _PROC_DEF_PARENT_MP_ROUND, true, _PROC_DEF_PRINT_ASSERT, _PROC_DEF_PRINT_WARN, _PROC_DEF_GUPDATE_FLAG );
  setProcWarnFlowFlag( true );
  setProcLoopMax( loopMax );
  topParam = new _Param();
@@ -4334,6 +4336,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  topParam._enableStat = false;
  topParam._var._label.setLabel( 0 , "Ans", true );
  setGlobalParam( topParam );
+ initProc();
  srand( time() );
  rand();
  calcUI = new CalcUI( topProc, topParam );
@@ -5316,7 +5319,6 @@ function delAllLogExpr(){
  writeProfileLogExpr();
 }
 function updateSelectVar(){
- var _token = new _Token();
  var _real = new _String();
  var _imag = new _String();
  var select = document.getElementById( "calc_select_var" );
@@ -5328,7 +5330,7 @@ function updateSelectVar(){
   if( topParam.isZero( index ) ){
    select.options[i].innerHTML = (index == 0) ? "Ans" : "@" + String.fromCharCode( index );
   } else {
-   _token.valueToString( topParam, topParam.val( index ), _real, _imag );
+   procToken().valueToString( topParam, topParam.val( index ), _real, _imag );
    select.options[i].innerHTML = ((index == 0) ? "Ans" : "@" + String.fromCharCode( index ) + "&nbsp;") + "&nbsp;=&nbsp;" + _real.str() + _imag.str();
   }
   if( started && (select.options[i].innerHTML != old) ){
@@ -6071,8 +6073,37 @@ function errorProc( err, num, func, token ){
   }
  }
 }
+function printAnsComplex( real, imag ){
+ var _real = new _String( real );
+ var _imag = new _String( imag );
+ switch( calcUI.sepType() ){
+ case 1:
+  procToken().sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
+  procToken().sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
+  break;
+ case 2:
+  procToken().sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
+  procToken().sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
+  break;
+ }
+ real = _real.replace( "⏌", "<span class='span_ans' style='font-size:15px'>⏌</span>" ).str();
+ imag = _imag.replace( "⏌", "<span class='span_ans' style='font-size:15px'>⏌</span>" ).str();
+ if( real.length > 0 ){
+  if( calcUI.italic() ){
+   document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + real + "<br>" + imag + "</span></b></i>";
+  } else {
+   document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + real + "<br>" + imag + "</span></b>";
+  }
+ } else {
+  if( calcUI.italic() ){
+   document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + imag + "</span></b></i>";
+  } else {
+   document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + imag + "</span></b>";
+  }
+ }
+ convUI.update();
+}
 function printAnsMatrix( param, array ){
- var _token = new _Token();
  var i;
  var code;
  var token;
@@ -6095,7 +6126,7 @@ function printAnsMatrix( param, array ){
    }
    enter = false;
   }
-  string += _token.tokenString( param, code, token );
+  string += procToken().tokenString( param, code, token );
   string += "&nbsp;";
   if( code == _CLIP_CODE_ARRAY_TOP ){
    indent += 2;
@@ -6107,35 +6138,6 @@ function printAnsMatrix( param, array ){
  }
  con[0].println( string );
  con[0].setColor();
-}
-function printAnsComplex( real, imag ){
- var _token = new _Token();
- var _real = new _String( real );
- var _imag = new _String( imag );
- switch( calcUI.sepType() ){
- case 1:
-  _token.sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
-  _token.sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>'</span>" );
-  break;
- case 2:
-  _token.sepString( _real, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
-  _token.sepString( _imag, "<span class='span_ans' style='font-family:\"Helvetica\"'>,</span>" );
-  break;
- }
- if( _real.str().length > 0 ){
-  if( calcUI.italic() ){
-   document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + _real.str() + "<br>" + _imag.str() + "</span></b></i>";
-  } else {
-   document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + _real.str() + "<br>" + _imag.str() + "</span></b>";
-  }
- } else {
-  if( calcUI.italic() ){
-   document.getElementById( "calc_ans" ).innerHTML = "<i><b><span class='span_ans'>" + _imag.str() + "</span></b></i>";
-  } else {
-   document.getElementById( "calc_ans" ).innerHTML = "<b><span class='span_ans'>" + _imag.str() + "</span></b>";
-  }
- }
- convUI.update();
 }
 function printWarn( warn, num, func ){
  con[1].newLine();
@@ -6290,7 +6292,7 @@ function doCommandGUpdate( gWorld ){
  gUpdate( gWorld );
 }
 function doCommandPlot( parentProc, parentParam, graph, start, end, step ){
- var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false );
+ var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false );
  var childParam = new _Param( parentProc._curLine._num, parentParam, true );
  childParam._enableCommand = false;
  childParam._enableStat = false;
@@ -6301,7 +6303,7 @@ try {
  childProc.end();
 }
 function doCommandRePlot( parentProc, parentParam, graph, start, end, step ){
- var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, parentProc._printAssert, parentProc._printWarn, false );
+ var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false );
  var childParam = new _Param( parentProc._curLine._num, parentParam, true );
  childParam._enableCommand = false;
  childParam._enableStat = false;
