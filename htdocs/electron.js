@@ -1,5 +1,5 @@
 const mainWidth    = 322;
-const mainHeight   = 510;
+const mainHeight   = 506;
 const mainTitleEN  = "ClipCalc";
 const mainTitleJP  = "関数電卓";
 const mainIcon     = "favicon.ico";

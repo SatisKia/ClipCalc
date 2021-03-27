@@ -37,6 +37,33 @@ var extFuncData2 = new Array();
 #include "math\_Time.js"
 #include "math\_Value.js"
 
+#include "mp\_MultiPrec.js"
+#include "mp\_abs.js"
+#include "mp\_add.js"
+#include "mp\_cmp.js"
+#include "mp\_div.js"
+#include "mp\_fadd.js"
+#include "mp\_fcmp.js"
+#include "mp\_fdigit.js"
+#include "mp\_fdiv.js"
+#include "mp\_fdiv2.js"
+#include "mp\_fmul.js"
+#include "mp\_fnum2str.js"
+#include "mp\_fround.js"
+#include "mp\_fsqrt.js"
+#include "mp\_fsqrt2.js"
+#include "mp\_fsqrt3.js"
+#include "mp\_fstr2num.js"
+#include "mp\_fsub.js"
+#include "mp\_ftrunc.js"
+#include "mp\_mul.js"
+#include "mp\_neg.js"
+#include "mp\_num2str.js"
+#include "mp\_set.js"
+#include "mp\_sqrt.js"
+#include "mp\_str2num.js"
+#include "mp\_sub.js"
+
 #include "param\_Boolean.js"
 #include "param\_Float.js"
 #include "param\_Integer.js"
@@ -361,7 +388,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	// ファイル選択コントロール
 	inputFile = new Array();
 	for( i = 0; i < inputFileIds.length; i++ ){
-		inputFile[i] = new _InputFile( inputFileIds[i] );
+		inputFile[i] = new _InputFile( inputFileIds[i][0], inputFileIds[i][1] );
 	}
 
 	// 計算エラー情報管理クラス
@@ -589,7 +616,10 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	}
 
 	if( common.isApp() ){
-		cssSetStyleDisplayById( "button_get_content", true );
+		cssSetStyleDisplayById( "button_getcontent", true );
+	}
+	if( common.isPC() ){
+		cssSetStyleDisplayById( "calc_input_loadimage", true );
 	}
 
 	if( getUrlParameter( "menu" ) == "option" ){
@@ -631,7 +661,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	for( i = 0; i < extFuncFile.length; i++ ){
 		var name = extFuncName( extFuncFile[i] );
 		if( name.length > 0 ){
-			regExtFuncButton( name );
+			regExtFuncButton( name.toLowerCase() );
 		}
 	}
 
@@ -639,7 +669,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	for( i = 0; i < extFuncFile2.length; i++ ){
 		var name = extFuncName( extFuncFile2[i] );
 		if( name.length > 0 ){
-			regExtFuncButton( name );
+			regExtFuncButton( name.toLowerCase() );
 		}
 	}
 
@@ -740,7 +770,7 @@ function setDeviceWidth( width ){
 }
 
 function defHeight( mainFlag ){
-	var height = (isAndroidTablet() || isIPad()) ? 471 : 510;
+	var height = (isAndroidTablet() || isIPad()) ? 471 : 506;
 	if( mainFlag && !usageFlag ){
 		height -= 40;
 	}
@@ -1341,6 +1371,19 @@ function updateEditExpr(){
 }
 
 function insEditExpr( token ){
+	if( token.length == 1 ){
+		var chr = token.charCodeAt( 0 );
+		if( (chr >= _CHAR_CODE_LA) && (chr <= _CHAR_CODE_LZ) ){
+			if( (editExpr.lastChar() == '@') || editExpr.lastCharUpper() ){
+				token = token.toUpperCase();
+			}
+		} else if( (chr >= _CHAR_CODE_UA) && (chr <= _CHAR_CODE_UZ) ){
+			if( editExpr.lastCharLower() ){
+				token = token.toLowerCase();
+			}
+		}
+	}
+
 	if( usageFlag ){
 		printUsage( token, topProc, topParam, englishFlag, "calc_usage" );
 	}
@@ -1897,6 +1940,8 @@ function loadExtFuncFile2(){
 function onInputFileLoad( func, data ){
 	var i;
 
+	func = func.toLowerCase();
+
 	// 外部関数キャッシュのクリア
 	topProc.clearFuncCache( func );
 
@@ -1904,7 +1949,8 @@ function onInputFileLoad( func, data ){
 
 	var index = extFuncFile2.length;
 	for( i = 0; i < extFuncFile2.length; i++ ){
-		if( extFuncFile2[i] == name ){
+		if( extFuncFile2[i].toLowerCase() == name ){
+			name = extFuncFile2[i];
 			index = i;
 			break;
 		}
@@ -1912,7 +1958,7 @@ function onInputFileLoad( func, data ){
 	extFuncFile2[index] = name;
 	extFuncData2[index] = splitData( data );
 
-	regExtFuncButton( extFuncName( extFuncFile2[index] ) );
+	regExtFuncButton( extFuncName( extFuncFile2[index] ).toLowerCase() );
 
 	data = "";
 	for( i = 0; i < extFuncData2[index].length; i++ ){
@@ -1965,14 +2011,14 @@ function getExtFuncDataDirect( func ){
 }
 function getExtFuncDataNameSpace( func ){
 	for( var i = 0; i < extFuncFile.length; i++ ){
-		if( extFuncName( extFuncFile[i] ) == func ){
+		if( extFuncName( extFuncFile[i] ).toLowerCase() == func.toLowerCase() ){
 			if( i < extFuncData.length ){
 				return extFuncData[i];
 			}
 		}
 	}
 	for( var i = 0; i < extFuncFile2.length; i++ ){
-		if( extFuncName( extFuncFile2[i] ) == func ){
+		if( extFuncName( extFuncFile2[i] ).toLowerCase() == func.toLowerCase() ){
 			if( i < extFuncData2.length ){
 				return extFuncData2[i];
 			}
@@ -3173,7 +3219,8 @@ function updateLanguage(){
 	document.getElementById( "button_profile_export" ).innerHTML = englishFlag ? "Export<br>profile" : "環境設定<br>ｴｸｽﾎﾟｰﾄ";
 	document.getElementById( "button_profile_import" ).innerHTML = englishFlag ? "Import<br>profile" : "環境設定<br>ｲﾝﾎﾟｰﾄ";
 	document.getElementById( "button_return" ).innerHTML = englishFlag ? "Return" : "戻る";
-	document.getElementById( "button_get_content" ).innerHTML = englishFlag ? "Album..." : "アルバム...";
+	document.getElementById( "button_getcontent" ).innerHTML = englishFlag ? "Album..." : "アルバム...";
+	document.getElementById( "button_loadimage" ).innerHTML = englishFlag ? "Image file..." : "画像ファイル...";
 	document.getElementById( "button_selectimage_del" ).innerHTML = englishFlag ? "Del" : "消";
 	document.getElementById( "button_return2" ).innerHTML = englishFlag ? "Return" : "戻る";
 	document.getElementById( "button_profile_import2" ).innerHTML = englishFlag ? "Import" : "ｲﾝﾎﾟｰﾄする";
@@ -3974,13 +4021,38 @@ function getContent(){
 	}
 }
 function onContentBase64( data ){
-	skinImage = data;
-	document.getElementById( "calc_edit_skin_image" ).value = skinImage;
-	updateSkin();
+	var canvas = document.createElement( "canvas" );
+	var context = canvas.getContext( "2d" );
+	var image = new Image();
+	image.onload = function(){
+		var dstHeight = common.isPC() ? defHeight( false ) : bodyHeight;
+		var dstWidth  = this.width * dstHeight / this.height;
+		if( dstWidth < 322 ){
+			dstWidth  = 322;
+			dstHeight = this.height * 322 / this.width;
+		}
+		canvas.width  = dstWidth;
+		canvas.height = dstHeight;
+		context.drawImage( this, 0, 0, this.width, this.height, 0, 0, dstWidth, dstHeight );
 
-	writeProfileString( "ENV_", "SkinImage", skinImage );
+		var quality = 1.0;
+		do {
+			skinImage = canvas.toDataURL( "image/jpeg", quality );
+			quality -= 0.1;
+		} while( skinImage.length <= 102400 );
 
-	addListImage();
+		document.getElementById( "calc_edit_skin_image" ).value = skinImage;
+		updateSkin();
+
+		writeProfileString( "ENV_", "SkinImage", skinImage );
+
+		addListImage();
+	};
+	image.src = data;
+}
+
+function onInputFileLoadImage( name, image ){
+	onContentBase64( image.src );
 }
 
 // キー関連
@@ -4016,7 +4088,6 @@ function onKeyDown( key ){
 	case _KEY_1:
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButton1();
-			return true;
 		} else {
 			switch( calcUI._mode ){
 			case _UI_CALC_MODE_FLOAT:
@@ -4026,10 +4097,13 @@ function onKeyDown( key ){
 			case _UI_CALC_MODE_SIGNED:
 			case _UI_CALC_MODE_UNSIGNED:
 				doButtonFactorial();
-				return true;
+				break;
+			default:
+				insEditExpr( "!" );
+				break;
 			}
 		}
-		break;
+		return true;
 	case _KEY_NUM_1: doButton1(); return true;
 	case _KEY_2    : doButton2(); return true;
 	case _KEY_NUM_2: doButton2(); return true;
@@ -4073,107 +4147,105 @@ function onKeyDown( key ){
 		}
 		return true;
 	case _KEY_NUM_9: doButton9(); return true;
+
 	case _KEY_A:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "a" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "A" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			doButtonA();
-			return true;
-		}
-		break;
-	case _KEY_B:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
-				doButtonB();
-			} else {
-				doButtonBIN();
-			}
-			return true;
-		}
-		break;
-	case _KEY_C:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			doButtonC();
-			return true;
-		}
-		break;
-	case _KEY_D:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			doButtonD();
-			return true;
 		} else {
-			switch( calcUI._mode ){
-			case _UI_CALC_MODE_FLOAT:
-			case _UI_CALC_MODE_FRACT:
-			case _UI_CALC_MODE_MFRACT:
-			case _UI_CALC_MODE_COMPLEX:
-				doButtonDeg();
-				return true;
-			}
+			insEditExpr( "a" );
 		}
-		break;
+		return true;
+	case _KEY_B:
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "b" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "B" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			if( editExpr.lastChar() == '\\' ){
+				doButtonBIN();
+			} else {
+				doButtonB();
+			}
+		} else {
+			insEditExpr( "b" );
+		}
+		return true;
+	case _KEY_C:
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "c" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "C" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonC();
+		} else {
+			insEditExpr( "c" );
+		}
+		return true;
+	case _KEY_D:
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "d" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "D" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+			doButtonD();
+		} else {
+			insEditExpr( "d" );
+		}
+		return true;
 	case _KEY_E:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "e" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "E" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			doButtonE();
 		} else {
-			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
-				doButtonEPlus();
+			if( editExpr.lastCharNumber() ){
+				if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
+					doButtonEPlus();
+				} else {
+					doButtonEMinus();
+				}
 			} else {
-				doButtonEMinus();
+				insEditExpr( "e" );
 			}
 		}
 		return true;
 	case _KEY_F:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
+		if( editExpr.lastChar() == '!' ){
+			insEditExpr( "f" );
+		} else if( editExpr.lastChar() == '@' ){
+			insEditExpr( "F" );
+		} else if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			doButtonF();
-			return true;
-		} else if( calcUI._mode == _UI_CALC_MODE_TIME ){
-			doButtonFrame();
-			return true;
+		} else {
+			insEditExpr( "f" );
 		}
-		break;
-	case _KEY_G:
-		switch( calcUI._mode ){
-		case _UI_CALC_MODE_FLOAT:
-		case _UI_CALC_MODE_FRACT:
-		case _UI_CALC_MODE_MFRACT:
-		case _UI_CALC_MODE_COMPLEX:
-			doButtonGrad();
-			return true;
-		}
-		break;
-	case _KEY_H:
-		if( calcUI._mode == _UI_CALC_MODE_TIME ){
-			doButtonHour();
-			return true;
-		}
-		break;
-	case _KEY_M:
-		if( calcUI._mode == _UI_CALC_MODE_TIME ){
-			doButtonMin();
-			return true;
-		}
-		break;
-	case _KEY_R:
-		switch( calcUI._mode ){
-		case _UI_CALC_MODE_FLOAT:
-		case _UI_CALC_MODE_FRACT:
-		case _UI_CALC_MODE_MFRACT:
-		case _UI_CALC_MODE_COMPLEX:
-			doButtonRad();
-			return true;
-		}
-		break;
-	case _KEY_S:
-		if( calcUI._mode == _UI_CALC_MODE_TIME ){
-			doButtonSec();
-			return true;
-		}
-		break;
-	case _KEY_X:
-		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
-			doButtonHEX();
-			return true;
-		}
-		break;
+		return true;
+	case _KEY_G: insEditExpr( "g" ); return true;
+	case _KEY_H: insEditExpr( "h" ); return true;
+	case _KEY_I: insEditExpr( "i" ); return true;
+	case _KEY_J: insEditExpr( "j" ); return true;
+	case _KEY_K: insEditExpr( "k" ); return true;
+	case _KEY_L: insEditExpr( "l" ); return true;
+	case _KEY_M: insEditExpr( "m" ); return true;
+	case _KEY_N: insEditExpr( "n" ); return true;
+	case _KEY_O: insEditExpr( "o" ); return true;
+	case _KEY_P: insEditExpr( "p" ); return true;
+	case _KEY_Q: insEditExpr( "q" ); return true;
+	case _KEY_R: insEditExpr( "r" ); return true;
+	case _KEY_S: insEditExpr( "s" ); return true;
+	case _KEY_T: insEditExpr( "t" ); return true;
+	case _KEY_U: insEditExpr( "u" ); return true;
+	case _KEY_V: insEditExpr( "v" ); return true;
+	case _KEY_W: insEditExpr( "w" ); return true;
+	case _KEY_X: insEditExpr( "x" ); return true;
+	case _KEY_Y: insEditExpr( "y" ); return true;
+	case _KEY_Z: insEditExpr( "z" ); return true;
 
 	case _KEY_NUM_POINT:
 		switch( calcUI._mode ){
@@ -4213,7 +4285,6 @@ function onKeyDown( key ){
 			doButtonMinus();
 		}
 		return true;
-
 	case 226:	// \_キー
 		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			doButtonEsc();
@@ -4221,16 +4292,6 @@ function onKeyDown( key ){
 			doButtonFract();
 		}
 		return true;
-	case _KEY_I:
-		switch( calcUI._mode ){
-		case _UI_CALC_MODE_FLOAT:
-		case _UI_CALC_MODE_FRACT:
-		case _UI_CALC_MODE_MFRACT:
-		case _UI_CALC_MODE_COMPLEX:
-			doButtonI();
-			return true;
-		}
-		break;
 	case 186:	// :*キー
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			if( calcUI._mode == _UI_CALC_MODE_TIME ){
@@ -4242,7 +4303,6 @@ function onKeyDown( key ){
 			return true;
 		}
 		break;
-
 	case _KEY_NUM_ADD:
 		if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
 			doButtonAdd();
@@ -4260,7 +4320,6 @@ function onKeyDown( key ){
 	case _KEY_NUM_MUL: doButtonMul(); return true;
 	case _KEY_NUM_DIV: doButtonDiv(); return true;
 	case 191: doButtonDiv(); return true;	// /?キー
-
 	case 222:	// ^~キー
 		if( (calcUI._mode == _UI_CALC_MODE_SIGNED) || (calcUI._mode == _UI_CALC_MODE_UNSIGNED) ){
 			if( _AND( _key_state, keyBit( _KEY_SHIFT ) ) == 0 ){
@@ -4288,9 +4347,10 @@ function onKeyDown( key ){
 			return true;
 		}
 		break;
-
+	case 192:	// @`キー
+		insEditExpr( "@" );
+		return true;
 	case _KEY_SPACE: doButtonSpace(); return true;
-
 	case _KEY_ENTER: doButtonEnter(); return true;
 	}
 

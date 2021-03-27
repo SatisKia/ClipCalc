@@ -57,9 +57,40 @@ EditExpr.prototype = {
 
 	_lastChar : function( str ){
 		if( str.length == 0 ){
-			return 0;
+			return '';
 		}
 		return str.charAt( str.length - 1 );
+	},
+
+	lastChar : function(){
+		if( !this._searchList( this._cursor - 1 ) ){
+			return '';
+		}
+		return this._lastChar( this._cur._token );
+	},
+	lastCharNumber : function(){
+		var chr = this.lastChar();
+		chr = (chr.length == 0) ? 0 : chr.charCodeAt( 0 );
+		if( (chr >= _CHAR_CODE_0) && (chr <= _CHAR_CODE_9) ){
+			return true;
+		}
+		return false;
+	},
+	lastCharLower : function(){
+		var chr = this.lastChar();
+		chr = (chr.length == 0) ? 0 : chr.charCodeAt( 0 );
+		if( (chr >= _CHAR_CODE_LA) && (chr <= _CHAR_CODE_LZ) ){
+			return true;
+		}
+		return false;
+	},
+	lastCharUpper : function(){
+		var chr = this.lastChar();
+		chr = (chr.length == 0) ? 0 : chr.charCodeAt( 0 );
+		if( (chr >= _CHAR_CODE_UA) && (chr <= _CHAR_CODE_UZ) ){
+			return true;
+		}
+		return false;
 	},
 
 	// トークンを追加する

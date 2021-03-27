@@ -9,16 +9,16 @@
 <title></title>
 
 <!--リリース用-->
-<script type="text/javascript" src="clip.js?v=210308"></script>
-<script type="text/javascript" src="Main.js?v=210308"></script>
+<script type="text/javascript" src="clip.js?v=210327"></script>
+<script type="text/javascript" src="Main.js?v=210327"></script>
 
 <!--デバッグ用
-<script type="text/javascript" src="clip.debug.js?v=210308"></script>
-<script type="text/javascript" src="Main.debug.js?v=210308"></script>
+<script type="text/javascript" src="clip.debug.js?v=210327"></script>
+<script type="text/javascript" src="Main.debug.js?v=210327"></script>
 -->
 
 <!--ライブラリ未使用版デバッグ用
-<script type="text/javascript" src="All.debug.js?v=210308"></script>
+<script type="text/javascript" src="All.debug.js?v=210327"></script>
 -->
 
 <script type="text/javascript">
@@ -26,7 +26,7 @@
 window.androidTabletTest = false;
 window.iPadTest          = false;
 
-window.bodyHeight = 510;
+window.bodyHeight = 506;
 if(
 	window.androidTabletTest || window.iPadTest ||
 	((window.navigator.userAgent.indexOf( "Android" ) != -1) && (window.navigator.userAgent.indexOf( "Mobile" ) < 0)) ||
@@ -212,6 +212,18 @@ input:disabled {
 	color:#808080;
 	background-color:#E0E0E0;
 }
+.label_button {
+	-webkit-appearance:button;
+	padding:6px;
+	font-family:"Helvetica";
+	font-size:16px;
+	line-height:21px;
+	vertical-align:middle;
+	border-left:1px solid #E0E0E0;
+	border-top:1px solid #E0E0E0;
+	border-right:1px solid #808080;
+	border-bottom:1px solid #808080;
+}
 .label_checkbox {
 	display:inline-block;
 	position:relative;
@@ -395,7 +407,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .div_body {
 	width:322px;
-	height:510px;
+	height:506px;
 	background-color:#FFFFFF;
 }
 .div_ans {
@@ -467,7 +479,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .div_gworld {
 	width:322px;
-	height:464px;
+	height:460px;
 	border:0;
 }
 .div_option {
@@ -529,7 +541,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 </style>
 </head>
-<body onload="main( 'div0', 'div1', 'div2', 'div3', 'div4', 'canvas0', ['file0','file1','file2'], 'textarea0' )">
+<body onload="main( 'div0', 'div1', 'div2', 'div3', 'div4', 'canvas0', [['file0',1],['file1',1],['file2',1],['file3',2]], 'textarea0' )">
 <div id="calc_body" class="div_body">
 
 <table><tr><td valign="top">
@@ -586,7 +598,6 @@ input[type="number"]::-webkit-inner-spin-button {
 				</td>
 			</tr>
 		</table>
-		<hr class="hr">
 	</div>
 	<div id="calc_ui_top">
 		<div id="calc_ans" class="div_ans"></div>
@@ -1406,7 +1417,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	</div>
 	<div id="calc_ui_gworld" style="display:none">
 		<div class="div_gworld">
-			<canvas id="canvas0" width="322" height="464"></canvas>
+			<canvas id="canvas0" width="322" height="460"></canvas>
 		</div>
 	</div>
 	<div id="calc_ui_option" style="display:none">
@@ -1778,8 +1789,12 @@ input[type="number"]::-webkit-inner-spin-button {
 					<td width="122"></td>
 					<td>
 						<form action="javascript:getContent()">
-							<button type="submit" id="button_get_content" class="button_common" style="width:115px; height:35px; display:none">アルバム...</button>
+							<button type="submit" id="button_getcontent" class="button_common" style="width:115px; height:35px; display:none">アルバム...</button>
 						</form>
+<div id="calc_input_loadimage" style="display:none">
+						<input type="file" id="file3" style="display:none">
+						<label for="file3" class="label_button button_common" style="width:115px; text-align:center" onclick=""><span id="button_loadimage" class="span">画像ファイル...</span></label>
+</div>
 					</td>
 					<td width="5"></td>
 				</tr>
