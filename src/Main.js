@@ -2357,29 +2357,15 @@ function doCommandGUpdate( gWorld ){
 	}
 	gUpdate( gWorld );
 }
-function doCommandPlot( parentProc, parentParam, graph, start, end, step ){
-	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
-	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
-	childParam._enableCommand = false;
-	childParam._enableStat = false;
+function doCommandPlot( parentProc, childProc, childParam, graph, start, end, step ){
 _TRY
 	parentProc.doCommandPlot( childProc, childParam, graph, start, end, step );
 _CATCH
-	childParam.end();
-	childProc.end();
 }
-function doCommandRePlot( parentProc, parentParam, graph, start, end, step ){
-	// 親プロセスの環境を受け継いで、子プロセスを実行する
-	var childProc = new _Proc( parentParam._mode, parentParam._mpPrec, parentParam._mpRound, false, parentProc._printAssert, parentProc._printWarn, false/*グラフィック画面更新OFF*/ );
-	var childParam = new _Param( parentProc._curLine._num, parentParam, true );
-	childParam._enableCommand = false;
-	childParam._enableStat = false;
+function doCommandRePlot( parentProc, childProc, childParam, graph, start, end, step ){
 _TRY
 	parentProc.doCommandRePlot( childProc, childParam, graph, start, end, step );
 _CATCH
-	childParam.end();
-	childProc.end();
 }
 function doCommandUsage( topUsage ){
 	common.setFont( 16, "Helvetica" );
