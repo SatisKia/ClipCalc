@@ -1,6 +1,6 @@
 cd htdocs
 
-call electron-packager . ClipCalc --app-version=6.4 --electron-version=2.0.0 --platform=win32 --arch=x64 --app-copyright="Copyright (C) SatisKia" --icon=./favicon.ico --overwrite
+call electron-packager . ClipCalc --app-version=6.4.1 --electron-version=2.0.0 --platform=win32 --arch=x64 --app-copyright="Copyright (C) SatisKia" --icon=./favicon.ico --overwrite
 
 cd ..
 
