@@ -1945,6 +1945,9 @@ function onInputFileLoad( func, data ){
 	// 外部関数キャッシュのクリア
 	topProc.clearFuncCache( func );
 
+	// 計算式をチェック
+	procGraph().checkExpr( func );
+
 	var name = "/" + func + ".cef";
 
 	var index = extFuncFile2.length;
@@ -3927,6 +3930,9 @@ function setFunc( chr, text ){
 
 	// 外部関数キャッシュのクリア
 	topProc.clearFuncCache( "!" + chr );
+
+	// 計算式をチェック
+	procGraph().checkExpr( "!" + chr );
 }
 function loadFunc(){
 	editor.setText( getFunc( String.fromCharCode( curFunc ) ) );

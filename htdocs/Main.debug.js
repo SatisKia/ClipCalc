@@ -5988,6 +5988,7 @@ function onInputFileLoad( func, data ){
  var i;
  func = func.toLowerCase();
  topProc.clearFuncCache( func );
+ procGraph().checkExpr( func );
  var name = "/" + func + ".cef";
  var index = extFuncFile2.length;
  for( i = 0; i < extFuncFile2.length; i++ ){
@@ -7770,6 +7771,7 @@ function getFunc( chr ){
 function setFunc( chr, text ){
  writeProfileString( "FUNC_", "" + chr, text );
  topProc.clearFuncCache( "!" + chr );
+ procGraph().checkExpr( "!" + chr );
 }
 function loadFunc(){
  editor.setText( getFunc( String.fromCharCode( curFunc ) ) );
