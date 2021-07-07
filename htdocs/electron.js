@@ -6,7 +6,7 @@ const mainIcon     = "favicon.ico";
 const mainTrayIcon = "trayicon.png";
 const mainPage     = "index.html";
 
-const { app, BrowserWindow, Menu, nativeImage, Tray, shell } = require( "electron" );
+const { app, BrowserWindow, Menu, nativeImage, Tray, shell, clipboard } = require( "electron" );
 const fs = require( "fs" );
 const path = require( "path" );
 
@@ -98,3 +98,4 @@ exports.extFuncCachePath = extFuncCachePath;
 exports.fs = fs;
 exports.isEnglish = false;
 exports.platform = process.platform;
+exports.clipboard = clipboard;

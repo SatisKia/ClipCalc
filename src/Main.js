@@ -210,6 +210,10 @@ var keyShiftOnly = false;
 #include "Electron.js"
 var electron = null;
 
+// クリップボード
+var clipboardFlag = false;
+var clipboardText = "";
+
 var divEdit;
 
 var buttonMode = 0;
@@ -395,7 +399,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	procError = new _ProcError();
 
 	editExpr = new EditExpr( 1 );
-	editExpr.setDispLen( 28, 8 );
+	editExpr.setDispLen( (electron != null) ? 27 : 28, 8 );
 	logExpr = new ListBox( logId );
 	logExpr.setLineNum( 12 );
 	_addCalcEventListener( logExpr.element(), "click", function( e ){
@@ -603,6 +607,13 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	// 計算結果エディットボックスの初期化
 	onCalcPrintAns();
 
+	if( electron != null ){
+		cssSetStyleDisplayById( "calc_clipboard", true );
+		cssSetPropertyValue( ".div_edit", "width", "298px" );
+	} else {
+		cssSetPropertyValue( ".div_edit", "width", "316px" );
+	}
+
 	if( !common.isApp() ){
 		if( useStorage && canUseStorage() ){
 			cssSetStyleDisplayById( "button_storage_clear", true );
@@ -722,6 +733,68 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	if( androidTabletTest || iPadTest || (bodyHeight != defHeight( false )) ){
 		setHeight( bodyHeight );
+	}
+}
+
+// クリップボード
+function watchClipboard(){
+	if( clipboardFlag ){
+		var text = electron.clipboardRead();
+
+		// 末尾の改行を取り除く
+		if( text.length > 0 ){
+			var len = text.length;
+			while( len > 0 ){
+				var chr = text.charAt( len - 1 );
+				if( chr == '\r' || chr == '\n' ){
+					len--;
+				} else {
+					break;
+				}
+			}
+			if( len == 0 ){
+				text = "";
+			} else if( len != text.length ){
+				text = text.substring( 0, len );
+			}
+		}
+
+		// クリップボード内容に変更があった場合
+		if( text != clipboardText ){
+			clipboardText = text;
+
+			var tmp = new _String();
+			tmp.set( clipboardText );
+			tmp.replaceNewLine( ";" );
+			while( true ){
+				var tmp2 = tmp.str();
+				tmp.replace( ";;", ";" );
+				if( tmp2 == tmp.str() ){
+					break;
+				}
+			}
+			editExpr.delAll();
+			editExpr.ins( tmp.str() );
+			writeProfileExpr();
+			updateEditExpr();
+
+			onCalcButtonEnter();
+		}
+
+		window.setTimeout( watchClipboard, 100 );
+	}
+}
+function doCheckClipboard(){
+	if( electron != null ){
+		clipboardFlag = clipboardFlag ? false : true;
+		if( clipboardFlag ){
+			// クリップボード内容をクリアしておく
+			clipboardText = "";
+			electron.clipboardWrite( clipboardText );
+
+			// クリップボード監視開始
+			watchClipboard();
+		}
 	}
 }
 
@@ -2129,6 +2202,12 @@ function errorProc( err, num, func, token ){
 }
 
 function printAnsComplex( real, imag ){
+	// クリップボード
+	if( clipboardFlag ){
+		clipboardText = real + imag;
+		electron.clipboardWrite( clipboardText );
+	}
+
 	// 桁区切り
 	var _real = new _String( real );
 	var _imag = new _String( imag );
@@ -2434,7 +2513,10 @@ function onCalcButtonEnter(){
 
 _TRY
 		initProcLoopCount();
-		topProc.processLoop( line, topParam );
+		if( topProc.processLoop( line, topParam ) == _CLIP_PROC_END ){
+			// ログを記録する
+			addLogExpr();
+		}
 _CATCH
 
 		if( lockGUpdate && needGUpdate ){
@@ -2446,9 +2528,6 @@ _CATCH
 		con[1].unlock();
 
 		updateSelectVar();
-
-		// ログを記録する
-		addLogExpr();
 	}
 }
 

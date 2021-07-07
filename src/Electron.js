@@ -85,6 +85,13 @@ Electron.prototype = {
 			this._extfunc_update = false;
 			this._main.fs.writeFileSync( this._main.extFuncCachePath, JSON.stringify( this._extfunc ) );
 		}
+	},
+
+	clipboardRead : function(){
+		return this._main.clipboard.readText();
+	},
+	clipboardWrite : function( text ){
+		this._main.clipboard.writeText( text );
 	}
 
 };

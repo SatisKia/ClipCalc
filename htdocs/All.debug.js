@@ -23037,9 +23037,17 @@ Electron.prototype = {
    this._extfunc_update = false;
    this._main.fs.writeFileSync( this._main.extFuncCachePath, JSON.stringify( this._extfunc ) );
   }
+ },
+ clipboardRead : function(){
+  return this._main.clipboard.readText();
+ },
+ clipboardWrite : function( text ){
+  this._main.clipboard.writeText( text );
  }
 };
 var electron = null;
+var clipboardFlag = false;
+var clipboardText = "";
 var divEdit;
 var buttonMode = 0;
 var usageFlag = true;
@@ -23172,7 +23180,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  procError = new _ProcError();
  editExpr = new EditExpr( 1 );
- editExpr.setDispLen( 28, 8 );
+ editExpr.setDispLen( (electron != null) ? 27 : 28, 8 );
  logExpr = new ListBox( logId );
  logExpr.setLineNum( 12 );
  _addCalcEventListener( logExpr.element(), "click", function( e ){
@@ -23337,6 +23345,12 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_edit_tab_up" , event, doButtonEditTabUp );
  _addCalcEventListenerById( "button_edit_tab_down", event, doButtonEditTabDown );
  onCalcPrintAns();
+ if( electron != null ){
+  cssSetStyleDisplayById( "calc_clipboard", true );
+  cssSetPropertyValue( ".div_edit", "width", "298px" );
+ } else {
+  cssSetPropertyValue( ".div_edit", "width", "316px" );
+ }
  if( !common.isApp() ){
   if( useStorage && canUseStorage() ){
    cssSetStyleDisplayById( "button_storage_clear", true );
@@ -23433,6 +23447,56 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  if( androidTabletTest || iPadTest || (bodyHeight != defHeight( false )) ){
   setHeight( bodyHeight );
+ }
+}
+function watchClipboard(){
+ if( clipboardFlag ){
+  var text = electron.clipboardRead();
+  if( text.length > 0 ){
+   var len = text.length;
+   while( len > 0 ){
+    var chr = text.charAt( len - 1 );
+    if( chr == '\r' || chr == '\n' ){
+     len--;
+    } else {
+     break;
+    }
+   }
+   if( len == 0 ){
+    text = "";
+   } else if( len != text.length ){
+    text = text.substring( 0, len );
+   }
+  }
+  if( text != clipboardText ){
+   clipboardText = text;
+   var tmp = new _String();
+   tmp.set( clipboardText );
+   tmp.replaceNewLine( ";" );
+   while( true ){
+    var tmp2 = tmp.str();
+    tmp.replace( ";;", ";" );
+    if( tmp2 == tmp.str() ){
+     break;
+    }
+   }
+   editExpr.delAll();
+   editExpr.ins( tmp.str() );
+   writeProfileExpr();
+   updateEditExpr();
+   onCalcButtonEnter();
+  }
+  window.setTimeout( watchClipboard, 100 );
+ }
+}
+function doCheckClipboard(){
+ if( electron != null ){
+  clipboardFlag = clipboardFlag ? false : true;
+  if( clipboardFlag ){
+   clipboardText = "";
+   electron.clipboardWrite( clipboardText );
+   watchClipboard();
+  }
  }
 }
 function sound(){
@@ -24956,6 +25020,10 @@ function errorProc( err, num, func, token ){
  }
 }
 function printAnsComplex( real, imag ){
+ if( clipboardFlag ){
+  clipboardText = real + imag;
+  electron.clipboardWrite( clipboardText );
+ }
  var _real = new _String( real );
  var _imag = new _String( imag );
  switch( calcUI.sepType() ){
@@ -25238,7 +25306,9 @@ function onCalcButtonEnter(){
   }
 try {
   initProcLoopCount();
-  topProc.processLoop( line, topParam );
+  if( topProc.processLoop( line, topParam ) == 0x04 ){
+   addLogExpr();
+  }
 } catch( e ){ catchError( e ); }
   if( lockGUpdate && needGUpdate ){
    gUpdate( procGWorld() );
@@ -25247,7 +25317,6 @@ try {
   con[0].unlock();
   con[1].unlock();
   updateSelectVar();
-  addLogExpr();
  }
 }
 function onCalcUpdateTrigButton( _this ){
