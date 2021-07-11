@@ -1,5 +1,0 @@
-#!/usr/local/bin/clip
-#直角三角形の斜辺の長さ hypotenuse
-#\!- <val> <val>
-:float \16
-sqrt (@0 * @0 + @1 * @1)

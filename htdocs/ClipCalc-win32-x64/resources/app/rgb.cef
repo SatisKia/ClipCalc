@@ -1,4 +1,0 @@
-#RGBカラー値 RGB color value
-#\!- <r_val> <g_val> <b_val>
-:uint
-return (@0 << 16) + (@1 << 8) + @2
