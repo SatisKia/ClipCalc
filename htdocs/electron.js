@@ -18,6 +18,9 @@ let trayIcon;
 let contextMenu;
 
 const createWindow = () => {
+	// バージョンの取得
+	exports.version = app.getVersion();
+
 	// ロケールの取得
 	exports.isEnglish = (app.getLocale() != "ja");
 
@@ -94,8 +97,10 @@ app.on( "activate", () => {
 	}
 } );
 
+exports.clipboard = clipboard;
 exports.extFuncCachePath = extFuncCachePath;
 exports.fs = fs;
 exports.isEnglish = false;
 exports.platform = process.platform;
-exports.clipboard = clipboard;
+exports.shell = shell;
+exports.version = "";

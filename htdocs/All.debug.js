@@ -22973,6 +22973,9 @@ function Electron( main ){
  this._extfunc_str = "";
 }
 Electron.prototype = {
+ version : function(){
+  return this._main.version;
+ },
  isEnglish : function(){
   return this._main.isEnglish;
  },
@@ -23043,11 +23046,60 @@ Electron.prototype = {
  },
  clipboardWrite : function( text ){
   this._main.clipboard.writeText( text );
+ },
+ beep : function(){
+  this._main.shell.beep();
  }
 };
 var electron = null;
+function __Audio(){
+ this.element = null;
+ this.state = 0;
+ this.volume = 100;
+}
+function loadAudio( src ){
+ try {
+  var audio = new __Audio();
+  audio.element = new Audio( "" );
+  audio.element.autoplay = false;
+  audio.element.src = src;
+  audio.element.load();
+  return audio;
+ } catch( e ){}
+ return null;
+}
+function isAudioLoaded( audio ){
+ if( audio != null ){
+  try {
+   if( audio.element.readyState >= 4 ){
+    return true;
+   }
+  } catch( e ){}
+ }
+ return false;
+}
+function playAudio( audio ){
+ if( audio != null ){
+  if( audio.state == 1 ){
+   try {
+    if( !audio.element.ended ){
+     audio.element.pause();
+     audio.element.currentTime = 0;
+    }
+   } catch( e ){}
+  }
+  try {
+   audio.element.loop = false;
+   audio.element.play();
+   audio.state = 1;
+  } catch( e ){}
+ }
+}
 var clipboardFlag = false;
+var clipboardProc = false;
 var clipboardText = "";
+var clipboardBeepFlag = false;
+var clipboardAudio;
 var divEdit;
 var buttonMode = 0;
 var usageFlag = true;
@@ -23069,23 +23121,8 @@ function isAndroidTablet(){
 function isIPad(){
  return (iPadTest || common.isIPad());
 }
-function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
- var i;
- defGWorldFunction();
- defProcFunction();
- conId = _conId;
- con[0] = new _Console( _conId );
- con[0].setMaxLen( conMaxLen );
- errId = _errId;
- con[1] = new _Console( _errId );
- con[1].setMaxLen( errMaxLen );
- try {
-  electron = new Electron( require( "electron" ).remote.require( "./electron" ) );
- } catch( e ){
-  electron = null;
- }
- common = new Common();
- con[0].println( "ClipCalc" + consoleBreak() + "Copyright (C) SatisKia" );
+function printAppVersion( version ){
+ con[0].println( "ClipCalc" + version + consoleBreak() + "Copyright (C) SatisKia" );
  con[0].setColor( "0000ff" );
  if( dispUserAgent ){
   con[0].setBold( true );
@@ -23105,6 +23142,34 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   con[0].println( common.isApp() ? "true" : "false" );
  }
  con[0].setColor();
+}
+function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
+ var i;
+ defGWorldFunction();
+ defProcFunction();
+ conId = _conId;
+ con[0] = new _Console( _conId );
+ con[0].setMaxLen( conMaxLen );
+ errId = _errId;
+ con[1] = new _Console( _errId );
+ con[1].setMaxLen( errMaxLen );
+ try {
+  electron = new Electron( require( "electron" ).remote.require( "./electron" ) );
+ } catch( e ){
+  electron = null;
+ }
+ common = new Common();
+ if( !common.isPC() ){
+  nativeRequest = new NativeRequest();
+  nativeRequest.setScheme( "native" );
+  nativeRequest.send( "get_app_version" );
+ } else {
+  var version = "";
+  if( electron != null ){
+   version = " " + electron.version();
+  }
+  printAppVersion( version );
+ }
  if( common.isIPhone() || common.isIPad() ){
   document.documentElement.addEventListener( "touchstart", function( e ){
    if( e.touches.length > 1 ){
@@ -23167,6 +23232,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  updateLanguage();
  soundType = getProfileInt( "ENV_", "Sound", 0 );
  updateSoundType();
+ clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
  divEdit = document.getElementById( editId );
  regGWorldDefCharInfo( 0 );
  regGWorldDefCharInfoLarge( 1 );
@@ -23242,6 +23308,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  document.getElementById( "check_recalc_sto" ).checked = calcUI.reCalcSTOFlag();
  document.getElementById( "check_print_usage" ).checked = usageFlag;
  document.getElementById( "check_calculator" ).checked = topParam._calculator;
+ document.getElementById( "check_clipboard_beep" ).checked = clipboardBeepFlag;
  var event = common.isPC() ? "mousedown" : "touchstart";
  var elements;
  _addCalcEventListenerById( "button_cursor_top", event, topEditExpr );
@@ -23346,8 +23413,10 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_edit_tab_down", event, doButtonEditTabDown );
  onCalcPrintAns();
  if( electron != null ){
+  clipboardAudio = loadAudio( audioFile[0] );
   cssSetStyleDisplayById( "calc_clipboard", true );
   cssSetPropertyValue( ".div_edit", "width", "298px" );
+  cssSetStyleDisplayById( "calc_clipboard_beep", true );
  } else {
   cssSetPropertyValue( ".div_edit", "width", "316px" );
  }
@@ -23435,9 +23504,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   writeProfileInt( "ENV_", "Calculator", topParam._calculator ? 1 : 0 );
  }
  started = true;
- if( !common.isPC() ){
-  nativeRequest = new NativeRequest();
-  nativeRequest.setScheme( "native" );
+ if( nativeRequest ){
   nativeRequest.send( "start_load_extfunc/" + extFuncFile[loadNum] );
  }
  _addCalcEventListener( document, "keydown", keyDown );
@@ -23484,7 +23551,9 @@ function watchClipboard(){
    editExpr.ins( tmp.str() );
    writeProfileExpr();
    updateEditExpr();
+   clipboardProc = true;
    onCalcButtonEnter();
+   clipboardProc = false;
   }
   window.setTimeout( watchClipboard, 100 );
  }
@@ -23498,6 +23567,10 @@ function doCheckClipboard(){
    watchClipboard();
   }
  }
+}
+function doCheckClipboardBeep(){
+ clipboardBeepFlag = document.getElementById( "check_clipboard_beep" ).checked;
+ writeProfileInt( "ENV_", "ClipboardBeep", clipboardBeepFlag ? 1 : 0 );
 }
 function sound(){
  if( soundType != 0 ){
@@ -25020,9 +25093,14 @@ function errorProc( err, num, func, token ){
  }
 }
 function printAnsComplex( real, imag ){
- if( clipboardFlag ){
+ if( clipboardProc ){
   clipboardText = real + imag;
   electron.clipboardWrite( clipboardText );
+  if( clipboardBeepFlag ){
+   if( isAudioLoaded( clipboardAudio ) ){
+    playAudio( clipboardAudio );
+   }
+  }
  }
  var _real = new _String( real );
  var _imag = new _String( imag );
@@ -25988,6 +26066,7 @@ function updateLanguage(){
  document.getElementById( "calc_static_option20" ).innerHTML = englishFlag ? "Off" : "なし";
  document.getElementById( "calc_static_option21" ).innerHTML = englishFlag ? "On" : "あり";
  document.getElementById( "calc_static_option22" ).innerHTML = englishFlag ? "Vibrate" : "振動";
+ document.getElementById( "calc_static_option23" ).innerHTML = englishFlag ? "Play sound when the calculation result is stored in the clipboard" : "計算結果をクリップボードに格納したら音を鳴らす";
  document.getElementById( "button_storage_clear" ).innerHTML = englishFlag ? "Clear<br>storage" : "ストレージ<br>クリア";
  document.getElementById( "button_cookie_clear" ).innerHTML = englishFlag ? "Clear<br>cookie" : "Cookie<br>クリア";
  document.getElementById( "button_profile_export" ).innerHTML = englishFlag ? "Export<br>profile" : "環境設定<br>ｴｸｽﾎﾟｰﾄ";

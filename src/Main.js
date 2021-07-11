@@ -211,8 +211,12 @@ var keyShiftOnly = false;
 var electron = null;
 
 // クリップボード
+#include "Audio.js"
 var clipboardFlag = false;
+var clipboardProc = false;
 var clipboardText = "";
+var clipboardBeepFlag = false;
+var clipboardAudio;
 
 var divEdit;
 
@@ -258,6 +262,29 @@ function isIPad(){
 	return (iPadTest || common.isIPad());
 }
 
+function printAppVersion( version ){
+	con[0].println( "ClipCalc" + version + consoleBreak() + "Copyright (C) SatisKia" );
+	con[0].setColor( "0000ff" );
+	if( dispUserAgent ){
+		con[0].setBold( true );
+		con[0].print( "UserAgent: " );
+		con[0].setBold( false );
+		con[0].println( window.navigator.userAgent );
+	}
+	if( electron != null ){
+		con[0].setBold( true );
+		con[0].print( "Platform: " );
+		con[0].setBold( false );
+		con[0].println( electron.platform() );
+	} else {
+		con[0].setBold( true );
+		con[0].print( "App: " );
+		con[0].setBold( false );
+		con[0].println( common.isApp() ? "true" : "false" );
+	}
+	con[0].setColor();
+}
+
 function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
 	var i;
 
@@ -280,26 +307,17 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	common = new Common();
 
-	con[0].println( "ClipCalc" + consoleBreak() + "Copyright (C) SatisKia" );
-	con[0].setColor( "0000ff" );
-	if( dispUserAgent ){
-		con[0].setBold( true );
-		con[0].print( "UserAgent: " );
-		con[0].setBold( false );
-		con[0].println( window.navigator.userAgent );
-	}
-	if( electron != null ){
-		con[0].setBold( true );
-		con[0].print( "Platform: " );
-		con[0].setBold( false );
-		con[0].println( electron.platform() );
+	if( !common.isPC() ){
+		nativeRequest = new NativeRequest();
+		nativeRequest.setScheme( "native" );
+		nativeRequest.send( "get_app_version" );
 	} else {
-		con[0].setBold( true );
-		con[0].print( "App: " );
-		con[0].setBold( false );
-		con[0].println( common.isApp() ? "true" : "false" );
+		var version = "";
+		if( electron != null ){
+			version = " " + electron.version();
+		}
+		printAppVersion( version );
 	}
-	con[0].setColor();
 
 	if( common.isIPhone() || common.isIPad() ){
 		// iOS10で複数指で拡大縮小が出来てしまうのを防ぐ
@@ -374,6 +392,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	soundType = getProfileInt( "ENV_", "Sound", 0 );
 	updateSoundType();
+
+	clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
 
 	divEdit = document.getElementById( editId );
 
@@ -473,13 +493,14 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	initSelect( "calc_select_var", 0 );
 	updateButton();
 
-	document.getElementById( "check_keep_trig"    ).checked = calcUI.keepTrigFlag();
-	document.getElementById( "check_italic"       ).checked = calcUI.italic();
-	document.getElementById( "check_recalc_mode"  ).checked = calcUI.reCalcModeFlag();
-	document.getElementById( "check_recalc_angle" ).checked = calcUI.reCalcAngleFlag();
-	document.getElementById( "check_recalc_sto"   ).checked = calcUI.reCalcSTOFlag();
-	document.getElementById( "check_print_usage"  ).checked = usageFlag;
-	document.getElementById( "check_calculator"   ).checked = topParam._calculator;
+	document.getElementById( "check_keep_trig"      ).checked = calcUI.keepTrigFlag();
+	document.getElementById( "check_italic"         ).checked = calcUI.italic();
+	document.getElementById( "check_recalc_mode"    ).checked = calcUI.reCalcModeFlag();
+	document.getElementById( "check_recalc_angle"   ).checked = calcUI.reCalcAngleFlag();
+	document.getElementById( "check_recalc_sto"     ).checked = calcUI.reCalcSTOFlag();
+	document.getElementById( "check_print_usage"    ).checked = usageFlag;
+	document.getElementById( "check_calculator"     ).checked = topParam._calculator;
+	document.getElementById( "check_clipboard_beep" ).checked = clipboardBeepFlag;
 
 	var event = common.isPC() ? "mousedown" : "touchstart";
 	var elements;
@@ -608,8 +629,11 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	onCalcPrintAns();
 
 	if( electron != null ){
+		clipboardAudio = loadAudio( audioFile[0] );
+
 		cssSetStyleDisplayById( "calc_clipboard", true );
 		cssSetPropertyValue( ".div_edit", "width", "298px" );
+		cssSetStyleDisplayById( "calc_clipboard_beep", true );
 	} else {
 		cssSetPropertyValue( ".div_edit", "width", "316px" );
 	}
@@ -717,9 +741,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	started = true;
 
-	if( !common.isPC() ){
-		nativeRequest = new NativeRequest();
-		nativeRequest.setScheme( "native" );
+	// 外部関数読み込み開始
+	if( nativeRequest ){
 		nativeRequest.send( "start_load_extfunc/" + extFuncFile[loadNum] );
 	}
 
@@ -778,7 +801,9 @@ function watchClipboard(){
 			writeProfileExpr();
 			updateEditExpr();
 
+			clipboardProc = true;
 			onCalcButtonEnter();
+			clipboardProc = false;
 		}
 
 		window.setTimeout( watchClipboard, 100 );
@@ -796,6 +821,11 @@ function doCheckClipboard(){
 			watchClipboard();
 		}
 	}
+}
+function doCheckClipboardBeep(){
+	clipboardBeepFlag = document.getElementById( "check_clipboard_beep" ).checked;
+
+	writeProfileInt( "ENV_", "ClipboardBeep", clipboardBeepFlag ? 1 : 0 );
 }
 
 function sound(){
@@ -884,13 +914,13 @@ function setHeight( height ){
 
 	var editorHeight = 0;
 	if( isAndroidTablet() ){
-		editorHeight = bodyHeight - 227;	// IMEのサイズ：357x227
+		editorHeight = bodyHeight - 227;		// IMEのサイズ：357x227
 	} else if( !androidTabletTest && common.isAndroidMobile() ){
 		editorHeight = bodyHeight - 255 - 39;	// IMEのサイズ：322x255
 	} else if( isIPad() ){
-		editorHeight = bodyHeight - 145;	// IMEのサイズ：357x145
+		editorHeight = bodyHeight - 145;		// IMEのサイズ：357x145
 	} else if( !iPadTest && common.isIPhone() ){
-		editorHeight = bodyHeight - 261;	// IMEのサイズ：322x261
+		editorHeight = bodyHeight - 261;		// IMEのサイズ：322x261
 	}
 	if( editorHeight > 0 ){
 		cssSetPropertyValue( ".textarea_func", "height", "" + editorHeight + "px" );
@@ -2203,9 +2233,15 @@ function errorProc( err, num, func, token ){
 
 function printAnsComplex( real, imag ){
 	// クリップボード
-	if( clipboardFlag ){
+	if( clipboardProc ){
 		clipboardText = real + imag;
 		electron.clipboardWrite( clipboardText );
+		if( clipboardBeepFlag ){
+//			electron.beep();
+			if( isAudioLoaded( clipboardAudio ) ){
+				playAudio( clipboardAudio );
+			}
+		}
 	}
 
 	// 桁区切り
@@ -3282,6 +3318,8 @@ function updateLanguage(){
 	document.getElementById( "calc_static_option20" ).innerHTML = englishFlag ? "Off" : "なし";
 	document.getElementById( "calc_static_option21" ).innerHTML = englishFlag ? "On" : "あり";
 	document.getElementById( "calc_static_option22" ).innerHTML = englishFlag ? "Vibrate" : "振動";
+//	document.getElementById( "calc_static_option23" ).innerHTML = englishFlag ? "Play \"Default Beep\" when the calculation result is stored in the clipboard" : "計算結果をクリップボードに格納したら「一般の警告音」を鳴らす";
+	document.getElementById( "calc_static_option23" ).innerHTML = englishFlag ? "Play sound when the calculation result is stored in the clipboard" : "計算結果をクリップボードに格納したら音を鳴らす";
 	document.getElementById( "button_storage_clear" ).innerHTML = englishFlag ? "Clear<br>storage" : "ストレージ<br>クリア";
 	document.getElementById( "button_cookie_clear" ).innerHTML = englishFlag ? "Clear<br>cookie" : "Cookie<br>クリア";
 	document.getElementById( "button_profile_export" ).innerHTML = englishFlag ? "Export<br>profile" : "環境設定<br>ｴｸｽﾎﾟｰﾄ";

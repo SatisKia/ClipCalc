@@ -9,16 +9,16 @@
 <title></title>
 
 <!--リリース用-->
-<script type="text/javascript" src="clip.js?v=210707"></script>
-<script type="text/javascript" src="Main.js?v=210707"></script>
+<script type="text/javascript" src="clip.js?v=210709"></script>
+<script type="text/javascript" src="Main.js?v=210709"></script>
 
 <!--デバッグ用
-<script type="text/javascript" src="clip.debug.js?v=210707"></script>
-<script type="text/javascript" src="Main.debug.js?v=210707"></script>
+<script type="text/javascript" src="clip.debug.js?v=210709"></script>
+<script type="text/javascript" src="Main.debug.js?v=210709"></script>
 -->
 
 <!--ライブラリ未使用版デバッグ用
-<script type="text/javascript" src="All.debug.js?v=210707"></script>
+<script type="text/javascript" src="All.debug.js?v=210709"></script>
 -->
 
 <script type="text/javascript">
@@ -89,6 +89,11 @@ window.extFuncFile = [
 	"time.cef",
 	"rgb.cef",
 	"color.cef"
+];
+
+// 音
+window.audioFile = [
+	"cursor15_a.mp3"
 ];
 
 </script>
@@ -318,8 +323,8 @@ select::-ms-expand {
 }
 .hr_border {
 	border-top:1px solid #808080;
-	margin-top:8px;
-	margin-bottom:7px;
+	margin-top:4px;
+	margin-bottom:5px;
 }
 .hr_nomargin {
 	border-top:1px solid #808080;
@@ -1680,16 +1685,6 @@ input[type="number"]::-webkit-inner-spin-button {
 			<table>
 				<tr>
 					<td width="5"></td>
-					<td>
-						<input type="checkbox" id="check_keep_trig" style="display:none" onchange="doCheckKeepTrig()">
-						<label for="check_keep_trig" class="label_checkbox" onclick=""><span id="calc_static_option13" class="span">[Inv][Hyp]チェック状態を保持</span><br></label>
-					</td>
-				</tr>
-			</table>
-			<hr class="hr_border">
-			<table>
-				<tr>
-					<td width="5"></td>
 					<td><span id="calc_static_option14" class="span">再計算:</span></td>
 				</tr>
 			</table>
@@ -1752,11 +1747,33 @@ input[type="number"]::-webkit-inner-spin-button {
 				<tr>
 					<td width="5"></td>
 					<td>
+						<input type="checkbox" id="check_keep_trig" style="display:none" onchange="doCheckKeepTrig()">
+						<label for="check_keep_trig" class="label_checkbox" onclick=""><span id="calc_static_option13" class="span">[Inv][Hyp]チェック状態を保持</span><br></label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
 						<input type="checkbox" id="check_print_usage" style="display:none" onchange="doCheckPrintUsage()">
 						<label for="check_print_usage" class="label_checkbox" onclick=""><span id="calc_static_option18" class="span">ボタン押下時に使用法を表示</span><br></label>
 					</td>
 				</tr>
 			</table>
+<div id="calc_clipboard_beep" style="display:none">
+			<hr class="hr">
+			<table>
+				<tr>
+					<td width="5"></td>
+					<td>
+						<input type="checkbox" id="check_clipboard_beep" style="display:none" onchange="doCheckClipboardBeep()">
+						<label for="check_clipboard_beep" class="label_checkbox" onclick=""><span id="calc_static_option23" class="span">計算結果をクリップボードに格納したら音を鳴らす</span><br></label>
+					</td>
+				</tr>
+			</table>
+</div>
 			<hr class="hr_border">
 			<table>
 				<tr>

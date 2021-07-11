@@ -15,6 +15,9 @@ function Electron( main ){
 
 Electron.prototype = {
 
+	version : function(){
+		return this._main.version;
+	},
 	isEnglish : function(){
 		return this._main.isEnglish;
 	},
@@ -92,6 +95,10 @@ Electron.prototype = {
 	},
 	clipboardWrite : function( text ){
 		this._main.clipboard.writeText( text );
+	},
+
+	beep : function(){
+		this._main.shell.beep();
 	}
 
 };
