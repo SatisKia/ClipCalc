@@ -1,4 +1,4 @@
-ClipCalc Version 6.5.1
+ClipCalc Version 6.5.2
 
 はじめに
 
@@ -23,6 +23,12 @@ ClipCalc Version 6.5.1
 「ClipCalc」の実行
 
     "ClipCalc-win32-x64"フォルダ内の"ClipCalc.exe"を実行してください。
+
+環境設定ファイルについて
+
+    「ClipCalc」終了時、
+        C:\Users\<ユーザー名>\ClipCalc.env
+    に環境設定が書き出され、起動時に読み込まれます。
 
 問い合わせ先
 

@@ -75,7 +75,7 @@ function getProfileKey( index ){
 	return _preference.getKey( index );
 }
 
-function doExportProfile( textarea ){
+function exportProfile(){
 	var i, j;
 
 	var tmp = new Array();
@@ -112,8 +112,10 @@ function doExportProfile( textarea ){
 	for( i = 0; i < num2; i++ ){
 		text += tmp[i] + "\n";
 	}
-	document.getElementById( textarea ).value = text;
-
+	return text;
+}
+function doExportProfile( textarea ){
+	document.getElementById( textarea ).value = exportProfile();
 	doButtonUIProfile( true );
 }
 
@@ -149,19 +151,9 @@ function splitData( data ){
 
 	return data3;
 }
-function doImportProfile( textarea ){
-	var i, j, k, l;
+function importProfile( text ){
+	var i, j;
 
-	// 既存のURLリスト登録数
-	var offset;
-	for( offset = 0; ; offset++ ){
-		var tmp = getProfileString( "IMAGE_PATH_", "" + (offset + 1), "" );
-		if( tmp.length == 0 ){
-			break;
-		}
-	}
-
-	var text = document.getElementById( textarea ).value;
 	var profile = splitData( text );
 	for( i = 0; i < profile.length; i++ ){
 		j = profile[i].indexOf( "=" );
@@ -187,48 +179,13 @@ function doImportProfile( textarea ){
 				tmpValue.replace( "\\n", "\n" );
 				tmpValue.replace( "¥"/*0xC2A5*/, "\\" );	// 重要：一番最後に行うこと！
 				value = tmpValue.str();
-			} else if( key == "IMAGE_" ){
-				var value2 = new String();
-				for( k = 0; k < value.length; k++ ){
-					var tmp = "" + value.charAt( k );
-					if( (tmp == "%") && (k <= value.length - 3) ){
-						if( (value.charAt( k + 1 ) == '7') && (value.charAt( k + 2 ) == 'B') ){
-							for( l = k + 3; l < value.length; l++ ){
-								if( value.charAt( l ) == '%' ){
-									break;
-								}
-							}
-							if( l - (k + 3) > 0 ){
-								// 既存のURLリスト登録数を加算する
-								var num = "" + (parseInt( value.substring( k + 3, l ) ) + offset);
-								tmp = "%7B" + num;
-								k += 2 + num.length;
-							}
-						}
-					}
-					value2 += tmp;
-				}
-
-				var oldValue = getProfileString( key, "", "" );
-				if( value2.length == 0 ){
-					value2 = oldValue;
-				} else if( oldValue.length > 0 ){
-					value2 = oldValue + "&" + value2;
-				}
-
-				value = value2;
-			} else if( key.indexOf( "IMAGE_PATH_" ) == 0 ){
-				// 既存のURLリスト登録数を加算する
-				var num = "" + (parseInt( key.slice( 11 ) ) + offset);
-				key = "IMAGE_PATH_" + num;
-			} else if( key.indexOf( "IMAGE_" ) == 0 ){
-				// 既存のURLリスト登録数を加算する
-				var num = "" + (parseInt( key.slice( 6 ) ) + offset);
-				key = "IMAGE_" + num;
 			}
 			writeProfileString( key, "", value );
 		}
 	}
+}
+function doImportProfile( textarea ){
+	importProfile( document.getElementById( textarea ).value );
 	location.replace( "index.html?menu=option" );
 }
 

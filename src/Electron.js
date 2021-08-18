@@ -86,7 +86,9 @@ Electron.prototype = {
 	applyExtFunc : function(){
 		if( this._extfunc_update ){
 			this._extfunc_update = false;
-			this._main.fs.writeFileSync( this._main.extFuncCachePath, JSON.stringify( this._extfunc ) );
+			try {
+				this._main.fs.writeFileSync( this._main.extFuncCachePath, JSON.stringify( this._extfunc ) );
+			} catch( e ){}
 		}
 	},
 
@@ -99,6 +101,19 @@ Electron.prototype = {
 
 	beep : function(){
 		this._main.shell.beep();
+	},
+
+	readProfile : function(){
+		try {
+			return this._main.fs.readFileSync( this._main.profilePath, "utf8" );
+		} catch( e ){
+		}
+		return "";
+	},
+	writeProfile : function( text ){
+		try {
+			this._main.fs.writeFileSync( this._main.profilePath, text );
+		} catch( e ){}
 	}
 
 };
