@@ -3869,7 +3869,7 @@ ConvUI.prototype = {
  }
 };
 var convUI = null;
-function NativeRequest(){
+function _NativeRequest(){
  this.e = document.createElement( "iframe" );
  this.e.setAttribute( "width", 0 );
  this.e.setAttribute( "height", 0 );
@@ -3880,7 +3880,7 @@ function NativeRequest(){
  document.body.appendChild( this.e );
  this.s = "";
 }
-NativeRequest.prototype = {
+_NativeRequest.prototype = {
  setScheme : function( scheme ){
   this.s = scheme;
  },
@@ -4687,7 +4687,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  started = true;
  if( !common.isPC() ){
-  nativeRequest = new NativeRequest();
+  nativeRequest = new _NativeRequest();
   nativeRequest.setScheme( "native" );
   nativeRequest.send( "started" );
  } else {
@@ -6432,15 +6432,15 @@ function gWorldClear( gWorld, color ){
   return;
  }
  canvasClear();
- canvasSetColor( COLOR_WIN[color] );
+ canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
  canvasFill( 0, 0, gWorld._width, gWorld._height );
- canvasSetColor( COLOR_WIN[gWorld._color] );
+ canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( _gWorld._color ) : COLOR_WIN[gWorld._color] );
 }
 function gWorldSetColor( gWorld, color ){
  if( lockGUpdate ){
   return;
  }
- canvasSetColor( COLOR_WIN[color] );
+ canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
 }
 function gWorldPutColor( gWorld, x, y, color ){
  if( lockGUpdate ){
@@ -6448,9 +6448,9 @@ function gWorldPutColor( gWorld, x, y, color ){
   return;
  }
  if( topProc._gUpdateFlag ){
-  canvasSetColor( COLOR_WIN[color] );
+  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
   canvasPut( x, y );
-  canvasSetColor( COLOR_WIN[gWorld._color] );
+  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
  }
 }
 function gWorldPut( gWorld, x, y ){
@@ -6493,11 +6493,11 @@ function gUpdate( gWorld ){
  var x, y;
  for( y = 0; y < height; y++ ){
   for( x = 0; x < width; x++ ){
-   canvasSetColor( COLOR_WIN[image[y * offset + x]] );
+   canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( image[y * offset + x] ) : COLOR_WIN[image[y * offset + x]] );
    canvasPut( x, y );
   }
  }
- canvasSetColor( COLOR_WIN[gWorld._color] );
+ canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
 }
 function doCommandGUpdate( gWorld ){
  if( lockGUpdate ){
