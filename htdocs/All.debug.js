@@ -1,22 +1,13 @@
 var extFuncData = new Array();
 var extFuncFile2 = new Array();
 var extFuncData2 = new Array();
-
-
-
-
 var _EPS5 = 0.001;
 var _SQRT05 = 0.7071067811865475244008444;
-
-
 function _Complex( re, im ){
  this._re = (re == undefined) ? 0.0 : re;
  this._im = (im == undefined) ? 0.0 : im;
 }
-
 _Complex.prototype = {
-
-
  angToAng : function( oldType, newType ){
   if( oldType != newType ){
    switch( oldType ){
@@ -35,18 +26,12 @@ _Complex.prototype = {
    }
   }
  },
-
-
  setReal : function( re ){
-
 assert( re != undefined );
-
   this._re = re;
  },
  setImag : function( im ){
-
 assert( im != undefined );
-
   this._im = im;
  },
  polar : function( rho, theta ){
@@ -54,25 +39,17 @@ assert( im != undefined );
   this._re = rho * _COS( theta );
   this._im = rho * _SIN( theta );
  },
-
-
  real : function(){
   return this._re;
  },
  imag : function(){
   return this._im;
  },
-
-
  toFloat : function(){
   return this._re;
  },
-
-
  ass : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re = r._re;
    this._im = r._im;
@@ -82,26 +59,18 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  minus : function(){
   return new _Complex( -this._re, -this._im );
  },
-
-
  add : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    return new _Complex( this._re + r._re, this._im + r._im );
   }
   return new _Complex( this._re + r, this._im );
  },
  addAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re += r._re;
    this._im += r._im;
@@ -110,21 +79,15 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  sub : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    return new _Complex( this._re - r._re, this._im - r._im );
   }
   return new _Complex( this._re - r, this._im );
  },
  subAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re -= r._re;
    this._im -= r._im;
@@ -133,12 +96,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  mul : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re * r._re, this._im * r._re );
@@ -148,9 +107,7 @@ assert( r != undefined );
   return new _Complex( this._re * r, this._im * r );
  },
  mulAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re *= r._re;
@@ -166,12 +123,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  div : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re / r._re, this._im / r._re );
@@ -188,9 +141,7 @@ assert( r != undefined );
   return new _Complex( this._re / r, this._im / r );
  },
  divAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re /= r._re;
@@ -214,12 +165,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  mod : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re % r._re, this._im % r._re );
@@ -234,9 +181,7 @@ assert( r != undefined );
   return new _Complex( this._re % r, this._im % r );
  },
  modAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re = this._re % r._re;
@@ -255,8 +200,6 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  equal : function( r ){
   if( r instanceof _Complex ){
    return (this._re == r._re) && (this._im == r._im);
@@ -269,8 +212,6 @@ assert( r != undefined );
   }
   return (this._re != r) || (this._im != 0.0);
  },
-
-
  fabs : function(){
   if( this._re == 0.0 ){
    return _ABS( this._im );
@@ -285,23 +226,15 @@ assert( r != undefined );
   var t = this._im / this._re;
   return _ABS( this._re ) * _SQRT( 1.0 + t * t );
  },
-
-
  farg : function(){
   return fatan2( this._im, this._re );
  },
-
-
  fnorm : function(){
   return this._re * this._re + this._im * this._im;
  },
-
-
  conjg : function(){
   return new _Complex( this._re, -this._im );
  },
-
-
  sin : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fsin( this._re ) );
@@ -313,8 +246,6 @@ assert( r != undefined );
    _COS( re ) * fsinh( im )
    );
  },
-
-
  cos : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fcos( this._re ) );
@@ -326,8 +257,6 @@ assert( r != undefined );
    -_SIN( re ) * fsinh( im )
    );
  },
-
-
  tan : function(){
   if( this._im == 0.0 ){
    return floatToComplex( ftan( this._re ) );
@@ -343,8 +272,6 @@ assert( r != undefined );
    fsinh( im2 ) / d
    );
  },
-
-
  asin : function(){
   if( this._im == 0.0 ){
    if( (this._re < -1.0) || (this._re > 1.0) ){
@@ -356,15 +283,12 @@ assert( r != undefined );
     return floatToComplex( fasin( this._re ) );
    }
   }
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.minus().mul( i.mul( this ).add( this.sqr().minus().add( 1.0 ).sqrt() ).log() );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  acos : function(){
   if( this._im == 0.0 ){
    if( (this._re < -1.0) || (this._re > 1.0) ){
@@ -376,19 +300,12 @@ assert( r != undefined );
     return floatToComplex( facos( this._re ) );
    }
   }
-
-
-
-
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.mul( this.sub( i.mul( this.sqr().minus().add( 1.0 ).sqrt() ) ).log() );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  atan : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fatan( this._re ) );
@@ -397,15 +314,12 @@ assert( r != undefined );
   if( d.equal( 0.0 ) ){
    setComplexError();
   }
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.mul( i.add( this ).div( d ).log() ).mul( 0.5 );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  sinh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fsinh( this._re ) );
@@ -415,8 +329,6 @@ assert( r != undefined );
    fcosh( this._re ) * _SIN( this._im )
    );
  },
-
-
  cosh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fcosh( this._re ) );
@@ -426,8 +338,6 @@ assert( r != undefined );
    fsinh( this._re ) * _SIN( this._im )
    );
  },
-
-
  tanh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( ftanh( this._re ) );
@@ -443,17 +353,12 @@ assert( r != undefined );
    _SIN( im2 ) / d
    );
  },
-
-
  asinh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fasinh( this._re ) );
   }
-
   return this.add( this.sqr().add( 1.0 ).sqrt() ).log();
  },
-
-
  acosh : function(){
   if( this._im == 0.0 ){
    if( this._re < 1.0 ){
@@ -465,11 +370,8 @@ assert( r != undefined );
     return floatToComplex( facosh( this._re ) );
    }
   }
-
   return this.add( this.sqr().sub( 1.0 ).sqrt() ).log();
  },
-
-
  atanh : function(){
   if( this._im == 0.0 ){
    if( (this._re <= -1.0) || (this._re >= 1.0) ){
@@ -485,27 +387,20 @@ assert( r != undefined );
   if( d.equal( 0.0 ) ){
    setComplexError();
   }
-
   return this.add( 1.0 ).div( d ).log().mul( 0.5 );
  },
-
-
  ceil : function(){
   return new _Complex(
    _CEIL( this._re ),
    _CEIL( this._im )
    );
  },
-
-
  floor : function(){
   return new _Complex(
    _FLOOR( this._re ),
    _FLOOR( this._im )
    );
  },
-
-
  exp : function(){
   if( this._im == 0.0 ){
    return floatToComplex( _EXP( this._re ) );
@@ -527,8 +422,6 @@ assert( r != undefined );
    e * _SIN( im )
    );
  },
-
-
  log : function(){
   if( this._im == 0.0 ){
    if( this._re <= 0.0 ){
@@ -561,40 +454,30 @@ assert( r != undefined );
    _ATAN2( this._im, this._re ) * _NORMALIZE
    );
  },
-
-
  pow : function( y ){
   if( y instanceof _Complex ){
    if( y._im == 0.0 ){
     if( this._im == 0.0 ){
      return floatToComplex( _POW( this._re, y._re ) );
     }
-
     return this.log().mul( y._re ).exp();
    }
    if( this._im == 0.0 ){
-
     return y.mul( _LOG( this._re ) ).exp();
    }
-
    return this.log().mul( y ).exp();
   }
   if( this._im == 0.0 ){
    return floatToComplex( _POW( this._re, y ) );
   }
-
   return this.log().mul( y ).exp();
  },
-
-
  sqr : function(){
   if( this._im == 0.0 ){
    return floatToComplex( this._re * this._re );
   }
   return new _Complex( this._re * this._re - this._im * this._im, this._re * this._im + this._im * this._re );
  },
-
-
  sqrt : function(){
   if( this._im == 0.0 ){
    if( this._re < 0.0 ){
@@ -626,9 +509,7 @@ assert( r != undefined );
    -_SQRT05 * r
    );
  }
-
 };
-
 function getComplex( c, re , im ){
  re.set( c._re );
  im.set( c._im );
@@ -638,26 +519,18 @@ function setComplex( c, re, im ){
  c._im = im;
  return c;
 }
-
 function dupComplex( x ){
  return new _Complex( x._re, x._im );
 }
-
 function floatToComplex( x ){
  return new _Complex( x, 0.0 );
 }
-
-
 function _radToAng( rad ){
  return complexIsRad() ? rad : rad * complexAngCoef() / _PI;
 }
-
-
 function _angToRad( ang ){
  return complexIsRad() ? ang : ang * _PI / complexAngCoef();
 }
-
-
 function fsin( x ){
  return _SIN( _angToRad( x ) );
 }
@@ -16626,7 +16499,6 @@ function defProcFunction(){
  if( window.doCommandPlot == undefined ) window.doCommandPlot = function( parentProc, childProc, childParam, graph, start, end, step ){};
  if( window.doCommandRePlot == undefined ) window.doCommandRePlot = function( parentProc, childProc, childParam, graph, start, end, step ){};
  if( window.doCommandUsage == undefined ) window.doCommandUsage = function( topUsage ){};
- if( window.doCustomCommand == undefined ) window.doCustomCommand = function( _this, param, code, token ){ return 0x2140 ; };
  if( window.skipCommandLog == undefined ) window.skipCommandLog = function(){ return true; };
  if( window.doCommandLog == undefined ) window.doCommandLog = function( topPrint ){};
  if( window.doCommandDumpVar == undefined ) window.doCommandDumpVar = function( param, index ){};
@@ -25132,9 +25004,9 @@ function loadExtFuncFile(){
   }
  }
 }
-function onHttpSetRequestHeader( header, value ){
-}
-function onHttpResponse( request, data ){
+window.onHttpSetRequestHeader = function( header, value ){
+};
+window.onHttpResponse = function( request, data ){
  extFuncData[loadNum] = splitData( data );
  data = "";
  for( var i = 0; i < extFuncData[loadNum].length; i++ ){
@@ -25150,10 +25022,10 @@ function onHttpResponse( request, data ){
  }
  loadNum++;
  loadExtFuncFile();
-}
-function onHttpError( request, status ){
+};
+window.onHttpError = function( request, status ){
  loading = false;
-}
+};
 function loadExtFuncFile2(){
  var i;
  if( electron != null ){
@@ -25245,13 +25117,13 @@ function extFuncName( str ){
  }
  return "";
 }
-function getExtFuncDataDirect( func ){
+window.getExtFuncDataDirect = function( func ){
  if( (func.charAt( 0 ) == "!") && (func.length == 2) ){
   return splitData( getFunc( func.charAt( 1 ) ) );
  }
  return null;
-}
-function getExtFuncDataNameSpace( func ){
+};
+window.getExtFuncDataNameSpace = function( func ){
  for( var i = 0; i < extFuncFile.length; i++ ){
   if( extFuncName( extFuncFile[i] ).toLowerCase() == func.toLowerCase() ){
    if( i < extFuncData.length ){
@@ -25267,7 +25139,7 @@ function getExtFuncDataNameSpace( func ){
   }
  }
  return null;
-}
+};
 function regExtFuncButton( name ){
  var i;
  if( name.indexOf( ".inc" ) >= 0 ){
@@ -25300,14 +25172,14 @@ function setExtFuncData( index, data ){
   nativeRequest.send( "load_extfunc/" + extFuncFile[loadNum] );
  }
 }
-function mainProc( parentProc, parentParam, func, funcParam, childProc, childParam ){
+window.mainProc = function( parentProc, parentParam, func, funcParam, childProc, childParam ){
  var ret;
 try {
  ret = childProc.mainLoop( func, childParam, funcParam, parentParam );
 } catch( e ){ catchError( e ); }
  return ret;
-}
-function assertProc( num, func ){
+};
+window.assertProc = function( num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -25322,7 +25194,7 @@ function assertProc( num, func ){
  if( englishFlag ) document.getElementById( "calc_usage" ).innerHTML = "Failed to assert.";
  else document.getElementById( "calc_usage" ).innerHTML = "アサートに失敗しました";
  return retAssertProc;
-}
+};
 function getErrorString( err, num, func, token ){
  var string = new String();
  var error = getProcErrorDefString( err, token, topParam._calculator, englishFlag );
@@ -25340,7 +25212,7 @@ function getErrorString( err, num, func, token ){
  }
  return string;
 }
-function errorProc( err, num, func, token ){
+window.errorProc = function( err, num, func, token ){
  if( silentErr ){
   procError.add( err, num, func, token );
  } else {
@@ -25355,8 +25227,8 @@ function errorProc( err, num, func, token ){
    }
   }
  }
-}
-function printAnsComplex( real, imag ){
+};
+window.printAnsComplex = function( real, imag ){
  if( clipboardProc ){
   clipboardText = real + imag;
   electron.clipboardWrite( clipboardText );
@@ -25394,8 +25266,8 @@ function printAnsComplex( real, imag ){
   }
  }
  convUI.update();
-}
-function printAnsMatrix( param, array ){
+};
+window.printAnsMatrix = function( param, array ){
  var i;
  var code;
  var token;
@@ -25430,8 +25302,8 @@ function printAnsMatrix( param, array ){
  }
  con[0].println( string );
  con[0].setColor();
-}
-function printWarn( warn, num, func ){
+};
+window.printWarn = function( warn, num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -25444,8 +25316,8 @@ function printWarn( warn, num, func ){
  if( englishFlag ) con[1].println( "Warning:" + consoleBreak() + warn );
  else con[1].println( "警告:" + consoleBreak() + warn );
  document.getElementById( "calc_usage" ).innerHTML = warn;
-}
-function printError( error, num, func ){
+};
+window.printError = function( error, num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -25458,24 +25330,24 @@ function printError( error, num, func ){
  if( englishFlag ) con[1].println( "Error:" + consoleBreak() + error );
  else con[1].println( "エラー:" + consoleBreak() + error );
  document.getElementById( "calc_usage" ).innerHTML = error;
-}
-function doFuncGColor( rgb ){
+};
+window.doFuncGColor = function( rgb ){
  return doFuncGColorBGR( rgb, COLOR_WIN );
-}
-function doFuncGColor24( index ){
+};
+window.doFuncGColor24 = function( index ){
  return _RGB2BGR( COLOR_WIN[index] );
-}
-function doFuncEval( parentProc, childProc, childParam, string, value ){
+};
+window.doFuncEval = function( parentProc, childProc, childParam, string, value ){
  var ret;
 try {
  ret = parentProc.doFuncEval( childProc, childParam, string, value );
 } catch( e ){ catchError( e ); }
  return ret;
-}
-function doCommandClear(){
+};
+window.doCommandClear = function(){
  con[0].clear();
-}
-function doCommandPrint( topPrint, flag ){
+};
+window.doCommandPrint = function( topPrint, flag ){
  var cur = topPrint;
  while( cur != null ){
   if( cur._string != null ){
@@ -25488,8 +25360,8 @@ function doCommandPrint( topPrint, flag ){
  if( flag ){
   con[0].println();
  }
-}
-function doCommandScan( topScan, proc, param ){
+};
+window.doCommandScan = function( topScan, proc, param ){
  var defString = new String();
  var newString = new String();
  var cur = topScan;
@@ -25502,8 +25374,8 @@ function doCommandScan( topScan, proc, param ){
   cur.setNewValue( newString, proc, param );
   cur = cur._next;
  }
-}
-function gWorldClear( gWorld, color ){
+};
+window.gWorldClear = function( gWorld, color ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -25512,14 +25384,14 @@ function gWorldClear( gWorld, color ){
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
  canvasFill( 0, 0, gWorld._width, gWorld._height );
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( _gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function gWorldSetColor( gWorld, color ){
+};
+window.gWorldSetColor = function( gWorld, color ){
  if( lockGUpdate ){
   return;
  }
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
-}
-function gWorldPutColor( gWorld, x, y, color ){
+};
+window.gWorldPutColor = function( gWorld, x, y, color ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -25529,8 +25401,8 @@ function gWorldPutColor( gWorld, x, y, color ){
   canvasPut( x, y );
   canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
  }
-}
-function gWorldPut( gWorld, x, y ){
+};
+window.gWorldPut = function( gWorld, x, y ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -25538,8 +25410,8 @@ function gWorldPut( gWorld, x, y ){
  if( topProc._gUpdateFlag ){
   canvasPut( x, y );
  }
-}
-function gWorldFill( gWorld, x, y, w, h ){
+};
+window.gWorldFill = function( gWorld, x, y, w, h ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -25547,8 +25419,8 @@ function gWorldFill( gWorld, x, y, w, h ){
  if( topProc._gUpdateFlag ){
   canvasFill( x, y, w, h );
  }
-}
-function gWorldLine( gWorld, x1, y1, x2, y2 ){
+};
+window.gWorldLine = function( gWorld, x1, y1, x2, y2 ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -25556,11 +25428,11 @@ function gWorldLine( gWorld, x1, y1, x2, y2 ){
  if( topProc._gUpdateFlag ){
   canvasLine( x1, y1, x2, y2 );
  }
-}
-function doCommandGColor( index, rgb ){
+};
+window.doCommandGColor = function( index, rgb ){
  COLOR_WIN[index] = _RGB2BGR( rgb );
  needGUpdate = true;
-}
+};
 function gUpdate( gWorld ){
  canvasClear();
  var image = gWorld._image;
@@ -25575,25 +25447,25 @@ function gUpdate( gWorld ){
   }
  }
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function doCommandGUpdate( gWorld ){
+};
+window.doCommandGUpdate = function( gWorld ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
  }
  gUpdate( gWorld );
-}
-function doCommandPlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandPlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 try {
  parentProc.doCommandPlot( childProc, childParam, graph, start, end, step );
 } catch( e ){ catchError( e ); }
-}
-function doCommandRePlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandRePlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 try {
  parentProc.doCommandRePlot( childProc, childParam, graph, start, end, step );
 } catch( e ){ catchError( e ); }
-}
-function doCommandUsage( topUsage ){
+};
+window.doCommandUsage = function( topUsage ){
  common.setFont( 16, "Helvetica" );
  var usage = new String();
  var cur = topUsage;
@@ -25604,11 +25476,11 @@ function doCommandUsage( topUsage ){
   cur = cur._next;
  }
  document.getElementById( "calc_usage" ).innerHTML = usage;
-}
-function onStartPlot(){
+};
+window.onStartPlot = function(){
  silentErr = true;
-}
-function onEndPlot(){
+};
+window.onEndPlot = function(){
  silentErr = false;
  var err = new _Integer();
  var num = new _Integer();
@@ -25619,18 +25491,18 @@ function onEndPlot(){
   errorProc( err._val, num._val, func.str(), token.str() );
  }
  procError.delAll();
-}
-function onStartRePlot(){
+};
+window.onStartRePlot = function(){
  onStartPlot();
-}
-function onEndRePlot(){
+};
+window.onEndRePlot = function(){
  onEndPlot();
-}
+};
 function dummy(){}
-function onCalcPrintAns(){
+window.onCalcPrintAns = function(){
  topProc.printAns( topParam );
-}
-function onCalcButtonEnter(){
+};
+window.onCalcButtonEnter = function(){
  var forward = new _String();
  var after = new _String();
  editExpr.get( forward, after, false );
@@ -25660,8 +25532,8 @@ try {
   con[1].unlock();
   updateSelectVar();
  }
-}
-function onCalcUpdateTrigButton( _this ){
+};
+window.onCalcUpdateTrigButton = function( _this ){
  document.getElementById( "check_inv" ).checked = ((_this._checkTrig & 0x01) != 0) ? true : false;
  document.getElementById( "check_hyp" ).checked = ((_this._checkTrig & 0x02) != 0) ? true : false;
  document.getElementById( "button_sin" ).innerHTML = _this._buttonSin;
@@ -25670,7 +25542,7 @@ function onCalcUpdateTrigButton( _this ){
  document.getElementById( "button_log" ).innerHTML = _this._buttonLog;
  document.getElementById( "button_log10" ).innerHTML = _this._buttonLog10;
  document.getElementById( "button_sqr" ).innerHTML = _this._buttonSqr;
-}
+};
 function updateCalcRadioMode(){
  var flag;
  cssLockStyleDisplay();
@@ -25956,18 +25828,18 @@ function doCalcSepLower(){
  updateCalcRadioSepType();
  writeProfileInt( "ENV_", "SepType", calcUI.sepType() );
 }
-function onConvUpdateStatic( _this ){
+window.onConvUpdateStatic = function( _this ){
  document.getElementById( "conv_static_1" ).innerHTML = _this._static1;
  document.getElementById( "conv_static_2" ).innerHTML = _this._static2;
  document.getElementById( "conv_static_3" ).innerHTML = _this._static3;
  document.getElementById( "conv_static_4" ).innerHTML = _this._static4;
-}
-function onConvUpdateEdit( _this ){
+};
+window.onConvUpdateEdit = function( _this ){
  document.getElementById( "conv_edit_1" ).value = _this._edit1;
  document.getElementById( "conv_edit_2" ).value = _this._edit2;
  document.getElementById( "conv_edit_3" ).value = _this._edit3;
  document.getElementById( "conv_edit_4" ).value = _this._edit4;
-}
+};
 function onChangeEdit1(){
  convUI._edit1 = document.getElementById( "conv_edit_1" ).value;
  var value = new _Value();
@@ -26755,7 +26627,7 @@ function doCheckCalculator(){
  changeExpr();
  writeProfileInt( "ENV_", "Calculator", topParam._calculator ? 1 : 0 );
 }
-function onCalcInitEnv( _this ){
+window.onCalcInitEnv = function( _this ){
  _this._mode = getProfileInt( "ENV_", "Mode", 0 );
  _this._bitType = getProfileInt( "ENV_", "Bit", 2 );
  _this._radix = getProfileInt( "ENV_", "Radix", 10 );
@@ -26774,7 +26646,7 @@ function onCalcInitEnv( _this ){
   resetCalculator = true;
  }
  _this._param._calculator = (calculatorMode == 1);
-}
+};
 function getProfileVar(){
  var c = new _Complex();
  var f = new _Fract();
@@ -26853,11 +26725,11 @@ function writeProfileExpr(){
  editExpr.exportLog( expr );
  writeProfileString( "EXPR_", "", expr.str() );
 }
-function onEditExprUpdateSelAll( id, flag ){
+window.onEditExprUpdateSelAll = function( id, flag ){
  if( (id == 1) && !_getProfileExpr ){
   writeProfileInt( "EXPR_", "SelAll", flag ? 1 : 0 );
  }
-}
+};
 function getProfileLogExpr(){
  var expr = new String();
  beginGetProfile( "LOG_" + "Expr" );
@@ -27089,7 +26961,7 @@ function onContentBase64( data ){
 function onInputFileLoadImage( name, image ){
  onContentBase64( image.src );
 }
-function onKeyDown( key ){
+window.onKeyDown = function( key ){
  if( menu != 0 ){
   return false;
  }
@@ -27380,11 +27252,11 @@ function onKeyDown( key ){
  case 13: doButtonEnter(); return true;
  }
  return false;
-}
-function onKeyUp( key ){
+};
+window.onKeyUp = function( key ){
  if( (key == 16) && keyShiftOnly ){
   doButtonSHIFT();
   return true;
  }
  return false;
-}
+};

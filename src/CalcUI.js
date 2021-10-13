@@ -428,9 +428,9 @@ function _addCalcEventListenerById( id, event, func ){
 	_addCalcEventListener( document.getElementById( id ), event, func );
 }
 
-//function onCalcInitEnv( _this ){}
+//window.onCalcInitEnv = function( _this ){};
 
-//function onCalcPrintAns(){}
-//function onCalcButtonEnter(){}
+//window.onCalcPrintAns = function(){};
+//window.onCalcButtonEnter = function(){};
 
-//function onCalcUpdateTrigButton( _this ){}
+//window.onCalcUpdateTrigButton = function( _this ){};

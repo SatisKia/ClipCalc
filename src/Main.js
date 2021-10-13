@@ -1990,9 +1990,9 @@ function loadExtFuncFile(){
 		}
 	}
 }
-function onHttpSetRequestHeader( header, value ){
-}
-function onHttpResponse( request, data ){
+window.onHttpSetRequestHeader = function( header, value ){
+};
+window.onHttpResponse = function( request, data ){
 	extFuncData[loadNum] = splitData( data );
 
 	data = "";
@@ -2011,10 +2011,10 @@ function onHttpResponse( request, data ){
 
 	loadNum++;
 	loadExtFuncFile();
-}
-function onHttpError( request, status ){
+};
+window.onHttpError = function( request, status ){
 	loading = false;
-}
+};
 
 function loadExtFuncFile2(){
 	var i;
@@ -2123,13 +2123,13 @@ function extFuncName( str ){
 	}
 	return "";
 }
-function getExtFuncDataDirect( func ){
+window.getExtFuncDataDirect = function( func ){
 	if( (func.charAt( 0 ) == "!") && (func.length == 2) ){
 		return splitData( getFunc( func.charAt( 1 ) ) );
 	}
 	return null;
-}
-function getExtFuncDataNameSpace( func ){
+};
+window.getExtFuncDataNameSpace = function( func ){
 	for( var i = 0; i < extFuncFile.length; i++ ){
 		if( extFuncName( extFuncFile[i] ).toLowerCase() == func.toLowerCase() ){
 			if( i < extFuncData.length ){
@@ -2145,7 +2145,7 @@ function getExtFuncDataNameSpace( func ){
 		}
 	}
 	return null;
-}
+};
 
 function regExtFuncButton( name ){
 	var i;
@@ -2185,14 +2185,14 @@ function setExtFuncData( index, data ){
 	}
 }
 
-function mainProc( parentProc, parentParam, func, funcParam, childProc, childParam ){
+window.mainProc = function( parentProc, parentParam, func, funcParam, childProc, childParam ){
 	var ret;
 _TRY
 	ret = childProc.mainLoop( func, childParam, funcParam, parentParam );
 _CATCH
 	return ret;
-}
-function assertProc( num, func ){
+};
+window.assertProc = function( num, func ){
 	con[1].newLine();
 	if( (func != null) && (func.length > 0) ){
 		if( englishFlag ) con[1].print( func + ": " );
@@ -2209,7 +2209,7 @@ function assertProc( num, func ){
 	else              document.getElementById( "calc_usage" ).innerHTML = "アサートに失敗しました";
 
 	return retAssertProc;
-}
+};
 function getErrorString( err, num, func, token ){
 	var string = new String();
 	var error  = getProcErrorDefString( err, token, topParam._calculator, englishFlag );
@@ -2227,7 +2227,7 @@ function getErrorString( err, num, func, token ){
 	}
 	return string;
 }
-function errorProc( err, num, func, token ){
+window.errorProc = function( err, num, func, token ){
 	if( silentErr ){
 		procError.add( err, num, func, token );
 	} else {
@@ -2243,9 +2243,9 @@ function errorProc( err, num, func, token ){
 			}
 		}
 	}
-}
+};
 
-function printAnsComplex( real, imag ){
+window.printAnsComplex = function( real, imag ){
 	// クリップボード
 	if( clipboardProc ){
 		clipboardText = real + imag;
@@ -2290,8 +2290,8 @@ function printAnsComplex( real, imag ){
 	}
 
 	convUI.update();
-}
-function printAnsMatrix( param, array/*_Token*/ ){
+};
+window.printAnsMatrix = function( param, array/*_Token*/ ){
 	var i;
 	var code;
 	var token;
@@ -2327,8 +2327,8 @@ function printAnsMatrix( param, array/*_Token*/ ){
 	}
 	con[0].println( string );
 	con[0].setColor();
-}
-function printWarn( warn, num, func ){
+};
+window.printWarn = function( warn, num, func ){
 	con[1].newLine();
 	if( (func != null) && (func.length > 0) ){
 		if( englishFlag ) con[1].print( func + ": " );
@@ -2342,8 +2342,8 @@ function printWarn( warn, num, func ){
 	else              con[1].println( "警告:" + consoleBreak() + warn );
 
 	document.getElementById( "calc_usage" ).innerHTML = warn;
-}
-function printError( error, num, func ){
+};
+window.printError = function( error, num, func ){
 	con[1].newLine();
 	if( (func != null) && (func.length > 0) ){
 		if( englishFlag ) con[1].print( func + ": " );
@@ -2357,26 +2357,26 @@ function printError( error, num, func ){
 	else              con[1].println( "エラー:" + consoleBreak() + error );
 
 	document.getElementById( "calc_usage" ).innerHTML = error;
-}
+};
 
-function doFuncGColor( rgb ){
+window.doFuncGColor = function( rgb ){
 	return doFuncGColorBGR( rgb, COLOR_WIN );
-}
-function doFuncGColor24( index ){
+};
+window.doFuncGColor24 = function( index ){
 	return _RGB2BGR( COLOR_WIN[index] );
-}
-function doFuncEval( parentProc, childProc, childParam, string, value ){
+};
+window.doFuncEval = function( parentProc, childProc, childParam, string, value ){
 	var ret;
 _TRY
 	ret = parentProc.doFuncEval( childProc, childParam, string, value );
 _CATCH
 	return ret;
-}
+};
 
-function doCommandClear(){
+window.doCommandClear = function(){
 	con[0].clear();
-}
-function doCommandPrint( topPrint, flag ){
+};
+window.doCommandPrint = function( topPrint, flag ){
 	var cur = topPrint;
 	while( cur != null ){
 		if( cur._string != null ){
@@ -2389,8 +2389,8 @@ function doCommandPrint( topPrint, flag ){
 	if( flag ){
 		con[0].println();
 	}
-}
-function doCommandScan( topScan, proc, param ){
+};
+window.doCommandScan = function( topScan, proc, param ){
 	var defString = new String();
 	var newString = new String();
 
@@ -2407,8 +2407,8 @@ function doCommandScan( topScan, proc, param ){
 
 		cur = cur._next;
 	}
-}
-function gWorldClear( gWorld, color ){
+};
+window.gWorldClear = function( gWorld, color ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
@@ -2417,14 +2417,14 @@ function gWorldClear( gWorld, color ){
 	canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
 	canvasFill( 0, 0, gWorld._width, gWorld._height );
 	canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( _gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function gWorldSetColor( gWorld, color ){
+};
+window.gWorldSetColor = function( gWorld, color ){
 	if( lockGUpdate ){
 		return;
 	}
 	canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
-}
-function gWorldPutColor( gWorld, x, y, color ){
+};
+window.gWorldPutColor = function( gWorld, x, y, color ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
@@ -2434,8 +2434,8 @@ function gWorldPutColor( gWorld, x, y, color ){
 		canvasPut( x, y );
 		canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
 	}
-}
-function gWorldPut( gWorld, x, y ){
+};
+window.gWorldPut = function( gWorld, x, y ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
@@ -2443,8 +2443,8 @@ function gWorldPut( gWorld, x, y ){
 	if( topProc._gUpdateFlag ){
 		canvasPut( x, y );
 	}
-}
-function gWorldFill( gWorld, x, y, w, h ){
+};
+window.gWorldFill = function( gWorld, x, y, w, h ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
@@ -2452,8 +2452,8 @@ function gWorldFill( gWorld, x, y, w, h ){
 	if( topProc._gUpdateFlag ){
 		canvasFill( x, y, w, h );
 	}
-}
-function gWorldLine( gWorld, x1, y1, x2, y2 ){
+};
+window.gWorldLine = function( gWorld, x1, y1, x2, y2 ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
@@ -2461,11 +2461,11 @@ function gWorldLine( gWorld, x1, y1, x2, y2 ){
 	if( topProc._gUpdateFlag ){
 		canvasLine( x1, y1, x2, y2 );
 	}
-}
-function doCommandGColor( index, rgb ){
+};
+window.doCommandGColor = function( index, rgb ){
 	COLOR_WIN[index] = _RGB2BGR( rgb );
 	needGUpdate = true;
-}
+};
 function gUpdate( gWorld ){
 	canvasClear();
 
@@ -2481,25 +2481,25 @@ function gUpdate( gWorld ){
 		}
 	}
 	canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function doCommandGUpdate( gWorld ){
+};
+window.doCommandGUpdate = function( gWorld ){
 	if( lockGUpdate ){
 		needGUpdate = true;
 		return;
 	}
 	gUpdate( gWorld );
-}
-function doCommandPlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandPlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 _TRY
 	parentProc.doCommandPlot( childProc, childParam, graph, start, end, step );
 _CATCH
-}
-function doCommandRePlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandRePlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 _TRY
 	parentProc.doCommandRePlot( childProc, childParam, graph, start, end, step );
 _CATCH
-}
-function doCommandUsage( topUsage ){
+};
+window.doCommandUsage = function( topUsage ){
 	common.setFont( 16, "Helvetica" );
 	var usage = new String();
 	var cur = topUsage;
@@ -2510,12 +2510,12 @@ function doCommandUsage( topUsage ){
 		cur = cur._next;
 	}
 	document.getElementById( "calc_usage" ).innerHTML = usage;
-}
+};
 
-function onStartPlot(){
+window.onStartPlot = function(){
 	silentErr = true;
-}
-function onEndPlot(){
+};
+window.onEndPlot = function(){
 	silentErr = false;
 
 	var err   = new _Integer();
@@ -2527,20 +2527,20 @@ function onEndPlot(){
 		errorProc( err._val, num._val, func.str(), token.str() );
 	}
 	procError.delAll();
-}
-function onStartRePlot(){
+};
+window.onStartRePlot = function(){
 	onStartPlot();
-}
-function onEndRePlot(){
+};
+window.onEndRePlot = function(){
 	onEndPlot();
-}
+};
 
 function dummy(){}
 
-function onCalcPrintAns(){
+window.onCalcPrintAns = function(){
 	topProc.printAns( topParam );
-}
-function onCalcButtonEnter(){
+};
+window.onCalcButtonEnter = function(){
 	var forward = new _String();
 	var after   = new _String();
 	editExpr.get( forward, after, false );
@@ -2579,9 +2579,9 @@ _CATCH
 
 		updateSelectVar();
 	}
-}
+};
 
-function onCalcUpdateTrigButton( _this ){
+window.onCalcUpdateTrigButton = function( _this ){
 	document.getElementById( "check_inv" ).checked = ((_this._checkTrig & _UI_CALC_TRIG_INV) != 0) ? true : false;
 	document.getElementById( "check_hyp" ).checked = ((_this._checkTrig & _UI_CALC_TRIG_HYP) != 0) ? true : false;
 
@@ -2591,7 +2591,7 @@ function onCalcUpdateTrigButton( _this ){
 	document.getElementById( "button_log"   ).innerHTML = _this._buttonLog;
 	document.getElementById( "button_log10" ).innerHTML = _this._buttonLog10;
 	document.getElementById( "button_sqr"   ).innerHTML = _this._buttonSqr;
-}
+};
 
 function updateCalcRadioMode(){
 	var flag;
@@ -2925,18 +2925,18 @@ function doCalcSepLower(){
 	writeProfileInt( "ENV_", "SepType", calcUI.sepType() );
 }
 
-function onConvUpdateStatic( _this ){
+window.onConvUpdateStatic = function( _this ){
 	document.getElementById( "conv_static_1" ).innerHTML = _this._static1;
 	document.getElementById( "conv_static_2" ).innerHTML = _this._static2;
 	document.getElementById( "conv_static_3" ).innerHTML = _this._static3;
 	document.getElementById( "conv_static_4" ).innerHTML = _this._static4;
-}
-function onConvUpdateEdit( _this ){
+};
+window.onConvUpdateEdit = function( _this ){
 	document.getElementById( "conv_edit_1" ).value = _this._edit1;
 	document.getElementById( "conv_edit_2" ).value = _this._edit2;
 	document.getElementById( "conv_edit_3" ).value = _this._edit3;
 	document.getElementById( "conv_edit_4" ).value = _this._edit4;
-}
+};
 
 function onChangeEdit1(){
 	convUI._edit1 = document.getElementById( "conv_edit_1" ).value;
@@ -3806,7 +3806,7 @@ function doCheckCalculator(){
 	writeProfileInt( "ENV_", "Calculator", topParam._calculator ? 1 : 0 );
 }
 
-function onCalcInitEnv( _this ){
+window.onCalcInitEnv = function( _this ){
 	_this._mode = getProfileInt( "ENV_", "Mode", _UI_CALC_MODE_FLOAT );
 	_this._bitType = getProfileInt( "ENV_", "Bit", _UI_CALC_BIT_32 );
 	_this._radix = getProfileInt( "ENV_", "Radix", 10 );
@@ -3826,7 +3826,7 @@ function onCalcInitEnv( _this ){
 		resetCalculator = true;
 	}
 	_this._param._calculator = (calculatorMode == 1);
-}
+};
 
 function getProfileVar(){
 	var c = new _Complex();
@@ -3912,11 +3912,11 @@ function writeProfileExpr(){
 	editExpr.exportLog( expr );
 	writeProfileString( "EXPR_", "", expr.str() );
 }
-function onEditExprUpdateSelAll( id, flag ){
+window.onEditExprUpdateSelAll = function( id, flag ){
 	if( (id == 1) && !_getProfileExpr ){
 		writeProfileInt( "EXPR_", "SelAll", flag ? 1 : 0 );
 	}
-}
+};
 
 function getProfileLogExpr(){
 	var expr = new String();
@@ -4183,7 +4183,7 @@ function onInputFileLoadImage( name, image ){
 }
 
 // キー関連
-function onKeyDown( key ){
+window.onKeyDown = function( key ){
 	if( menu != _UI_CALC_MENU_MAIN ){
 		return false;
 	}
@@ -4482,12 +4482,12 @@ function onKeyDown( key ){
 	}
 
 	return false;
-}
-function onKeyUp( key ){
+};
+window.onKeyUp = function( key ){
 	if( (key == _KEY_SHIFT) && keyShiftOnly ){
 		doButtonSHIFT();
 		return true;
 	}
 
 	return false;
-}
+};

@@ -105,5 +105,5 @@ function keyUp( e ){
 	}
 }
 
-//function onKeyDown( key ){ return false; }
-//function onKeyUp( key ){ return false; }
+//window.onKeyDown = function( key ){ return false; };
+//window.onKeyUp = function( key ){ return false; };

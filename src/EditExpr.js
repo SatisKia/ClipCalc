@@ -394,4 +394,4 @@ EditExpr.prototype = {
 
 };
 
-//function onEditExprUpdateSelAll( id, flag ){}
+//window.onEditExprUpdateSelAll = function( id, flag ){};

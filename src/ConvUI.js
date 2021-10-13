@@ -265,5 +265,5 @@ ConvUI.prototype = {
 
 };
 
-//function onConvUpdateStatic( _this ){}
-//function onConvUpdateEdit( _this ){}
+//window.onConvUpdateStatic = function( _this ){};
+//window.onConvUpdateEdit = function( _this ){};

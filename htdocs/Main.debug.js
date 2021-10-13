@@ -8,49 +8,39 @@ var COLOR_WIN = [
  0x007F2A, 0x557F2A, 0xAA7F2A, 0xFF7F2A, 0x009F2A, 0x559F2A, 0xAA9F2A, 0xFF9F2A,
  0x00BF2A, 0x55BF2A, 0xAABF2A, 0xFFBF2A, 0x00DF2A, 0x55DF2A, 0xAADF2A, 0xFFDF2A,
  0x00FF2A, 0x55FF2A, 0xAAFF2A, 0xFFFF2A,
-
  0x000055, 0x550055, 0xAA0055, 0xFF0055, 0x001F55, 0x551F55, 0xAA1F55, 0xFF1F55,
  0x003F55, 0x553F55, 0xAA3F55, 0xFF3F55, 0x005F55, 0x555F55, 0xAA5F55, 0xFF5F55,
  0x007F55, 0x557F55, 0xAA7F55, 0xFF7F55, 0x009F55, 0x559F55, 0xAA9F55, 0xFF9F55,
  0x00BF55, 0x55BF55, 0xAABF55, 0xFFBF55, 0x00DF55, 0x55DF55, 0xAADF55, 0xFFDF55,
  0x00FF55, 0x55FF55, 0xAAFF55, 0xFFFF55,
-
  0x00007F, 0x55007F, 0xAA007F, 0xFF007F, 0x001F7F, 0x551F7F, 0xAA1F7F, 0xFF1F7F,
  0x003F7F, 0x553F7F, 0xAA3F7F, 0xFF3F7F, 0x005F7F, 0x555F7F, 0xAA5F7F, 0xFF5F7F,
  0x007F7F, 0x557F7F, 0xAA7F7F, 0xFF7F7F, 0x009F7F, 0x559F7F, 0xAA9F7F, 0xFF9F7F,
  0x00BF7F, 0x55BF7F, 0xAABF7F, 0xFFBF7F, 0x00DF7F, 0x55DF7F, 0xAADF7F, 0xFFDF7F,
  0x00FF7F, 0x55FF7F, 0xAAFF7F, 0xFFFF7F,
-
  0x0000AA, 0x5500AA, 0xAA00AA, 0xFF00AA, 0x001FAA, 0x551FAA, 0xAA1FAA, 0xFF1FAA,
  0x003FAA, 0x553FAA, 0xAA3FAA, 0xFF3FAA, 0x005FAA, 0x555FAA, 0xAA5FAA, 0xFF5FAA,
  0x007FAA, 0x557FAA, 0xAA7FAA, 0xFF7FAA, 0x009FAA, 0x559FAA, 0xAA9FAA, 0xFF9FAA,
  0x00BFAA, 0x55BFAA, 0xAABFAA, 0xFFBFAA, 0x00DFAA, 0x55DFAA, 0xAADFAA, 0xFFDFAA,
  0x00FFAA, 0x55FFAA, 0xAAFFAA, 0xFFFFAA,
-
  0x0000D4, 0x5500D4, 0xAA00D4, 0xFF00D4, 0x001FD4, 0x551FD4, 0xAA1FD4, 0xFF1FD4,
  0x003FD4, 0x553FD4, 0xAA3FD4, 0xFF3FD4, 0x005FD4, 0x555FD4, 0xAA5FD4, 0xFF5FD4,
  0x007FD4, 0x557FD4, 0xAA7FD4, 0xFF7FD4, 0x009FD4, 0x559FD4, 0xAA9FD4, 0xFF9FD4,
  0x00BFD4, 0x55BFD4, 0xAABFD4, 0xFFBFD4, 0x00DFD4, 0x55DFD4, 0xAADFD4, 0xFFDFD4,
  0x00FFD4, 0x55FFD4, 0xAAFFD4, 0xFFFFD4,
-
            0x5500FF, 0xAA00FF, 0x001FFF, 0x551FFF, 0xAA1FFF, 0xFF1FFF,
  0x003FFF, 0x553FFF, 0xAA3FFF, 0xFF3FFF, 0x005FFF, 0x555FFF, 0xAA5FFF, 0xFF5FFF,
  0x007FFF, 0x557FFF, 0xAA7FFF, 0xFF7FFF, 0x009FFF, 0x559FFF, 0xAA9FFF, 0xFF9FFF,
  0x00BFFF, 0x55BFFF, 0xAABFFF, 0xFFBFFF, 0x00DFFF, 0x55DFFF, 0xAADFFF, 0xFFDFFF,
            0x55FFFF, 0xAAFFFF,
-
  0xFFCCCC, 0xFFCCFF, 0xFFFF33, 0xFFFF66, 0xFFFF99, 0xFFFFCC,
-
  0x007F00, 0x557F00, 0xAA7F00, 0xFF7F00, 0x009F00, 0x559F00, 0xAA9F00, 0xFF9F00,
  0x00BF00, 0x55BF00, 0xAABF00, 0xFFBF00, 0x00DF00, 0x55DF00, 0xAADF00, 0xFFDF00,
            0x55FF00, 0xAAFF00,
-
  0x00002A, 0x55002A, 0xAA002A, 0xFF002A, 0x001F2A, 0x551F2A, 0xAA1F2A, 0xFF1F2A,
  0x003F2A, 0x553F2A,
-
                                                              0xF0FBFF, 0xA4A0A0,
  0xC0C0C0, 0x0000FF, 0x00FF00, 0x00FFFF, 0xFF0000, 0xFF00FF, 0xFFFF00, 0xFFFFFF
-
 ];
 function regGWorldDefCharInfo( i ){
  newGWorldCharInfo( i );
@@ -6055,9 +6045,9 @@ function loadExtFuncFile(){
   }
  }
 }
-function onHttpSetRequestHeader( header, value ){
-}
-function onHttpResponse( request, data ){
+window.onHttpSetRequestHeader = function( header, value ){
+};
+window.onHttpResponse = function( request, data ){
  extFuncData[loadNum] = splitData( data );
  data = "";
  for( var i = 0; i < extFuncData[loadNum].length; i++ ){
@@ -6073,10 +6063,10 @@ function onHttpResponse( request, data ){
  }
  loadNum++;
  loadExtFuncFile();
-}
-function onHttpError( request, status ){
+};
+window.onHttpError = function( request, status ){
  loading = false;
-}
+};
 function loadExtFuncFile2(){
  var i;
  if( electron != null ){
@@ -6168,13 +6158,13 @@ function extFuncName( str ){
  }
  return "";
 }
-function getExtFuncDataDirect( func ){
+window.getExtFuncDataDirect = function( func ){
  if( (func.charAt( 0 ) == "!") && (func.length == 2) ){
   return splitData( getFunc( func.charAt( 1 ) ) );
  }
  return null;
-}
-function getExtFuncDataNameSpace( func ){
+};
+window.getExtFuncDataNameSpace = function( func ){
  for( var i = 0; i < extFuncFile.length; i++ ){
   if( extFuncName( extFuncFile[i] ).toLowerCase() == func.toLowerCase() ){
    if( i < extFuncData.length ){
@@ -6190,7 +6180,7 @@ function getExtFuncDataNameSpace( func ){
   }
  }
  return null;
-}
+};
 function regExtFuncButton( name ){
  var i;
  if( name.indexOf( ".inc" ) >= 0 ){
@@ -6223,14 +6213,14 @@ function setExtFuncData( index, data ){
   nativeRequest.send( "load_extfunc/" + extFuncFile[loadNum] );
  }
 }
-function mainProc( parentProc, parentParam, func, funcParam, childProc, childParam ){
+window.mainProc = function( parentProc, parentParam, func, funcParam, childProc, childParam ){
  var ret;
 try {
  ret = childProc.mainLoop( func, childParam, funcParam, parentParam );
 } catch( e ){ catchError( e ); }
  return ret;
-}
-function assertProc( num, func ){
+};
+window.assertProc = function( num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -6245,7 +6235,7 @@ function assertProc( num, func ){
  if( englishFlag ) document.getElementById( "calc_usage" ).innerHTML = "Failed to assert.";
  else document.getElementById( "calc_usage" ).innerHTML = "アサートに失敗しました";
  return retAssertProc;
-}
+};
 function getErrorString( err, num, func, token ){
  var string = new String();
  var error = getProcErrorDefString( err, token, topParam._calculator, englishFlag );
@@ -6263,7 +6253,7 @@ function getErrorString( err, num, func, token ){
  }
  return string;
 }
-function errorProc( err, num, func, token ){
+window.errorProc = function( err, num, func, token ){
  if( silentErr ){
   procError.add( err, num, func, token );
  } else {
@@ -6278,8 +6268,8 @@ function errorProc( err, num, func, token ){
    }
   }
  }
-}
-function printAnsComplex( real, imag ){
+};
+window.printAnsComplex = function( real, imag ){
  if( clipboardProc ){
   clipboardText = real + imag;
   electron.clipboardWrite( clipboardText );
@@ -6317,8 +6307,8 @@ function printAnsComplex( real, imag ){
   }
  }
  convUI.update();
-}
-function printAnsMatrix( param, array ){
+};
+window.printAnsMatrix = function( param, array ){
  var i;
  var code;
  var token;
@@ -6353,8 +6343,8 @@ function printAnsMatrix( param, array ){
  }
  con[0].println( string );
  con[0].setColor();
-}
-function printWarn( warn, num, func ){
+};
+window.printWarn = function( warn, num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -6367,8 +6357,8 @@ function printWarn( warn, num, func ){
  if( englishFlag ) con[1].println( "Warning:" + consoleBreak() + warn );
  else con[1].println( "警告:" + consoleBreak() + warn );
  document.getElementById( "calc_usage" ).innerHTML = warn;
-}
-function printError( error, num, func ){
+};
+window.printError = function( error, num, func ){
  con[1].newLine();
  if( (func != null) && (func.length > 0) ){
   if( englishFlag ) con[1].print( func + ": " );
@@ -6381,24 +6371,24 @@ function printError( error, num, func ){
  if( englishFlag ) con[1].println( "Error:" + consoleBreak() + error );
  else con[1].println( "エラー:" + consoleBreak() + error );
  document.getElementById( "calc_usage" ).innerHTML = error;
-}
-function doFuncGColor( rgb ){
+};
+window.doFuncGColor = function( rgb ){
  return doFuncGColorBGR( rgb, COLOR_WIN );
-}
-function doFuncGColor24( index ){
+};
+window.doFuncGColor24 = function( index ){
  return _RGB2BGR( COLOR_WIN[index] );
-}
-function doFuncEval( parentProc, childProc, childParam, string, value ){
+};
+window.doFuncEval = function( parentProc, childProc, childParam, string, value ){
  var ret;
 try {
  ret = parentProc.doFuncEval( childProc, childParam, string, value );
 } catch( e ){ catchError( e ); }
  return ret;
-}
-function doCommandClear(){
+};
+window.doCommandClear = function(){
  con[0].clear();
-}
-function doCommandPrint( topPrint, flag ){
+};
+window.doCommandPrint = function( topPrint, flag ){
  var cur = topPrint;
  while( cur != null ){
   if( cur._string != null ){
@@ -6411,8 +6401,8 @@ function doCommandPrint( topPrint, flag ){
  if( flag ){
   con[0].println();
  }
-}
-function doCommandScan( topScan, proc, param ){
+};
+window.doCommandScan = function( topScan, proc, param ){
  var defString = new String();
  var newString = new String();
  var cur = topScan;
@@ -6425,8 +6415,8 @@ function doCommandScan( topScan, proc, param ){
   cur.setNewValue( newString, proc, param );
   cur = cur._next;
  }
-}
-function gWorldClear( gWorld, color ){
+};
+window.gWorldClear = function( gWorld, color ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -6435,14 +6425,14 @@ function gWorldClear( gWorld, color ){
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
  canvasFill( 0, 0, gWorld._width, gWorld._height );
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( _gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function gWorldSetColor( gWorld, color ){
+};
+window.gWorldSetColor = function( gWorld, color ){
  if( lockGUpdate ){
   return;
  }
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( color ) : COLOR_WIN[color] );
-}
-function gWorldPutColor( gWorld, x, y, color ){
+};
+window.gWorldPutColor = function( gWorld, x, y, color ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -6452,8 +6442,8 @@ function gWorldPutColor( gWorld, x, y, color ){
   canvasPut( x, y );
   canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
  }
-}
-function gWorldPut( gWorld, x, y ){
+};
+window.gWorldPut = function( gWorld, x, y ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -6461,8 +6451,8 @@ function gWorldPut( gWorld, x, y ){
  if( topProc._gUpdateFlag ){
   canvasPut( x, y );
  }
-}
-function gWorldFill( gWorld, x, y, w, h ){
+};
+window.gWorldFill = function( gWorld, x, y, w, h ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -6470,8 +6460,8 @@ function gWorldFill( gWorld, x, y, w, h ){
  if( topProc._gUpdateFlag ){
   canvasFill( x, y, w, h );
  }
-}
-function gWorldLine( gWorld, x1, y1, x2, y2 ){
+};
+window.gWorldLine = function( gWorld, x1, y1, x2, y2 ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
@@ -6479,11 +6469,11 @@ function gWorldLine( gWorld, x1, y1, x2, y2 ){
  if( topProc._gUpdateFlag ){
   canvasLine( x1, y1, x2, y2 );
  }
-}
-function doCommandGColor( index, rgb ){
+};
+window.doCommandGColor = function( index, rgb ){
  COLOR_WIN[index] = _RGB2BGR( rgb );
  needGUpdate = true;
-}
+};
 function gUpdate( gWorld ){
  canvasClear();
  var image = gWorld._image;
@@ -6498,25 +6488,25 @@ function gUpdate( gWorld ){
   }
  }
  canvasSetColor( gWorld._rgbFlag ? _RGB2BGR( gWorld._color ) : COLOR_WIN[gWorld._color] );
-}
-function doCommandGUpdate( gWorld ){
+};
+window.doCommandGUpdate = function( gWorld ){
  if( lockGUpdate ){
   needGUpdate = true;
   return;
  }
  gUpdate( gWorld );
-}
-function doCommandPlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandPlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 try {
  parentProc.doCommandPlot( childProc, childParam, graph, start, end, step );
 } catch( e ){ catchError( e ); }
-}
-function doCommandRePlot( parentProc, childProc, childParam, graph, start, end, step ){
+};
+window.doCommandRePlot = function( parentProc, childProc, childParam, graph, start, end, step ){
 try {
  parentProc.doCommandRePlot( childProc, childParam, graph, start, end, step );
 } catch( e ){ catchError( e ); }
-}
-function doCommandUsage( topUsage ){
+};
+window.doCommandUsage = function( topUsage ){
  common.setFont( 16, "Helvetica" );
  var usage = new String();
  var cur = topUsage;
@@ -6527,11 +6517,11 @@ function doCommandUsage( topUsage ){
   cur = cur._next;
  }
  document.getElementById( "calc_usage" ).innerHTML = usage;
-}
-function onStartPlot(){
+};
+window.onStartPlot = function(){
  silentErr = true;
-}
-function onEndPlot(){
+};
+window.onEndPlot = function(){
  silentErr = false;
  var err = new _Integer();
  var num = new _Integer();
@@ -6542,18 +6532,18 @@ function onEndPlot(){
   errorProc( err._val, num._val, func.str(), token.str() );
  }
  procError.delAll();
-}
-function onStartRePlot(){
+};
+window.onStartRePlot = function(){
  onStartPlot();
-}
-function onEndRePlot(){
+};
+window.onEndRePlot = function(){
  onEndPlot();
-}
+};
 function dummy(){}
-function onCalcPrintAns(){
+window.onCalcPrintAns = function(){
  topProc.printAns( topParam );
-}
-function onCalcButtonEnter(){
+};
+window.onCalcButtonEnter = function(){
  var forward = new _String();
  var after = new _String();
  editExpr.get( forward, after, false );
@@ -6583,8 +6573,8 @@ try {
   con[1].unlock();
   updateSelectVar();
  }
-}
-function onCalcUpdateTrigButton( _this ){
+};
+window.onCalcUpdateTrigButton = function( _this ){
  document.getElementById( "check_inv" ).checked = ((_this._checkTrig & 0x01) != 0) ? true : false;
  document.getElementById( "check_hyp" ).checked = ((_this._checkTrig & 0x02) != 0) ? true : false;
  document.getElementById( "button_sin" ).innerHTML = _this._buttonSin;
@@ -6593,7 +6583,7 @@ function onCalcUpdateTrigButton( _this ){
  document.getElementById( "button_log" ).innerHTML = _this._buttonLog;
  document.getElementById( "button_log10" ).innerHTML = _this._buttonLog10;
  document.getElementById( "button_sqr" ).innerHTML = _this._buttonSqr;
-}
+};
 function updateCalcRadioMode(){
  var flag;
  cssLockStyleDisplay();
@@ -6879,18 +6869,18 @@ function doCalcSepLower(){
  updateCalcRadioSepType();
  writeProfileInt( "ENV_", "SepType", calcUI.sepType() );
 }
-function onConvUpdateStatic( _this ){
+window.onConvUpdateStatic = function( _this ){
  document.getElementById( "conv_static_1" ).innerHTML = _this._static1;
  document.getElementById( "conv_static_2" ).innerHTML = _this._static2;
  document.getElementById( "conv_static_3" ).innerHTML = _this._static3;
  document.getElementById( "conv_static_4" ).innerHTML = _this._static4;
-}
-function onConvUpdateEdit( _this ){
+};
+window.onConvUpdateEdit = function( _this ){
  document.getElementById( "conv_edit_1" ).value = _this._edit1;
  document.getElementById( "conv_edit_2" ).value = _this._edit2;
  document.getElementById( "conv_edit_3" ).value = _this._edit3;
  document.getElementById( "conv_edit_4" ).value = _this._edit4;
-}
+};
 function onChangeEdit1(){
  convUI._edit1 = document.getElementById( "conv_edit_1" ).value;
  var value = new _Value();
@@ -7678,7 +7668,7 @@ function doCheckCalculator(){
  changeExpr();
  writeProfileInt( "ENV_", "Calculator", topParam._calculator ? 1 : 0 );
 }
-function onCalcInitEnv( _this ){
+window.onCalcInitEnv = function( _this ){
  _this._mode = getProfileInt( "ENV_", "Mode", 0 );
  _this._bitType = getProfileInt( "ENV_", "Bit", 2 );
  _this._radix = getProfileInt( "ENV_", "Radix", 10 );
@@ -7697,7 +7687,7 @@ function onCalcInitEnv( _this ){
   resetCalculator = true;
  }
  _this._param._calculator = (calculatorMode == 1);
-}
+};
 function getProfileVar(){
  var c = new _Complex();
  var f = new _Fract();
@@ -7776,11 +7766,11 @@ function writeProfileExpr(){
  editExpr.exportLog( expr );
  writeProfileString( "EXPR_", "", expr.str() );
 }
-function onEditExprUpdateSelAll( id, flag ){
+window.onEditExprUpdateSelAll = function( id, flag ){
  if( (id == 1) && !_getProfileExpr ){
   writeProfileInt( "EXPR_", "SelAll", flag ? 1 : 0 );
  }
-}
+};
 function getProfileLogExpr(){
  var expr = new String();
  beginGetProfile( "LOG_" + "Expr" );
@@ -8012,7 +8002,7 @@ function onContentBase64( data ){
 function onInputFileLoadImage( name, image ){
  onContentBase64( image.src );
 }
-function onKeyDown( key ){
+window.onKeyDown = function( key ){
  if( menu != 0 ){
   return false;
  }
@@ -8303,11 +8293,11 @@ function onKeyDown( key ){
  case 13: doButtonEnter(); return true;
  }
  return false;
-}
-function onKeyUp( key ){
+};
+window.onKeyUp = function( key ){
  if( (key == 16) && keyShiftOnly ){
   doButtonSHIFT();
   return true;
  }
  return false;
-}
+};
