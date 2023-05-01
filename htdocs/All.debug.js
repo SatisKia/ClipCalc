@@ -6706,7 +6706,7 @@ _GWorld.prototype = {
   return this._rgbFlag ? 16777216 : 256;
  }
 };
-function defGWorldFunction(){
+function defGWorldFunction( window ){
  if( window.gWorldClear == undefined ) window.gWorldClear = function( gWorld, color ){};
  if( window.gWorldSetColor == undefined ) window.gWorldSetColor = function( gWorld, color ){};
  if( window.gWorldPutColor == undefined ) window.gWorldPutColor = function( gWorld, x, y, color ){};
@@ -16794,7 +16794,7 @@ var _procTest = [
  _Proc.prototype._procTest2,
  _Proc.prototype._procTest3
 ];
-function defProcFunction(){
+function defProcFunction( window ){
  if( window.getExtFuncDataDirect == undefined ) window.getExtFuncDataDirect = function( func ){ return null; };
  if( window.getExtFuncDataNameSpace == undefined ) window.getExtFuncDataNameSpace = function( func ){ return null; };
  if( window.mainProc == undefined ) window.mainProc = function( parentProc, parentParam, func, funcParam, childProc, childParam ){ return 0x04; };
@@ -23604,8 +23604,8 @@ function printAppVersion( version ){
 }
 function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
  var i;
- defGWorldFunction();
- defProcFunction();
+ defGWorldFunction( window );
+ defProcFunction( window );
  conId = _conId;
  con[0] = new _Console( _conId );
  con[0].setMaxLen( conMaxLen );

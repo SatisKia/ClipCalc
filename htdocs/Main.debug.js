@@ -4327,8 +4327,8 @@ function printAppVersion( version ){
 }
 function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
  var i;
- defGWorldFunction();
- defProcFunction();
+ defGWorldFunction( window );
+ defProcFunction( window );
  conId = _conId;
  con[0] = new _Console( _conId );
  con[0].setMaxLen( conMaxLen );

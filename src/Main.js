@@ -291,8 +291,8 @@ function printAppVersion( version ){
 function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFileIds, editorId ){
 	var i;
 
-	defGWorldFunction();
-	defProcFunction();
+	defGWorldFunction( window );
+	defProcFunction( window );
 
 	// コンソール
 	conId = _conId;
