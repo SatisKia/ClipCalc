@@ -357,7 +357,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 
 	skin      = getProfileInt( "ENV_", "Skin"     , 0 ); if( skin > SKIN_MAX ) skin = SKIN_MAX;
 	skinColor = getProfileInt( "ENV_", "SkinColor", 0 ); if( skinColor >= COLOR.length ) skinColor = 0;
-	skinAns   = getProfileInt( "ENV_", "SkinAns"  , 0 ); if( skinAns > 2 ) skin = 0;
+	skinAns   = getProfileInt( "ENV_", "SkinAns"  , 0 ); if( skinAns > 6 ) skin = 0;
 	document.getElementById( "calc_edit_r" ).value = getProfileInt( "ENV_", "SkinColorR", 161 );
 	document.getElementById( "calc_edit_g" ).value = getProfileInt( "ENV_", "SkinColorG", 161 );
 	document.getElementById( "calc_edit_b" ).value = getProfileInt( "ENV_", "SkinColorB", 161 );
@@ -1295,6 +1295,22 @@ function updateSkinAns(){
 	case 2:
 		cssSetPropertyValue( ".div_ans", "background-color", (skin == SKIN_IMAGE) ? "rgba(255,255,255,0.0)" : "#000000" );
 		cssSetPropertyValue( ".span_ans", "color", _RGB( 255, 160, 0 ) );
+		break;
+	case 3:
+		cssSetPropertyValue( ".div_ans", "background-color", (skin == SKIN_IMAGE) ? "rgba(255,255,255,0.0)" : "#000000" );
+		cssSetPropertyValue( ".span_ans", "color", _RGB( 0, 255, 255 ) );
+		break;
+	case 4:
+		cssSetPropertyValue( ".div_ans", "background-color", (skin == SKIN_IMAGE) ? "rgba(255,255,255,0.0)" : "#000000" );
+		cssSetPropertyValue( ".span_ans", "color", _RGB( 255, 0, 255 ) );
+		break;
+	case 5:
+		cssSetPropertyValue( ".div_ans", "background-color", (skin == SKIN_IMAGE) ? "rgba(255,255,255,0.0)" : "#000000" );
+		cssSetPropertyValue( ".span_ans", "color", _RGB( 255, 255, 0 ) );
+		break;
+	case 6:
+		cssSetPropertyValue( ".div_ans", "background-color", (skin == SKIN_IMAGE) ? "rgba(255,255,255,0.0)" : "#000000" );
+		cssSetPropertyValue( ".span_ans", "color", _RGB( 255, 255, 255 ) );
 		break;
 	}
 }
@@ -3278,6 +3294,10 @@ function updateLanguage(){
 	select.options[0].innerHTML = englishFlag ? "Black" : "ブラック";
 	select.options[1].innerHTML = englishFlag ? "Green" : "グリーン";
 	select.options[2].innerHTML = englishFlag ? "Orange" : "オレンジ";
+	select.options[3].innerHTML = englishFlag ? "Cyan" : "シアン";
+	select.options[4].innerHTML = englishFlag ? "Magenta" : "マゼンタ";
+	select.options[5].innerHTML = englishFlag ? "Yellow" : "イエロー";
+	select.options[6].innerHTML = englishFlag ? "White" : "ホワイト";
 
 	document.getElementById( "calc_static_option2" ).innerHTML = englishFlag ? "Body:" : "本体:";
 
