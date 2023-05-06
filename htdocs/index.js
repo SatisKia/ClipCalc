@@ -14,6 +14,7 @@ const boundsInfoPath   = path.join( app.getPath( "userData" ), "bounds-info.json
 const extFuncCachePath = path.join( app.getPath( "userData" ), "extfunc-cache.json" );
 const profilePath      = path.join( app.getPath( "home" ), "ClipCalc.env" );
 
+let topWindow;
 let mainWindow = null;
 let trayIcon;
 let contextMenu;
@@ -36,8 +37,12 @@ const createWindow = () => {
 		bounds = { "x": 100, "y": 100 };
 	}
 
+	topWindow = new BrowserWindow( { width: 0, height: 0, frame: false } );
+	topWindow.hide();
+
 	// メイン・ウィンドウ
 	mainWindow = new BrowserWindow( {
+		parent: topWindow,
 		width: mainWidth,
 		height: mainHeight,
 		useContentSize: true,
@@ -65,6 +70,7 @@ const createWindow = () => {
 		fs.writeFileSync( boundsInfoPath, JSON.stringify( mainWindow.getBounds() ) );
 	} );
 	mainWindow.on( "closed", () => {
+		topWindow.close();
 		mainWindow = null;
 	} );
 
@@ -80,8 +86,9 @@ const createWindow = () => {
 	// トレイアイコンにメニューを設定
 	contextMenu = Menu.buildFromTemplate( [
 		{ "label": (_isEnglish ? "Always on top" : "常に手前に表示"), "type": "checkbox", "checked": mainWindow.isAlwaysOnTop(), "click": () => {
-			mainWindow.setAlwaysOnTop( mainWindow.isAlwaysOnTop() ? false : true );
-			mainWindow.webContents.send("updateAlwaysOnTop", mainWindow.isAlwaysOnTop());
+			let flag = mainWindow.isAlwaysOnTop() ? false : true;
+			mainWindow.setAlwaysOnTop( flag );
+			mainWindow.webContents.send("updateAlwaysOnTop", flag);
 		} },
 		{ "label": (_isEnglish ? "Show" : "表示"), "click": () => { mainWindow.focus(); } },
 		{ "label": (_isEnglish ? "Quit" : "終了"), "click": () => { mainWindow.close(); } }
