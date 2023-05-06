@@ -1,5 +1,8 @@
 {
-	"name": "関数電卓",
+	"name": "ClipCalc",
 	"author": "SatisKia",
-	"main": "electron.js"
+	"main": "index.js",
+	"scripts": {
+		"start": "electron ."
+	}
 }

@@ -241,6 +241,8 @@ var fontEdit;
 
 var soundType;
 
+var alwaysOnTopFlag = false;
+
 #define _UI_CALC_MENU_MAIN			0
 #define _UI_CALC_MENU_FUNC			1
 #define _UI_CALC_MENU_LOG			2
@@ -302,14 +304,17 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	con[1] = new _Console( _errId );
 	con[1].setMaxLen( errMaxLen );
 
-	try {
-		electron = new Electron( require( "electron" ).remote.require( "./electron" ) );
+	if( window.electronAPI != undefined ){
+		electron = new Electron( window.electronAPI );
 
 		window.onbeforeunload = function(){
 			electron.writeProfile( exportProfile() );
 		};
-	} catch( e ){
-		electron = null;
+
+		window.electronAPI.updateAlwaysOnTop( ( event, value ) => {
+			alwaysOnTopFlag = value;
+			writeProfileInt( "ENV_", "AlwaysOnTop", alwaysOnTopFlag ? 1 : 0 );
+		} );
 	}
 
 	common = new Common();
@@ -398,6 +403,11 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	updateSoundType();
 
 	clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
+
+	alwaysOnTopFlag = (getProfileInt( "ENV_", "AlwaysOnTop", 0 ) == 1);
+	if( electron != null ){
+		window.electronAPI.setAlwaysOnTop( alwaysOnTopFlag );
+	}
 
 	divEdit = document.getElementById( editId );
 

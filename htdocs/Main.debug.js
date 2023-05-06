@@ -4128,7 +4128,7 @@ var keyShiftOnly = false;
 function Electron( main ){
  this._main = main;
  try {
-  this._extfunc = JSON.parse( this._main.fs.readFileSync( this._main.extFuncCachePath, "utf8" ) );
+  this._extfunc = JSON.parse( this._main.fsReadExtFuncCache() );
  } catch( e ){
   this._extfunc = {};
  }
@@ -4139,13 +4139,13 @@ function Electron( main ){
 }
 Electron.prototype = {
  version : function(){
-  return this._main.version;
+  return this._main.version();
  },
  isEnglish : function(){
-  return this._main.isEnglish;
+  return this._main.isEnglish();
  },
  platform : function(){
-  return this._main.platform;
+  return this._main.platform();
  },
  extFuncKeyNum : function(){
   return Object.keys( this._extfunc ).length;
@@ -4203,31 +4203,23 @@ Electron.prototype = {
  applyExtFunc : function(){
   if( this._extfunc_update ){
    this._extfunc_update = false;
-   try {
-    this._main.fs.writeFileSync( this._main.extFuncCachePath, JSON.stringify( this._extfunc ) );
-   } catch( e ){}
+   this._main.fsWriteExtFuncCache( JSON.stringify( this._extfunc ) );
   }
  },
  clipboardRead : function(){
-  return this._main.clipboard.readText();
+  return this._main.clipboardRead();
  },
  clipboardWrite : function( text ){
-  this._main.clipboard.writeText( text );
+  this._main.clipboardWrite( text );
  },
  beep : function(){
-  this._main.shell.beep();
+  this._main.shellBeep();
  },
  readProfile : function(){
-  try {
-   return this._main.fs.readFileSync( this._main.profilePath, "utf8" );
-  } catch( e ){
-  }
-  return "";
+  return this._main.fsReadProfile();
  },
  writeProfile : function( text ){
-  try {
-   this._main.fs.writeFileSync( this._main.profilePath, text );
-  } catch( e ){}
+  this._main.fsWriteProfile( text );
  }
 };
 var electron = null;
@@ -4292,6 +4284,7 @@ var skinImage;
 var fontSpan;
 var fontEdit;
 var soundType;
+var alwaysOnTopFlag = false;
 var menu = -1;
 var lastTouchEnd = 0;
 function isAndroidTablet(){
@@ -4335,13 +4328,15 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  errId = _errId;
  con[1] = new _Console( _errId );
  con[1].setMaxLen( errMaxLen );
- try {
-  electron = new Electron( require( "electron" ).remote.require( "./electron" ) );
+ if( window.electronAPI != undefined ){
+  electron = new Electron( window.electronAPI );
   window.onbeforeunload = function(){
    electron.writeProfile( exportProfile() );
   };
- } catch( e ){
-  electron = null;
+  window.electronAPI.updateAlwaysOnTop( ( event, value ) => {
+   alwaysOnTopFlag = value;
+   writeProfileInt( "ENV_", "AlwaysOnTop", alwaysOnTopFlag ? 1 : 0 );
+  } );
  }
  common = new Common();
  if( common.isIPhone() || common.isIPad() ){
@@ -4415,6 +4410,10 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  soundType = getProfileInt( "ENV_", "Sound", 0 );
  updateSoundType();
  clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
+ alwaysOnTopFlag = (getProfileInt( "ENV_", "AlwaysOnTop", 0 ) == 1);
+ if( electron != null ){
+  window.electronAPI.setAlwaysOnTop( alwaysOnTopFlag );
+ }
  divEdit = document.getElementById( editId );
  regGWorldDefCharInfo( 0 );
  regGWorldDefCharInfoLarge( 1 );
