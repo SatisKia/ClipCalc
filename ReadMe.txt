@@ -1,4 +1,4 @@
-ClipCalc Version 6.5.3
+ClipCalc Version 6.5.4
 
 ‚Í‚¶‚ß‚É
 
