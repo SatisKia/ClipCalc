@@ -6,7 +6,7 @@ const mainIcon     = "favicon.ico";
 const mainTrayIcon = "trayicon.png";
 const mainPage     = "index.html";
 
-const { app, BrowserWindow, Menu, nativeImage, Tray, shell, clipboard, ipcMain } = require( "electron" );
+const { app, BrowserWindow, clipboard, globalShortcut, ipcMain, Menu, nativeImage, shell, Tray } = require( "electron" );
 const fs = require( "fs" );
 const path = require( "path" );
 
@@ -21,6 +21,8 @@ let contextMenu;
 
 let _version = "";
 let _isEnglish = false;
+let _globalShortcut = "Ctrl+Alt+C";
+let _globalShortcutRegistered = false;
 
 const createWindow = () => {
 	// バージョンの取得
@@ -65,14 +67,28 @@ const createWindow = () => {
 	// メニューバーを消す
 	mainWindow.removeMenu();
 
+	// グローバルショートカットを登録
+	globalShortcut.register( _globalShortcut, () => {
+		_globalShortcutRegistered = true;
+		mainWindow.focus();
+	} );
+
 	mainWindow.on( "close", () => {
 		// ウィンドウ位置の保存
 		fs.writeFileSync( boundsInfoPath, JSON.stringify( mainWindow.getBounds() ) );
 	} );
 	mainWindow.on( "closed", () => {
+		// グローバルショートカットを登録解除
+		if( _globalShortcutRegistered ){
+			globalShortcut.unregister( _globalShortcut );
+		}
+
 		topWindow.close();
 		mainWindow = null;
 	} );
+
+	// デベロッパーツール
+//	mainWindow.webContents.openDevTools({ mode: 'detach' });
 
 	// メイン・コンテンツ
 	mainWindow.loadURL( "file://" + __dirname + "/" + mainPage );
@@ -105,7 +121,19 @@ const createWindow = () => {
 	} );
 };
 
-app.on( "ready", createWindow );
+app.on( "second-instance", () => {
+	mainWindow.focus();
+} );
+
+app.on( "ready", () => {
+	// 多重起動防止
+	if( !app.requestSingleInstanceLock() ){
+		app.quit();
+		return;
+	}
+
+	createWindow();
+} );
 
 app.on( "window-all-closed", () => {
 	if( process.platform != "darwin" ){
