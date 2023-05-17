@@ -1,3 +1,15 @@
+function canUseAudio(){
+	return (!!document.createElement( "audio" ).canPlayType);
+}
+
+function canPlayType( type ){
+	var audio = document.createElement( "audio" );
+	if( !!audio.canPlayType ){
+		return (audio.canPlayType( type ).replace( new RegExp( "no" ), "" ) != "");
+	}
+	return false;
+}
+
 #define _AUDIO_STATE_STOP	0
 #define _AUDIO_STATE_PLAY	1
 

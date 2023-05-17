@@ -1,5 +1,5 @@
 const mainWidth    = 322;
-const mainHeight   = 564;//506;
+const mainHeight   = 506;
 const mainTitleEN  = "ClipCalc";
 const mainTitleJP  = "関数電卓";
 const mainIcon     = "favicon.ico";
@@ -50,7 +50,7 @@ const createWindow = () => {
 		useContentSize: true,
 		x: bounds.x,
 		y: bounds.y,
-		resizable: false,
+//		resizable: false,
 		movable: true,
 		minimizable: true,
 		maximizable: false,
@@ -66,6 +66,11 @@ const createWindow = () => {
 
 	// メニューバーを消す
 	mainWindow.removeMenu();
+
+	// ウィンドウのサイズ変更を不可に
+	let windowSize = mainWindow.getSize();
+	mainWindow.setMinimumSize(windowSize[0], windowSize[1]);
+	mainWindow.setMaximumSize(windowSize[0], windowSize[1]);
 
 	// グローバルショートカットを登録
 	globalShortcut.register( _globalShortcut, () => {

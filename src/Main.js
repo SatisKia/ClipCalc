@@ -269,12 +269,14 @@ function printAppVersion( version ){
 	started = false;
 	con[0].println( "ClipCalc" + version + consoleBreak() + "Copyright (C) SatisKia" );
 	con[0].setColor( "0000ff" );
+
 	if( dispUserAgent ){
 		con[0].setBold( true );
 		con[0].print( "UserAgent: " );
 		con[0].setBold( false );
 		con[0].println( window.navigator.userAgent );
 	}
+
 	if( electron != null ){
 		con[0].setBold( true );
 		con[0].print( "Platform: " );
@@ -286,6 +288,26 @@ function printAppVersion( version ){
 		con[0].setBold( false );
 		con[0].println( common.isApp() ? "true" : "false" );
 	}
+
+/*
+	con[0].setBold( true );
+	con[0].print( "HTML5 Audio: " );
+	con[0].setBold( false );
+	con[0].println( canUseAudio() ? "true" : "false" );
+	con[0].setBold( true );
+	con[0].print( "MP3: " );
+	con[0].setBold( false );
+	con[0].println( canPlayType( "audio/mpeg" ) ? "true" : "false" );
+	con[0].setBold( true );
+	con[0].print( "WAV: " );
+	con[0].setBold( false );
+	con[0].println( canPlayType( "audio/wav" ) ? "true" : "false" );
+	con[0].setBold( true );
+	con[0].print( "Ogg: " );
+	con[0].setBold( false );
+	con[0].println( canPlayType( "audio/ogg" ) ? "true" : "false" );
+*/
+
 	con[0].setColor();
 	started = saveStarted;
 }

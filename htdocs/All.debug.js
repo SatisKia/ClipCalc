@@ -23506,6 +23506,16 @@ Electron.prototype = {
  }
 };
 var electron = null;
+function canUseAudio(){
+ return (!!document.createElement( "audio" ).canPlayType);
+}
+function canPlayType( type ){
+ var audio = document.createElement( "audio" );
+ if( !!audio.canPlayType ){
+  return (audio.canPlayType( type ).replace( new RegExp( "no" ), "" ) != "");
+ }
+ return false;
+}
 function __Audio(){
  this.element = null;
  this.state = 0;
