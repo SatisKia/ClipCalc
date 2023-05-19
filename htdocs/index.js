@@ -16,7 +16,7 @@ const profilePath      = path.join( app.getPath( "home" ), "ClipCalc.env" );
 
 let topWindow;
 let mainWindow = null;
-let trayIcon;
+let trayIcon = null;
 let contextMenu;
 
 let _version = "";
@@ -75,7 +75,7 @@ const createWindow = () => {
 	// グローバルショートカットを登録
 	globalShortcut.register( _globalShortcut, () => {
 		_globalShortcutRegistered = true;
-		mainWindow.focus();
+		focusMainWindow();
 	} );
 
 	mainWindow.on( "close", () => {
@@ -99,25 +99,41 @@ const createWindow = () => {
 	mainWindow.loadURL( "file://" + __dirname + "/" + mainPage );
 
 	// トレイアイコン
-	trayIcon = new Tray( nativeImage.createFromPath( __dirname + "/" + mainTrayIcon ) );
-	trayIcon.on( "click", () => {
-		mainWindow.focus();
-	} );
+	if( trayIcon == null ){
+		trayIcon = new Tray( nativeImage.createFromPath( __dirname + "/" + mainTrayIcon ) );
+		trayIcon.on( "click", () => {
+			if( mainWindow == null ){
+				createWindow();
+			} else {
+				focusMainWindow();
+			}
+		} );
 
-	// トレイアイコンにメニューを設定
-	contextMenu = Menu.buildFromTemplate( [
-		{ "label": (_isEnglish ? "Always on top" : "常に手前に表示"), "type": "checkbox", "checked": mainWindow.isAlwaysOnTop(), "click": () => {
-			let flag = mainWindow.isAlwaysOnTop() ? false : true;
-			mainWindow.setAlwaysOnTop( flag );
-			mainWindow.webContents.send("updateAlwaysOnTop", flag);
-		} },
-		{ "label": (_isEnglish ? "Show" : "表示"), "click": () => { mainWindow.focus(); } },
-		{ "label": (_isEnglish ? "Quit" : "終了"), "click": () => { mainWindow.close(); } }
-	] );
-	trayIcon.setContextMenu( contextMenu );
+		// トレイアイコンにメニューを設定
+		contextMenu = Menu.buildFromTemplate( [
+			{ "label": (_isEnglish ? "Always on top" : "常に手前に表示"), "type": "checkbox", "checked": mainWindow.isAlwaysOnTop(), "click": () => {
+				let flag = mainWindow.isAlwaysOnTop() ? false : true;
+				mainWindow.setAlwaysOnTop( flag );
+				mainWindow.webContents.send("updateAlwaysOnTop", flag);
+			} },
+			{ "label": (_isEnglish ? "Show" : "表示"), "click": () => {
+				if( mainWindow == null ){
+					createWindow();
+				} else {
+					focusMainWindow();
+				}
+			} },
+			{ "label": (_isEnglish ? "Quit" : "終了"), "click": () => {
+				if( mainWindow != null ){
+					mainWindow.close();
+				}
+			} }
+		] );
+		trayIcon.setContextMenu( contextMenu );
 
-	// トレイアイコンにツールチップを設定
-	trayIcon.setToolTip( _isEnglish ? mainTitleEN : mainTitleJP );
+		// トレイアイコンにツールチップを設定
+		trayIcon.setToolTip( _isEnglish ? mainTitleEN : mainTitleJP );
+	}
 
 	// ヘルプをデフォルトブラウザで開くように設定
 	mainWindow.webContents.setWindowOpenHandler( ( { url } ) => {
@@ -126,8 +142,17 @@ const createWindow = () => {
 	} );
 };
 
+// アプリを手前に持ってくる
+const focusMainWindow = () => {
+	if( mainWindow != null ){
+		let saveFlag = mainWindow.isAlwaysOnTop();
+		mainWindow.setAlwaysOnTop( true );
+		mainWindow.setAlwaysOnTop( saveFlag );
+	}
+};
+
 app.on( "second-instance", () => {
-	mainWindow.focus();
+	focusMainWindow();
 } );
 
 app.on( "ready", () => {
