@@ -22,7 +22,6 @@ let contextMenu;
 let _version = "";
 let _isEnglish = false;
 let _globalShortcut = "Ctrl+Alt+C";
-let _globalShortcutRegistered = false;
 
 const createWindow = () => {
 	// バージョンの取得
@@ -74,7 +73,6 @@ const createWindow = () => {
 
 	// グローバルショートカットを登録
 	globalShortcut.register( _globalShortcut, () => {
-		_globalShortcutRegistered = true;
 		focusMainWindow();
 	} );
 
@@ -84,9 +82,7 @@ const createWindow = () => {
 	} );
 	mainWindow.on( "closed", () => {
 		// グローバルショートカットを登録解除
-		if( _globalShortcutRegistered ){
-			globalShortcut.unregister( _globalShortcut );
-		}
+		globalShortcut.unregister( _globalShortcut );
 
 		topWindow.close();
 		mainWindow = null;
