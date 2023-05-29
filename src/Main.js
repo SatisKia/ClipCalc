@@ -4432,6 +4432,7 @@ window.onKeyDown = function( key ){
 		case _UI_CALC_MODE_FRACT:
 		case _UI_CALC_MODE_MFRACT:
 		case _UI_CALC_MODE_COMPLEX:
+		case _UI_CALC_MODE_TIME:
 			doButtonPoint();
 			return true;
 		}
@@ -4442,6 +4443,7 @@ window.onKeyDown = function( key ){
 		case _UI_CALC_MODE_FRACT:
 		case _UI_CALC_MODE_MFRACT:
 		case _UI_CALC_MODE_COMPLEX:
+		case _UI_CALC_MODE_TIME:
 			doButtonPoint();
 			return true;
 		case _UI_CALC_MODE_SIGNED:

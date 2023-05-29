@@ -1745,7 +1745,7 @@ function _onInputFileChangeExtfunc( e ){
       }
      }
      var tmp = data.substring( top, top + 11 );
-     if( tmp.toLowerCase() == "#!namespace" ){
+     if( tmp == "#!NAMESPACE" ){
       var data2 = new _String( data );
       var data3 = data2.replaceNewLine().str();
       if( data3.indexOf( "\n" ) < 0 ){
@@ -8235,6 +8235,7 @@ window.onKeyDown = function( key ){
   case 1:
   case 2:
   case 3:
+  case 6:
    doButtonPoint();
    return true;
   }
@@ -8245,6 +8246,7 @@ window.onKeyDown = function( key ){
   case 1:
   case 2:
   case 3:
+  case 6:
    doButtonPoint();
    return true;
   case 4:
