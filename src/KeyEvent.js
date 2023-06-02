@@ -87,6 +87,9 @@ function keyBit( key ){
 }
 
 function keyDown( e ){
+	if( e.ctrlKey || e.metaKey ){
+		return;
+	}
 	var k = keyBit( e.keyCode );
 	if( _AND( _key_state, k ) == 0 ){
 		_key_state += k;
@@ -96,6 +99,9 @@ function keyDown( e ){
 	}
 }
 function keyUp( e ){
+	if( e.ctrlKey || e.metaKey ){
+		return;
+	}
 	var k = keyBit( e.keyCode );
 	if( _AND( _key_state, k ) != 0 ){
 		_key_state -= k;

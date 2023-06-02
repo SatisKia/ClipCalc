@@ -66,6 +66,27 @@ const createWindow = () => {
 	// メニューバーを消す
 	mainWindow.removeMenu();
 
+	// macOSメニューバー
+	if( process.platform == "darwin" ){
+		Menu.setApplicationMenu(Menu.buildFromTemplate([
+			{
+				label: "",
+				submenu: [
+					{
+						role: "about",
+					},
+					{
+						label: _isEnglish ? "Quit" : "終了",
+						accelerator: "Command+Q",
+						click() {
+							app.quit();
+						},
+					},
+				],
+			},
+		]));
+	}
+
 	// ウィンドウのサイズ変更を不可に
 	let windowSize = mainWindow.getSize();
 	mainWindow.setMinimumSize(windowSize[0], windowSize[1]);
