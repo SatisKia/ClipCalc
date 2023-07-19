@@ -3,7 +3,7 @@
 cd htdocs
 
 iconutil -c icns icon.iconset
-electron-packager . ClipCalc --app-version=6.5.4 --electron-version=24.1.3 --platform=darwin --arch=x64 --app-copyright="Copyright (C) SatisKia" --icon=./icon.icns --overwrite
+electron-packager . ClipCalc --app-version=6.5.5 --electron-version=24.1.3 --platform=darwin --arch=x64 --app-copyright="Copyright (C) SatisKia" --icon=./icon.icns --overwrite
 
 cd ..
 
