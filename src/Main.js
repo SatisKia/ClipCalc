@@ -207,8 +207,8 @@ var nativeRequest = null;
 #include "KeyEvent.js"
 var keyShiftOnly = false;
 
-#include "Electron.js"
-var electron = null;
+#include "DesktopApp.js"
+var desktopApp = null;
 
 // クリップボード
 #include "Audio.js"
@@ -277,11 +277,11 @@ function printAppVersion( version ){
 		con[0].println( window.navigator.userAgent );
 	}
 
-	if( electron != null ){
+	if( desktopApp != null ){
 		con[0].setBold( true );
 		con[0].print( "Platform: " );
 		con[0].setBold( false );
-		con[0].println( electron.platform() );
+		con[0].println( desktopApp.platform() );
 	} else {
 		con[0].setBold( true );
 		con[0].print( "App: " );
@@ -326,14 +326,14 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	con[1] = new _Console( _errId );
 	con[1].setMaxLen( errMaxLen );
 
-	if( window.electronAPI != undefined ){
-		electron = new Electron( window.electronAPI );
+	if( window.desktopAppAPI != undefined ){
+		desktopApp = new DesktopApp( window.desktopAppAPI );
 
 		window.onbeforeunload = function(){
-			electron.writeProfile( exportProfile() );
+			desktopApp.writeProfile( exportProfile() );
 		};
 
-		window.electronAPI.updateAlwaysOnTop( ( event, value ) => {
+		window.desktopAppAPI.updateAlwaysOnTop( ( event, value ) => {
 			alwaysOnTopFlag = value;
 			writeProfileInt( "ENV_", "AlwaysOnTop", alwaysOnTopFlag ? 1 : 0 );
 		} );
@@ -366,8 +366,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	initProfile( useStorage );
 	setProfilePrefix( PROFILE_PREFIX );
 
-	if( electron != null ){
-		var text = electron.readProfile();
+	if( desktopApp != null ){
+		var text = desktopApp.readProfile();
 		if( text.length > 0 ){
 			setEnableWriteProfile( true );
 			importProfile( text );
@@ -427,8 +427,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
 
 	alwaysOnTopFlag = (getProfileInt( "ENV_", "AlwaysOnTop", 0 ) == 1);
-	if( electron != null ){
-		window.electronAPI.setAlwaysOnTop( alwaysOnTopFlag );
+	if( desktopApp != null ){
+		window.desktopAppAPI.setAlwaysOnTop( alwaysOnTopFlag );
 	}
 
 	divEdit = document.getElementById( editId );
@@ -455,7 +455,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	procError = new _ProcError();
 
 	editExpr = new EditExpr( 1 );
-	editExpr.setDispLen( (electron != null) ? 27 : 28, 8 );
+	editExpr.setDispLen( (desktopApp != null) ? 27 : 28, 8 );
 	logExpr = new ListBox( logId );
 	logExpr.setLineNum( 12 );
 	_addCalcEventListener( logExpr.element(), "click", function( e ){
@@ -664,7 +664,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	// 計算結果エディットボックスの初期化
 	onCalcPrintAns();
 
-	if( electron != null ){
+	if( desktopApp != null ){
 		clipboardAudio = loadAudio( audioFile[0] );
 
 		cssSetStyleDisplayById( "calc_clipboard", true );
@@ -787,8 +787,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 		nativeRequest.send( "started" );
 	} else {
 		var version = "";
-		if( electron != null ){
-			version = " " + electron.version();
+		if( desktopApp != null ){
+			version = " " + desktopApp.version();
 		}
 		printAppVersion( version );
 	}
@@ -802,8 +802,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 	_addCalcEventListener( document, "keydown", keyDown );
 	_addCalcEventListener( document, "keyup", keyUp );
 
-	if( electron != null ){
-		setEnglish( electron.isEnglish() );
+	if( desktopApp != null ){
+		setEnglish( desktopApp.isEnglish() );
 	}
 
 	if( androidTabletTest || iPadTest || (bodyHeight != defHeight( false )) ){
@@ -814,7 +814,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 // クリップボード
 function watchClipboard(){
 	if( clipboardFlag ){
-		var text = electron.clipboardRead();
+		var text = desktopApp.clipboardRead();
 
 		// 末尾の改行を取り除く
 		if( text.length > 0 ){
@@ -855,12 +855,12 @@ function watchClipboard(){
 	}
 }
 function doCheckClipboard(){
-	if( electron != null ){
+	if( desktopApp != null ){
 		clipboardFlag = clipboardFlag ? false : true;
 		if( clipboardFlag ){
 			// クリップボード内容をクリアしておく
 			clipboardText = "";
-			electron.clipboardWrite( clipboardText );
+			desktopApp.clipboardWrite( clipboardText );
 
 			// クリップボード監視開始
 			watchClipboard();
@@ -2009,8 +2009,8 @@ function doLoadExtFuncFile(){
 }
 function loadExtFuncFile(){
 	if( loadNum >= extFuncFile.length ){
-		if( electron != null ){
-			electron.applyExtFunc();
+		if( desktopApp != null ){
+			desktopApp.applyExtFunc();
 		}
 
 		cssSetStyleDisplayById( "calc_button_loadextfunc" , false );
@@ -2024,8 +2024,8 @@ function loadExtFuncFile(){
 	}
 
 	var data;
-	if( electron != null ){
-		data = electron.getExtFunc( extFuncFile[loadNum], "" );
+	if( desktopApp != null ){
+		data = desktopApp.getExtFunc( extFuncFile[loadNum], "" );
 	} else {
 		data = getProfileString( "TMP_", extFuncFile[loadNum], "" );
 	}
@@ -2050,8 +2050,8 @@ window.onHttpResponse = function( request, data ){
 	}
 
 	if( request != null ){
-		if( electron != null ){
-			electron.setExtFunc( extFuncFile[loadNum], data );
+		if( desktopApp != null ){
+			desktopApp.setExtFunc( extFuncFile[loadNum], data );
 		} else {
 			writeProfileString( "TMP_", extFuncFile[loadNum], data );
 		}
@@ -2067,16 +2067,16 @@ window.onHttpError = function( request, status ){
 function loadExtFuncFile2(){
 	var i;
 
-	if( electron != null ){
-		electron.beginReadExtFunc( "load" );
+	if( desktopApp != null ){
+		desktopApp.beginReadExtFunc( "load" );
 		for( i = 0; ; i++ ){
-			file = electron.readExtFunc();
+			file = desktopApp.readExtFunc();
 			if( file.length == 0 ){
 				break;
 			}
 			extFuncFile2[i] = file;
 		}
-		electron.endReadExtFunc();
+		desktopApp.endReadExtFunc();
 	} else {
 		beginGetProfile( "TMP_LOADCEF_" );
 		for( i = 0; ; i++ ){
@@ -2091,8 +2091,8 @@ function loadExtFuncFile2(){
 
 	for( i = 0; i < extFuncFile2.length; i++ ){
 		var data;
-		if( electron != null ){
-			data = electron.getExtFunc( extFuncFile2[i], "" );
+		if( desktopApp != null ){
+			data = desktopApp.getExtFunc( extFuncFile2[i], "" );
 		} else {
 			data = getProfileString( "TMP_", extFuncFile2[i], "" );
 		}
@@ -2134,14 +2134,14 @@ function onInputFileLoad( func, data ){
 		data += extFuncData2[index][i];
 	}
 
-	if( electron != null ){
-		electron.beginWriteExtFunc();
+	if( desktopApp != null ){
+		desktopApp.beginWriteExtFunc();
 		for( i = 0; i < extFuncFile2.length; i++ ){
-			electron.writeExtFunc( extFuncFile2[i] );
+			desktopApp.writeExtFunc( extFuncFile2[i] );
 		}
-		electron.endWriteExtFunc( "load" );
+		desktopApp.endWriteExtFunc( "load" );
 
-		electron.setExtFunc( extFuncFile2[index], data );
+		desktopApp.setExtFunc( extFuncFile2[index], data );
 	} else {
 		beginWriteProfile();
 		for( i = 0; i < extFuncFile2.length; i++ ){
@@ -2153,8 +2153,8 @@ function onInputFileLoad( func, data ){
 	}
 }
 function onInputFileLoadEnd( num ){
-	if( electron != null ){
-		electron.applyExtFunc();
+	if( desktopApp != null ){
+		desktopApp.applyExtFunc();
 	}
 }
 
@@ -2297,9 +2297,9 @@ window.printAnsComplex = function( real, imag ){
 	// クリップボード
 	if( clipboardProc ){
 		clipboardText = real + imag;
-		electron.clipboardWrite( clipboardText );
+		desktopApp.clipboardWrite( clipboardText );
 		if( clipboardBeepFlag ){
-//			electron.beep();
+//			desktopApp.beep();
 			if( isAudioLoaded( clipboardAudio ) ){
 				playAudio( clipboardAudio );
 			}
@@ -3759,8 +3759,8 @@ function doButtonUIProfile( readOnly ){
 	cssSetStyleDisplayById( "button_profile_import2", readOnly ? false : true );
 	document.getElementById( "profile" ).readOnly = readOnly;
 	if( !readOnly ){
-		if( electron != null ){
-			document.getElementById( "profile" ).value = electron.readProfile();
+		if( desktopApp != null ){
+			document.getElementById( "profile" ).value = desktopApp.readProfile();
 		} else {
 			document.getElementById( "profile" ).value = "";
 		}

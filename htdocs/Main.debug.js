@@ -8,49 +8,39 @@ var COLOR_WIN = [
  0x007F2A, 0x557F2A, 0xAA7F2A, 0xFF7F2A, 0x009F2A, 0x559F2A, 0xAA9F2A, 0xFF9F2A,
  0x00BF2A, 0x55BF2A, 0xAABF2A, 0xFFBF2A, 0x00DF2A, 0x55DF2A, 0xAADF2A, 0xFFDF2A,
  0x00FF2A, 0x55FF2A, 0xAAFF2A, 0xFFFF2A,
-
  0x000055, 0x550055, 0xAA0055, 0xFF0055, 0x001F55, 0x551F55, 0xAA1F55, 0xFF1F55,
  0x003F55, 0x553F55, 0xAA3F55, 0xFF3F55, 0x005F55, 0x555F55, 0xAA5F55, 0xFF5F55,
  0x007F55, 0x557F55, 0xAA7F55, 0xFF7F55, 0x009F55, 0x559F55, 0xAA9F55, 0xFF9F55,
  0x00BF55, 0x55BF55, 0xAABF55, 0xFFBF55, 0x00DF55, 0x55DF55, 0xAADF55, 0xFFDF55,
  0x00FF55, 0x55FF55, 0xAAFF55, 0xFFFF55,
-
  0x00007F, 0x55007F, 0xAA007F, 0xFF007F, 0x001F7F, 0x551F7F, 0xAA1F7F, 0xFF1F7F,
  0x003F7F, 0x553F7F, 0xAA3F7F, 0xFF3F7F, 0x005F7F, 0x555F7F, 0xAA5F7F, 0xFF5F7F,
  0x007F7F, 0x557F7F, 0xAA7F7F, 0xFF7F7F, 0x009F7F, 0x559F7F, 0xAA9F7F, 0xFF9F7F,
  0x00BF7F, 0x55BF7F, 0xAABF7F, 0xFFBF7F, 0x00DF7F, 0x55DF7F, 0xAADF7F, 0xFFDF7F,
  0x00FF7F, 0x55FF7F, 0xAAFF7F, 0xFFFF7F,
-
  0x0000AA, 0x5500AA, 0xAA00AA, 0xFF00AA, 0x001FAA, 0x551FAA, 0xAA1FAA, 0xFF1FAA,
  0x003FAA, 0x553FAA, 0xAA3FAA, 0xFF3FAA, 0x005FAA, 0x555FAA, 0xAA5FAA, 0xFF5FAA,
  0x007FAA, 0x557FAA, 0xAA7FAA, 0xFF7FAA, 0x009FAA, 0x559FAA, 0xAA9FAA, 0xFF9FAA,
  0x00BFAA, 0x55BFAA, 0xAABFAA, 0xFFBFAA, 0x00DFAA, 0x55DFAA, 0xAADFAA, 0xFFDFAA,
  0x00FFAA, 0x55FFAA, 0xAAFFAA, 0xFFFFAA,
-
  0x0000D4, 0x5500D4, 0xAA00D4, 0xFF00D4, 0x001FD4, 0x551FD4, 0xAA1FD4, 0xFF1FD4,
  0x003FD4, 0x553FD4, 0xAA3FD4, 0xFF3FD4, 0x005FD4, 0x555FD4, 0xAA5FD4, 0xFF5FD4,
  0x007FD4, 0x557FD4, 0xAA7FD4, 0xFF7FD4, 0x009FD4, 0x559FD4, 0xAA9FD4, 0xFF9FD4,
  0x00BFD4, 0x55BFD4, 0xAABFD4, 0xFFBFD4, 0x00DFD4, 0x55DFD4, 0xAADFD4, 0xFFDFD4,
  0x00FFD4, 0x55FFD4, 0xAAFFD4, 0xFFFFD4,
-
            0x5500FF, 0xAA00FF, 0x001FFF, 0x551FFF, 0xAA1FFF, 0xFF1FFF,
  0x003FFF, 0x553FFF, 0xAA3FFF, 0xFF3FFF, 0x005FFF, 0x555FFF, 0xAA5FFF, 0xFF5FFF,
  0x007FFF, 0x557FFF, 0xAA7FFF, 0xFF7FFF, 0x009FFF, 0x559FFF, 0xAA9FFF, 0xFF9FFF,
  0x00BFFF, 0x55BFFF, 0xAABFFF, 0xFFBFFF, 0x00DFFF, 0x55DFFF, 0xAADFFF, 0xFFDFFF,
            0x55FFFF, 0xAAFFFF,
-
  0xFFCCCC, 0xFFCCFF, 0xFFFF33, 0xFFFF66, 0xFFFF99, 0xFFFFCC,
-
  0x007F00, 0x557F00, 0xAA7F00, 0xFF7F00, 0x009F00, 0x559F00, 0xAA9F00, 0xFF9F00,
  0x00BF00, 0x55BF00, 0xAABF00, 0xFFBF00, 0x00DF00, 0x55DF00, 0xAADF00, 0xFFDF00,
            0x55FF00, 0xAAFF00,
-
  0x00002A, 0x55002A, 0xAA002A, 0xFF002A, 0x001F2A, 0x551F2A, 0xAA1F2A, 0xFF1F2A,
  0x003F2A, 0x553F2A,
-
                                                              0xF0FBFF, 0xA4A0A0,
  0xC0C0C0, 0x0000FF, 0x00FF00, 0x00FFFF, 0xFF0000, 0xFF00FF, 0xFFFF00, 0xFFFFFF
-
 ];
 function regGWorldDefCharInfo( i ){
  newGWorldCharInfo( i );
@@ -4070,8 +4060,8 @@ function doClearStorage( button ){
  if( canUseStorage() ){
   document.getElementById( button ).disabled = true;
   clearStorage( _profile_prefix + "TMP_" );
-  if( electron != null ){
-   electron.clearExtFunc();
+  if( desktopApp != null ){
+   desktopApp.clearExtFunc();
   }
   location.replace( "index.html?menu=option" );
  }
@@ -4080,8 +4070,8 @@ function doClearCookie( button ){
  if( canUseCookie() ){
   document.getElementById( button ).disabled = true;
   clearCookie( _profile_prefix + "TMP_" );
-  if( electron != null ){
-   electron.clearExtFunc();
+  if( desktopApp != null ){
+   desktopApp.clearExtFunc();
   }
   location.replace( "index.html?menu=option" );
  }
@@ -4131,7 +4121,7 @@ function keyUp( e ){
  }
 }
 var keyShiftOnly = false;
-function Electron( main ){
+function DesktopApp( main ){
  this._main = main;
  try {
   this._extfunc = JSON.parse( this._main.fsReadExtFuncCache() );
@@ -4143,7 +4133,7 @@ function Electron( main ){
  this._extfunc_s = 0;
  this._extfunc_str = "";
 }
-Electron.prototype = {
+DesktopApp.prototype = {
  version : function(){
   return this._main.version();
  },
@@ -4228,7 +4218,7 @@ Electron.prototype = {
   this._main.fsWriteProfile( text );
  }
 };
-var electron = null;
+var desktopApp = null;
 function canUseAudio(){
  return (!!document.createElement( "audio" ).canPlayType);
 }
@@ -4320,11 +4310,11 @@ function printAppVersion( version ){
   con[0].setBold( false );
   con[0].println( window.navigator.userAgent );
  }
- if( electron != null ){
+ if( desktopApp != null ){
   con[0].setBold( true );
   con[0].print( "Platform: " );
   con[0].setBold( false );
-  con[0].println( electron.platform() );
+  con[0].println( desktopApp.platform() );
  } else {
   con[0].setBold( true );
   con[0].print( "App: " );
@@ -4344,12 +4334,12 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  errId = _errId;
  con[1] = new _Console( _errId );
  con[1].setMaxLen( errMaxLen );
- if( window.electronAPI != undefined ){
-  electron = new Electron( window.electronAPI );
+ if( window.desktopAppAPI != undefined ){
+  desktopApp = new DesktopApp( window.desktopAppAPI );
   window.onbeforeunload = function(){
-   electron.writeProfile( exportProfile() );
+   desktopApp.writeProfile( exportProfile() );
   };
-  window.electronAPI.updateAlwaysOnTop( ( event, value ) => {
+  window.desktopAppAPI.updateAlwaysOnTop( ( event, value ) => {
    alwaysOnTopFlag = value;
    writeProfileInt( "ENV_", "AlwaysOnTop", alwaysOnTopFlag ? 1 : 0 );
   } );
@@ -4374,8 +4364,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  initProfile( useStorage );
  setProfilePrefix( "_CLIPCALC_" );
- if( electron != null ){
-  var text = electron.readProfile();
+ if( desktopApp != null ){
+  var text = desktopApp.readProfile();
   if( text.length > 0 ){
    setEnableWriteProfile( true );
    importProfile( text );
@@ -4427,8 +4417,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  updateSoundType();
  clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
  alwaysOnTopFlag = (getProfileInt( "ENV_", "AlwaysOnTop", 0 ) == 1);
- if( electron != null ){
-  window.electronAPI.setAlwaysOnTop( alwaysOnTopFlag );
+ if( desktopApp != null ){
+  window.desktopAppAPI.setAlwaysOnTop( alwaysOnTopFlag );
  }
  divEdit = document.getElementById( editId );
  regGWorldDefCharInfo( 0 );
@@ -4443,7 +4433,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  procError = new _ProcError();
  editExpr = new EditExpr( 1 );
- editExpr.setDispLen( (electron != null) ? 27 : 28, 8 );
+ editExpr.setDispLen( (desktopApp != null) ? 27 : 28, 8 );
  logExpr = new ListBox( logId );
  logExpr.setLineNum( 12 );
  _addCalcEventListener( logExpr.element(), "click", function( e ){
@@ -4609,7 +4599,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_edit_tab_up" , event, doButtonEditTabUp );
  _addCalcEventListenerById( "button_edit_tab_down", event, doButtonEditTabDown );
  onCalcPrintAns();
- if( electron != null ){
+ if( desktopApp != null ){
   clipboardAudio = loadAudio( audioFile[0] );
   cssSetStyleDisplayById( "calc_clipboard", true );
   cssSetPropertyValue( ".div_edit", "width", "294px" );
@@ -4711,8 +4701,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   nativeRequest.send( "started" );
  } else {
   var version = "";
-  if( electron != null ){
-   version = " " + electron.version();
+  if( desktopApp != null ){
+   version = " " + desktopApp.version();
   }
   printAppVersion( version );
  }
@@ -4721,8 +4711,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  _addCalcEventListener( document, "keydown", keyDown );
  _addCalcEventListener( document, "keyup", keyUp );
- if( electron != null ){
-  setEnglish( electron.isEnglish() );
+ if( desktopApp != null ){
+  setEnglish( desktopApp.isEnglish() );
  }
  if( androidTabletTest || iPadTest || (bodyHeight != defHeight( false )) ){
   setHeight( bodyHeight );
@@ -4730,7 +4720,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 }
 function watchClipboard(){
  if( clipboardFlag ){
-  var text = electron.clipboardRead();
+  var text = desktopApp.clipboardRead();
   if( text.length > 0 ){
    var len = text.length;
    while( len > 0 ){
@@ -4764,11 +4754,11 @@ function watchClipboard(){
  }
 }
 function doCheckClipboard(){
- if( electron != null ){
+ if( desktopApp != null ){
   clipboardFlag = clipboardFlag ? false : true;
   if( clipboardFlag ){
    clipboardText = "";
-   electron.clipboardWrite( clipboardText );
+   desktopApp.clipboardWrite( clipboardText );
    watchClipboard();
   }
  }
@@ -6063,8 +6053,8 @@ function doLoadExtFuncFile(){
 }
 function loadExtFuncFile(){
  if( loadNum >= extFuncFile.length ){
-  if( electron != null ){
-   electron.applyExtFunc();
+  if( desktopApp != null ){
+   desktopApp.applyExtFunc();
   }
   cssSetStyleDisplayById( "calc_button_loadextfunc" , false );
   cssSetStyleDisplayById( "calc_button_loadextfunc2", false );
@@ -6076,8 +6066,8 @@ function loadExtFuncFile(){
   return;
  }
  var data;
- if( electron != null ){
-  data = electron.getExtFunc( extFuncFile[loadNum], "" );
+ if( desktopApp != null ){
+  data = desktopApp.getExtFunc( extFuncFile[loadNum], "" );
  } else {
   data = getProfileString( "TMP_", extFuncFile[loadNum], "" );
  }
@@ -6100,8 +6090,8 @@ window.onHttpResponse = function( request, data ){
   data += extFuncData[loadNum][i];
  }
  if( request != null ){
-  if( electron != null ){
-   electron.setExtFunc( extFuncFile[loadNum], data );
+  if( desktopApp != null ){
+   desktopApp.setExtFunc( extFuncFile[loadNum], data );
   } else {
    writeProfileString( "TMP_", extFuncFile[loadNum], data );
   }
@@ -6114,16 +6104,16 @@ window.onHttpError = function( request, status ){
 };
 function loadExtFuncFile2(){
  var i;
- if( electron != null ){
-  electron.beginReadExtFunc( "load" );
+ if( desktopApp != null ){
+  desktopApp.beginReadExtFunc( "load" );
   for( i = 0; ; i++ ){
-   file = electron.readExtFunc();
+   file = desktopApp.readExtFunc();
    if( file.length == 0 ){
     break;
    }
    extFuncFile2[i] = file;
   }
-  electron.endReadExtFunc();
+  desktopApp.endReadExtFunc();
  } else {
   beginGetProfile( "TMP_LOADCEF_" );
   for( i = 0; ; i++ ){
@@ -6137,8 +6127,8 @@ function loadExtFuncFile2(){
  }
  for( i = 0; i < extFuncFile2.length; i++ ){
   var data;
-  if( electron != null ){
-   data = electron.getExtFunc( extFuncFile2[i], "" );
+  if( desktopApp != null ){
+   data = desktopApp.getExtFunc( extFuncFile2[i], "" );
   } else {
    data = getProfileString( "TMP_", extFuncFile2[i], "" );
   }
@@ -6169,13 +6159,13 @@ function onInputFileLoad( func, data ){
   if( i != 0 ) data += "\n";
   data += extFuncData2[index][i];
  }
- if( electron != null ){
-  electron.beginWriteExtFunc();
+ if( desktopApp != null ){
+  desktopApp.beginWriteExtFunc();
   for( i = 0; i < extFuncFile2.length; i++ ){
-   electron.writeExtFunc( extFuncFile2[i] );
+   desktopApp.writeExtFunc( extFuncFile2[i] );
   }
-  electron.endWriteExtFunc( "load" );
-  electron.setExtFunc( extFuncFile2[index], data );
+  desktopApp.endWriteExtFunc( "load" );
+  desktopApp.setExtFunc( extFuncFile2[index], data );
  } else {
   beginWriteProfile();
   for( i = 0; i < extFuncFile2.length; i++ ){
@@ -6186,8 +6176,8 @@ function onInputFileLoad( func, data ){
  }
 }
 function onInputFileLoadEnd( num ){
- if( electron != null ){
-  electron.applyExtFunc();
+ if( desktopApp != null ){
+  desktopApp.applyExtFunc();
  }
 }
 function extFuncName( str ){
@@ -6317,7 +6307,7 @@ window.errorProc = function( err, num, func, token ){
 window.printAnsComplex = function( real, imag ){
  if( clipboardProc ){
   clipboardText = real + imag;
-  electron.clipboardWrite( clipboardText );
+  desktopApp.clipboardWrite( clipboardText );
   if( clipboardBeepFlag ){
    if( isAudioLoaded( clipboardAudio ) ){
     playAudio( clipboardAudio );
@@ -7631,8 +7621,8 @@ function doButtonUIProfile( readOnly ){
  cssSetStyleDisplayById( "button_profile_import2", readOnly ? false : true );
  document.getElementById( "profile" ).readOnly = readOnly;
  if( !readOnly ){
-  if( electron != null ){
-   document.getElementById( "profile" ).value = electron.readProfile();
+  if( desktopApp != null ){
+   document.getElementById( "profile" ).value = desktopApp.readProfile();
   } else {
    document.getElementById( "profile" ).value = "";
   }

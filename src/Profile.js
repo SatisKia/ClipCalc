@@ -193,8 +193,8 @@ function doClearStorage( button ){
 	if( canUseStorage() ){
 		document.getElementById( button ).disabled = true;
 		clearStorage( _profile_prefix + "TMP_" );
-		if( electron != null ){
-			electron.clearExtFunc();
+		if( desktopApp != null ){
+			desktopApp.clearExtFunc();
 		}
 		location.replace( "index.html?menu=option" );
 	}
@@ -204,8 +204,8 @@ function doClearCookie( button ){
 	if( canUseCookie() ){
 		document.getElementById( button ).disabled = true;
 		clearCookie( _profile_prefix + "TMP_" );
-		if( electron != null ){
-			electron.clearExtFunc();
+		if( desktopApp != null ){
+			desktopApp.clearExtFunc();
 		}
 		location.replace( "index.html?menu=option" );
 	}

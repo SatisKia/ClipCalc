@@ -1,22 +1,13 @@
 var extFuncData = new Array();
 var extFuncFile2 = new Array();
 var extFuncData2 = new Array();
-
-
-
-
 var _EPS5 = 0.001;
 var _SQRT05 = 0.7071067811865475244008444;
-
-
 function _Complex( re, im ){
  this._re = (re == undefined) ? 0.0 : re;
  this._im = (im == undefined) ? 0.0 : im;
 }
-
 _Complex.prototype = {
-
-
  angToAng : function( oldType, newType ){
   if( oldType != newType ){
    switch( oldType ){
@@ -35,18 +26,12 @@ _Complex.prototype = {
    }
   }
  },
-
-
  setReal : function( re ){
-
 assert( re != undefined );
-
   this._re = re;
  },
  setImag : function( im ){
-
 assert( im != undefined );
-
   this._im = im;
  },
  polar : function( rho, theta ){
@@ -54,25 +39,17 @@ assert( im != undefined );
   this._re = rho * _COS( theta );
   this._im = rho * _SIN( theta );
  },
-
-
  real : function(){
   return this._re;
  },
  imag : function(){
   return this._im;
  },
-
-
  toFloat : function(){
   return this._re;
  },
-
-
  ass : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re = r._re;
    this._im = r._im;
@@ -82,26 +59,18 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  minus : function(){
   return new _Complex( -this._re, -this._im );
  },
-
-
  add : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    return new _Complex( this._re + r._re, this._im + r._im );
   }
   return new _Complex( this._re + r, this._im );
  },
  addAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re += r._re;
    this._im += r._im;
@@ -110,21 +79,15 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  sub : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    return new _Complex( this._re - r._re, this._im - r._im );
   }
   return new _Complex( this._re - r, this._im );
  },
  subAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    this._re -= r._re;
    this._im -= r._im;
@@ -133,12 +96,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  mul : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re * r._re, this._im * r._re );
@@ -148,9 +107,7 @@ assert( r != undefined );
   return new _Complex( this._re * r, this._im * r );
  },
  mulAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re *= r._re;
@@ -166,12 +123,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  div : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re / r._re, this._im / r._re );
@@ -188,9 +141,7 @@ assert( r != undefined );
   return new _Complex( this._re / r, this._im / r );
  },
  divAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re /= r._re;
@@ -214,12 +165,8 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  mod : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     return new _Complex( this._re % r._re, this._im % r._re );
@@ -234,9 +181,7 @@ assert( r != undefined );
   return new _Complex( this._re % r, this._im % r );
  },
  modAndAss : function( r ){
-
 assert( r != undefined );
-
   if( r instanceof _Complex ){
    if( r._im == 0.0 ){
     this._re = this._re % r._re;
@@ -255,8 +200,6 @@ assert( r != undefined );
   }
   return this;
  },
-
-
  equal : function( r ){
   if( r instanceof _Complex ){
    return (this._re == r._re) && (this._im == r._im);
@@ -269,8 +212,6 @@ assert( r != undefined );
   }
   return (this._re != r) || (this._im != 0.0);
  },
-
-
  fabs : function(){
   if( this._re == 0.0 ){
    return _ABS( this._im );
@@ -285,23 +226,15 @@ assert( r != undefined );
   var t = this._im / this._re;
   return _ABS( this._re ) * _SQRT( 1.0 + t * t );
  },
-
-
  farg : function(){
   return fatan2( this._im, this._re );
  },
-
-
  fnorm : function(){
   return this._re * this._re + this._im * this._im;
  },
-
-
  conjg : function(){
   return new _Complex( this._re, -this._im );
  },
-
-
  sin : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fsin( this._re ) );
@@ -313,8 +246,6 @@ assert( r != undefined );
    _COS( re ) * fsinh( im )
    );
  },
-
-
  cos : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fcos( this._re ) );
@@ -326,8 +257,6 @@ assert( r != undefined );
    -_SIN( re ) * fsinh( im )
    );
  },
-
-
  tan : function(){
   if( this._im == 0.0 ){
    return floatToComplex( ftan( this._re ) );
@@ -343,8 +272,6 @@ assert( r != undefined );
    fsinh( im2 ) / d
    );
  },
-
-
  asin : function(){
   if( this._im == 0.0 ){
    if( (this._re < -1.0) || (this._re > 1.0) ){
@@ -356,15 +283,12 @@ assert( r != undefined );
     return floatToComplex( fasin( this._re ) );
    }
   }
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.minus().mul( i.mul( this ).add( this.sqr().minus().add( 1.0 ).sqrt() ).log() );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  acos : function(){
   if( this._im == 0.0 ){
    if( (this._re < -1.0) || (this._re > 1.0) ){
@@ -376,19 +300,12 @@ assert( r != undefined );
     return floatToComplex( facos( this._re ) );
    }
   }
-
-
-
-
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.mul( this.sub( i.mul( this.sqr().minus().add( 1.0 ).sqrt() ) ).log() );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  atan : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fatan( this._re ) );
@@ -397,15 +314,12 @@ assert( r != undefined );
   if( d.equal( 0.0 ) ){
    setComplexError();
   }
-
   var i = new _Complex( 0.0, 1.0 );
   var c = i.mul( i.add( this ).div( d ).log() ).mul( 0.5 );
   c._re = _radToAng( c._re );
   c._im = _radToAng( c._im );
   return c;
  },
-
-
  sinh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fsinh( this._re ) );
@@ -415,8 +329,6 @@ assert( r != undefined );
    fcosh( this._re ) * _SIN( this._im )
    );
  },
-
-
  cosh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fcosh( this._re ) );
@@ -426,8 +338,6 @@ assert( r != undefined );
    fsinh( this._re ) * _SIN( this._im )
    );
  },
-
-
  tanh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( ftanh( this._re ) );
@@ -443,17 +353,12 @@ assert( r != undefined );
    _SIN( im2 ) / d
    );
  },
-
-
  asinh : function(){
   if( this._im == 0.0 ){
    return floatToComplex( fasinh( this._re ) );
   }
-
   return this.add( this.sqr().add( 1.0 ).sqrt() ).log();
  },
-
-
  acosh : function(){
   if( this._im == 0.0 ){
    if( this._re < 1.0 ){
@@ -465,11 +370,8 @@ assert( r != undefined );
     return floatToComplex( facosh( this._re ) );
    }
   }
-
   return this.add( this.sqr().sub( 1.0 ).sqrt() ).log();
  },
-
-
  atanh : function(){
   if( this._im == 0.0 ){
    if( (this._re <= -1.0) || (this._re >= 1.0) ){
@@ -485,27 +387,20 @@ assert( r != undefined );
   if( d.equal( 0.0 ) ){
    setComplexError();
   }
-
   return this.add( 1.0 ).div( d ).log().mul( 0.5 );
  },
-
-
  ceil : function(){
   return new _Complex(
    _CEIL( this._re ),
    _CEIL( this._im )
    );
  },
-
-
  floor : function(){
   return new _Complex(
    _FLOOR( this._re ),
    _FLOOR( this._im )
    );
  },
-
-
  exp : function(){
   if( this._im == 0.0 ){
    return floatToComplex( _EXP( this._re ) );
@@ -527,8 +422,6 @@ assert( r != undefined );
    e * _SIN( im )
    );
  },
-
-
  log : function(){
   if( this._im == 0.0 ){
    if( this._re <= 0.0 ){
@@ -561,40 +454,30 @@ assert( r != undefined );
    _ATAN2( this._im, this._re ) * _NORMALIZE
    );
  },
-
-
  pow : function( y ){
   if( y instanceof _Complex ){
    if( y._im == 0.0 ){
     if( this._im == 0.0 ){
      return floatToComplex( _POW( this._re, y._re ) );
     }
-
     return this.log().mul( y._re ).exp();
    }
    if( this._im == 0.0 ){
-
     return y.mul( _LOG( this._re ) ).exp();
    }
-
    return this.log().mul( y ).exp();
   }
   if( this._im == 0.0 ){
    return floatToComplex( _POW( this._re, y ) );
   }
-
   return this.log().mul( y ).exp();
  },
-
-
  sqr : function(){
   if( this._im == 0.0 ){
    return floatToComplex( this._re * this._re );
   }
   return new _Complex( this._re * this._re - this._im * this._im, this._re * this._im + this._im * this._re );
  },
-
-
  sqrt : function(){
   if( this._im == 0.0 ){
    if( this._re < 0.0 ){
@@ -626,9 +509,7 @@ assert( r != undefined );
    -_SQRT05 * r
    );
  }
-
 };
-
 function getComplex( c, re , im ){
  re.set( c._re );
  im.set( c._im );
@@ -638,26 +519,18 @@ function setComplex( c, re, im ){
  c._im = im;
  return c;
 }
-
 function dupComplex( x ){
  return new _Complex( x._re, x._im );
 }
-
 function floatToComplex( x ){
  return new _Complex( x, 0.0 );
 }
-
-
 function _radToAng( rad ){
  return complexIsRad() ? rad : rad * complexAngCoef() / _PI;
 }
-
-
 function _angToRad( ang ){
  return complexIsRad() ? ang : ang * _PI / complexAngCoef();
 }
-
-
 function fsin( x ){
  return _SIN( _angToRad( x ) );
 }
@@ -23372,8 +23245,8 @@ function doClearStorage( button ){
  if( canUseStorage() ){
   document.getElementById( button ).disabled = true;
   clearStorage( _profile_prefix + "TMP_" );
-  if( electron != null ){
-   electron.clearExtFunc();
+  if( desktopApp != null ){
+   desktopApp.clearExtFunc();
   }
   location.replace( "index.html?menu=option" );
  }
@@ -23382,8 +23255,8 @@ function doClearCookie( button ){
  if( canUseCookie() ){
   document.getElementById( button ).disabled = true;
   clearCookie( _profile_prefix + "TMP_" );
-  if( electron != null ){
-   electron.clearExtFunc();
+  if( desktopApp != null ){
+   desktopApp.clearExtFunc();
   }
   location.replace( "index.html?menu=option" );
  }
@@ -23433,7 +23306,7 @@ function keyUp( e ){
  }
 }
 var keyShiftOnly = false;
-function Electron( main ){
+function DesktopApp( main ){
  this._main = main;
  try {
   this._extfunc = JSON.parse( this._main.fsReadExtFuncCache() );
@@ -23445,7 +23318,7 @@ function Electron( main ){
  this._extfunc_s = 0;
  this._extfunc_str = "";
 }
-Electron.prototype = {
+DesktopApp.prototype = {
  version : function(){
   return this._main.version();
  },
@@ -23530,7 +23403,7 @@ Electron.prototype = {
   this._main.fsWriteProfile( text );
  }
 };
-var electron = null;
+var desktopApp = null;
 function canUseAudio(){
  return (!!document.createElement( "audio" ).canPlayType);
 }
@@ -23622,11 +23495,11 @@ function printAppVersion( version ){
   con[0].setBold( false );
   con[0].println( window.navigator.userAgent );
  }
- if( electron != null ){
+ if( desktopApp != null ){
   con[0].setBold( true );
   con[0].print( "Platform: " );
   con[0].setBold( false );
-  con[0].println( electron.platform() );
+  con[0].println( desktopApp.platform() );
  } else {
   con[0].setBold( true );
   con[0].print( "App: " );
@@ -23646,12 +23519,12 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  errId = _errId;
  con[1] = new _Console( _errId );
  con[1].setMaxLen( errMaxLen );
- if( window.electronAPI != undefined ){
-  electron = new Electron( window.electronAPI );
+ if( window.desktopAppAPI != undefined ){
+  desktopApp = new DesktopApp( window.desktopAppAPI );
   window.onbeforeunload = function(){
-   electron.writeProfile( exportProfile() );
+   desktopApp.writeProfile( exportProfile() );
   };
-  window.electronAPI.updateAlwaysOnTop( ( event, value ) => {
+  window.desktopAppAPI.updateAlwaysOnTop( ( event, value ) => {
    alwaysOnTopFlag = value;
    writeProfileInt( "ENV_", "AlwaysOnTop", alwaysOnTopFlag ? 1 : 0 );
   } );
@@ -23676,8 +23549,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  initProfile( useStorage );
  setProfilePrefix( "_CLIPCALC_" );
- if( electron != null ){
-  var text = electron.readProfile();
+ if( desktopApp != null ){
+  var text = desktopApp.readProfile();
   if( text.length > 0 ){
    setEnableWriteProfile( true );
    importProfile( text );
@@ -23729,8 +23602,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  updateSoundType();
  clipboardBeepFlag = (getProfileInt( "ENV_", "ClipboardBeep", 0 ) == 1);
  alwaysOnTopFlag = (getProfileInt( "ENV_", "AlwaysOnTop", 0 ) == 1);
- if( electron != null ){
-  window.electronAPI.setAlwaysOnTop( alwaysOnTopFlag );
+ if( desktopApp != null ){
+  window.desktopAppAPI.setAlwaysOnTop( alwaysOnTopFlag );
  }
  divEdit = document.getElementById( editId );
  regGWorldDefCharInfo( 0 );
@@ -23745,7 +23618,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  procError = new _ProcError();
  editExpr = new EditExpr( 1 );
- editExpr.setDispLen( (electron != null) ? 27 : 28, 8 );
+ editExpr.setDispLen( (desktopApp != null) ? 27 : 28, 8 );
  logExpr = new ListBox( logId );
  logExpr.setLineNum( 12 );
  _addCalcEventListener( logExpr.element(), "click", function( e ){
@@ -23911,7 +23784,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  _addCalcEventListenerById( "button_edit_tab_up" , event, doButtonEditTabUp );
  _addCalcEventListenerById( "button_edit_tab_down", event, doButtonEditTabDown );
  onCalcPrintAns();
- if( electron != null ){
+ if( desktopApp != null ){
   clipboardAudio = loadAudio( audioFile[0] );
   cssSetStyleDisplayById( "calc_clipboard", true );
   cssSetPropertyValue( ".div_edit", "width", "294px" );
@@ -24013,8 +23886,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
   nativeRequest.send( "started" );
  } else {
   var version = "";
-  if( electron != null ){
-   version = " " + electron.version();
+  if( desktopApp != null ){
+   version = " " + desktopApp.version();
   }
   printAppVersion( version );
  }
@@ -24023,8 +23896,8 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
  }
  _addCalcEventListener( document, "keydown", keyDown );
  _addCalcEventListener( document, "keyup", keyUp );
- if( electron != null ){
-  setEnglish( electron.isEnglish() );
+ if( desktopApp != null ){
+  setEnglish( desktopApp.isEnglish() );
  }
  if( androidTabletTest || iPadTest || (bodyHeight != defHeight( false )) ){
   setHeight( bodyHeight );
@@ -24032,7 +23905,7 @@ function main( editId, logId, _conId, _errId, selectImageId, canvasId, inputFile
 }
 function watchClipboard(){
  if( clipboardFlag ){
-  var text = electron.clipboardRead();
+  var text = desktopApp.clipboardRead();
   if( text.length > 0 ){
    var len = text.length;
    while( len > 0 ){
@@ -24066,11 +23939,11 @@ function watchClipboard(){
  }
 }
 function doCheckClipboard(){
- if( electron != null ){
+ if( desktopApp != null ){
   clipboardFlag = clipboardFlag ? false : true;
   if( clipboardFlag ){
    clipboardText = "";
-   electron.clipboardWrite( clipboardText );
+   desktopApp.clipboardWrite( clipboardText );
    watchClipboard();
   }
  }
@@ -25365,8 +25238,8 @@ function doLoadExtFuncFile(){
 }
 function loadExtFuncFile(){
  if( loadNum >= extFuncFile.length ){
-  if( electron != null ){
-   electron.applyExtFunc();
+  if( desktopApp != null ){
+   desktopApp.applyExtFunc();
   }
   cssSetStyleDisplayById( "calc_button_loadextfunc" , false );
   cssSetStyleDisplayById( "calc_button_loadextfunc2", false );
@@ -25378,8 +25251,8 @@ function loadExtFuncFile(){
   return;
  }
  var data;
- if( electron != null ){
-  data = electron.getExtFunc( extFuncFile[loadNum], "" );
+ if( desktopApp != null ){
+  data = desktopApp.getExtFunc( extFuncFile[loadNum], "" );
  } else {
   data = getProfileString( "TMP_", extFuncFile[loadNum], "" );
  }
@@ -25402,8 +25275,8 @@ window.onHttpResponse = function( request, data ){
   data += extFuncData[loadNum][i];
  }
  if( request != null ){
-  if( electron != null ){
-   electron.setExtFunc( extFuncFile[loadNum], data );
+  if( desktopApp != null ){
+   desktopApp.setExtFunc( extFuncFile[loadNum], data );
   } else {
    writeProfileString( "TMP_", extFuncFile[loadNum], data );
   }
@@ -25416,16 +25289,16 @@ window.onHttpError = function( request, status ){
 };
 function loadExtFuncFile2(){
  var i;
- if( electron != null ){
-  electron.beginReadExtFunc( "load" );
+ if( desktopApp != null ){
+  desktopApp.beginReadExtFunc( "load" );
   for( i = 0; ; i++ ){
-   file = electron.readExtFunc();
+   file = desktopApp.readExtFunc();
    if( file.length == 0 ){
     break;
    }
    extFuncFile2[i] = file;
   }
-  electron.endReadExtFunc();
+  desktopApp.endReadExtFunc();
  } else {
   beginGetProfile( "TMP_LOADCEF_" );
   for( i = 0; ; i++ ){
@@ -25439,8 +25312,8 @@ function loadExtFuncFile2(){
  }
  for( i = 0; i < extFuncFile2.length; i++ ){
   var data;
-  if( electron != null ){
-   data = electron.getExtFunc( extFuncFile2[i], "" );
+  if( desktopApp != null ){
+   data = desktopApp.getExtFunc( extFuncFile2[i], "" );
   } else {
    data = getProfileString( "TMP_", extFuncFile2[i], "" );
   }
@@ -25471,13 +25344,13 @@ function onInputFileLoad( func, data ){
   if( i != 0 ) data += "\n";
   data += extFuncData2[index][i];
  }
- if( electron != null ){
-  electron.beginWriteExtFunc();
+ if( desktopApp != null ){
+  desktopApp.beginWriteExtFunc();
   for( i = 0; i < extFuncFile2.length; i++ ){
-   electron.writeExtFunc( extFuncFile2[i] );
+   desktopApp.writeExtFunc( extFuncFile2[i] );
   }
-  electron.endWriteExtFunc( "load" );
-  electron.setExtFunc( extFuncFile2[index], data );
+  desktopApp.endWriteExtFunc( "load" );
+  desktopApp.setExtFunc( extFuncFile2[index], data );
  } else {
   beginWriteProfile();
   for( i = 0; i < extFuncFile2.length; i++ ){
@@ -25488,8 +25361,8 @@ function onInputFileLoad( func, data ){
  }
 }
 function onInputFileLoadEnd( num ){
- if( electron != null ){
-  electron.applyExtFunc();
+ if( desktopApp != null ){
+  desktopApp.applyExtFunc();
  }
 }
 function extFuncName( str ){
@@ -25619,7 +25492,7 @@ window.errorProc = function( err, num, func, token ){
 window.printAnsComplex = function( real, imag ){
  if( clipboardProc ){
   clipboardText = real + imag;
-  electron.clipboardWrite( clipboardText );
+  desktopApp.clipboardWrite( clipboardText );
   if( clipboardBeepFlag ){
    if( isAudioLoaded( clipboardAudio ) ){
     playAudio( clipboardAudio );
@@ -26933,8 +26806,8 @@ function doButtonUIProfile( readOnly ){
  cssSetStyleDisplayById( "button_profile_import2", readOnly ? false : true );
  document.getElementById( "profile" ).readOnly = readOnly;
  if( !readOnly ){
-  if( electron != null ){
-   document.getElementById( "profile" ).value = electron.readProfile();
+  if( desktopApp != null ){
+   document.getElementById( "profile" ).value = desktopApp.readProfile();
   } else {
    document.getElementById( "profile" ).value = "";
   }

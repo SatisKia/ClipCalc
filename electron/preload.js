@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require( 'electron' );
 
 contextBridge.exposeInMainWorld( 'electronAPI', {
-  updateAlwaysOnTop: ( flag ) => ipcRenderer.on( 'updateAlwaysOnTop', flag ),
+  updateAlwaysOnTop: ( func ) => ipcRenderer.on( 'updateAlwaysOnTop', func ),
   setAlwaysOnTop   : ( flag ) => ipcRenderer.sendSync( 'setAlwaysOnTop', flag ),
 
   clipboardRead      : ()       => ipcRenderer.sendSync( 'clipboardRead' ),

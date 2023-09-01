@@ -7,6 +7,7 @@
 <meta name="format-detection" content="telephone=no, email=no, address=no">
 <link rel="icon" href="favicon.ico">
 <title></title>
+<script type="text/javascript" src="api.js?v=230831"></script>
 
 <!--リリース用-->
 <script type="text/javascript" src="clip.js?v=230716"></script>
@@ -550,9 +551,33 @@ input[type="number"]::-webkit-inner-spin-button {
 	background-size:cover;
 	background-position:50% 50%;
 }
+
+#contextmenu {
+	position:fixed;
+	font-size:12px;
+	background-color:#E0E0E0;
+	border:1px solid #808080;
+	box-shadow:1px 1px 1px rgba(0,0,0,0.25);
+	z-index:1000;
+	user-select:none;
+	display:none;
+}
+#contextmenu.show {
+	display:block;
+}
+#contextmenu ul {
+	list-style:none;
+	margin:2px 4px;
+	padding:0;
+}
 </style>
 </head>
 <body onload="main( 'div0', 'div1', 'div2', 'div3', 'div4', 'canvas0', [['file0',1],['file1',1],['file2',1],['file3',2]], 'textarea0' )">
+<div id="contextmenu">
+	<ul>
+		<li><div id="contextmenuitem" onclick="javascript:toggleAlwaysOnTop()"></div></li>
+	</ul>
+</div>
 <div id="calc_body" class="div_body">
 
 <table><tr><td valign="top">

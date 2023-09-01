@@ -1,0 +1,27 @@
+{
+  "name": "ClipCalc",
+  "version": "6.5.5",
+  "main": "index.html",
+  "window": {
+    "show": false,
+    "width": 322,
+    "height": 506,
+    "icon": "trayicon.png",
+    "resizable": false
+  },
+  "chromium-args": "--disable-devtools",
+  "scripts": {
+    "start": "./node_modules/.bin/nw ."
+  },
+  "nwbuild": {
+    "app": {
+      "fileDescription": "ClipCalc",
+      "icon": "./../icns/icon.icns",
+      "legalCopyright": "Copyright (C) SatisKia"
+    }
+  },
+  "dependencies": {
+    "node-clipboardy": "^1.0.3",
+    "nw": "^0.79.1-sdk"
+  }
+}
