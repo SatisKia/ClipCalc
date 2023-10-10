@@ -1302,11 +1302,11 @@ function updateSkin(){
 		cssSetPropertyValue( "input[type=\"checkbox\"]:checked + label::after", "background", IMAGE_CHECKED );
 		cssSetPropertyValue( "input[type=\"radio\"]:checked + label::after"   , "background", IMAGE_CHECKED );
 
-		cssSetPropertyValue( ".div_edit"       , "background-color", "rgba(255,255,255,0.0)" );
-		cssSetPropertyValue( ".div_log"        , "background-color", "rgba(255,255,255,0.0)" );
+		cssSetPropertyValue( ".div_edit"       , "background-color", color );
+		cssSetPropertyValue( ".div_log"        , "background-color", color );
 		cssSetPropertyValue( ".div_selectimage", "background-color", "rgba(255,255,255,0.0)" );
-		cssSetPropertyValue( ".div_error"      , "background-color", "rgba(255,255,255,0.0)" );
-		cssSetPropertyValue( ".div_console"    , "background-color", "rgba(255,255,255,0.0)" );
+		cssSetPropertyValue( ".div_error"      , "background-color", color );
+		cssSetPropertyValue( ".div_console"    , "background-color", color );
 
 		cursorText = "#FFFFFF";
 		cursorBack = IMAGE_CHECKED;
