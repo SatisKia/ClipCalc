@@ -218,6 +218,7 @@ ipcMain.on( 'profilePath', (event, message) => {
 ipcMain.on( 'fsReadExtFuncCache', (event, message) => {
 	try {
 		event.returnValue = fs.readFileSync( extFuncCachePath, "utf8" );
+		return;
 	} catch( e ){
 	}
 	event.returnValue = "";
@@ -232,6 +233,7 @@ ipcMain.on( 'fsWriteExtFuncCache', (event, message) => {
 ipcMain.on( 'fsReadProfile', (event, message) => {
 	try {
 		event.returnValue = fs.readFileSync( profilePath, "utf8" );
+		return;
 	} catch( e ){
 	}
 	event.returnValue = "";
