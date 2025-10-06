@@ -1,15 +1,4 @@
 {
-  "name": "ClipCalc",
-  "version": "6.5.5",
-  "main": "index.html",
-  "window": {
-    "show": false,
-    "width": 322,
-    "height": 506,
-    "icon": "trayicon.png",
-    "resizable": false
-  },
-  "chromium-args": "--disable-devtools",
   "scripts": {
     "start": ".\\node_modules\\.bin\\nw ."
   },

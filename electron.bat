@@ -7,6 +7,7 @@ copy electron\package_win.json build\tmp\package.json
 copy electron\preload.js       build\tmp
 
 cd build
+set NODE_TLS_REJECT_UNAUTHORIZED=0
 call electron-packager ./tmp ClipCalc --app-version=6.5.5 --electron-version=24.1.3 --platform=win32 --arch=x64 --app-copyright="Copyright (C) SatisKia" --icon=../htdocs/favicon.ico --overwrite
 @echo on
 cd ..
